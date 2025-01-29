@@ -3,7 +3,6 @@ import cv2
 import glob
 import json
 import os
-import keyboard
 import numpy as np
 import h5py
 from KeypointClassifier import KeypointClassifier
@@ -94,9 +93,10 @@ def processFile(file, out_filename):
 
                 if results[0].keypoints.has_visible == False:
                     continue
+
                 
                 normalized_keypoints = normalize_keypoints(
-                    results[0].keypoints.xy[0].numpy())
+                    results[0].keypoints.xy[0].cpu().numpy())
 
                 if timestamp_s >= next_state_time:
                     state_number += 1
@@ -124,7 +124,7 @@ def processFile(file, out_filename):
 
         metadata_group = video_group.create_group('metadata')
         metadata_group.create_dataset(
-            'filename', data=np.string_(fileName_ext))
+            'filename', data=np.bytes_(fileName_ext))
         metadata_group.create_dataset('total_frames', data=frame_number)
 
         cap.release()
@@ -133,16 +133,16 @@ def processFile(file, out_filename):
 
 # main(r'samples\50ways', r'samples\50ways\50ways_labels.json')
 main('samples\\video\\cauca\\train',
-     'samples\\labels\\caucafall_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_cauca_train.h5", "avi")
+     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_train.h5", "avi")
 main('samples\\video\\cauca\\test',
-     'samples\\labels\\caucafall_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_cauca_test.h5", "avi")
+     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_test.h5", "avi")
 main('samples\\video\\cauca\\validation',
-     'samples\\labels\\caucafall_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_cauca_validation.h5", "avi")
+     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_validation.h5", "avi")
 
 
 main('samples\\video\\fifty_ways\\train',
-     'samples\\labels\\50ways_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_fifty_ways_train.h5", "avi")
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_train.h5", "avi")
 main('samples\\video\\fifty_ways\\test',
-     'samples\\labels\\50ways_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_fifty_ways_test.h5", "avi")
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_test.h5", "avi")
 main('samples\\video\\fifty_ways\\validation',
-     'samples\\labels\\50ways_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_fifty_ways_validation.h5", "avi")
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_validation.h5", "avi")
