@@ -1,0 +1,502 @@
+{
+    "FallBackwardsS01": [
+        {
+            "time": 1.92,
+            "state": 2
+        },
+        {
+            "time": 3.08,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS02": [
+        {
+            "time": 2.36,
+            "state": 2
+        },
+        {
+            "time": 3.24,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS03": [
+        {
+            "time": 2.40,
+            "state": 2
+        },
+        {
+            "time": 3.56,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS04": [
+        {
+            "time": 2.8,
+            "state": 2
+        },
+        {
+            "time": 3.68,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS05": [
+        {
+            "time": 1.24,
+            "state": 2
+        },
+        {
+            "time": 2.56,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS06": [
+        {
+            "time": 2.76,
+            "state": 2
+        },
+        {
+            "time": 4.56,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS07": [
+        {
+            "time": 2.84,
+            "state": 2
+        },
+        {
+            "time": 4.80,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS08": [
+        {
+            "time": 2,
+            "state": 2
+        },
+        {
+            "time": 3.36,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS09": [
+        {
+            "time": 1.2,
+            "state": 2
+        },
+        {
+            "time": 3.40,
+            "state": 1
+        }
+    ],
+    "FallBackwardsS10": [
+        {
+            "time": 2.16,
+            "state": 2
+        },
+        {
+            "time": 4.12,
+            "state": 1
+        }
+    ],
+    "FallForwardS01": [
+        {
+            "time": 5.56,
+            "state": 2
+        },
+        {
+            "time": 7,
+            "state": 1
+        }
+    ],
+    "FallForwardS02": [
+        {
+            "time": 0.56,
+            "state": 2
+        },
+        {
+            "time": 1.44,
+            "state": 1
+        }
+    ],
+    "FallForwardS03": [
+        {
+            "time": 3.40,
+            "state": 2
+        },
+        {
+            "time": 4.88,
+            "state": 1
+        }
+    ],
+    "FallForwardS04": [
+        {
+            "time": 0.56,
+            "state": 2
+        },
+        {
+            "time": 1.56,
+            "state": 1
+        }
+    ],
+    "FallForwardS05": [
+        {
+            "time": 1.96,
+            "state": 2
+        },
+        {
+            "time": 3.44,
+            "state": 1
+        }
+    ],
+    "FallForwardS06": [
+        {
+            "time": 3,
+            "state": 2
+        },
+        {
+            "time": 4.68,
+            "state": 1
+        }
+    ],
+    "FallForwardS07": [
+        {
+            "time": 0.76,
+            "state": 2
+        },
+        {
+            "time": 2.68,
+            "state": 1
+        }
+    ],
+    "FallForwardS08": [
+        {
+            "time": 0.88,
+            "state": 2
+        },
+        {
+            "time": 2.48,
+            "state": 1
+        }
+    ],
+    "FallForwardS09": [
+        {
+            "time": 1.12,
+            "state": 2
+        },
+        {
+            "time": 3.2,
+            "state": 1
+        }
+    ],
+    "FallForwardS10": [
+        {
+            "time": 1,
+            "state": 2
+        },
+        {
+            "time": 3.24,
+            "state": 1
+        }
+    ],
+    "FallLeftS01": [
+        {
+            "time": 1.2,
+            "state": 2
+        },
+        {
+            "time": 2.68,
+            "state": 1
+        }
+    ],
+    "FallLeftS02": [
+        {
+            "time": 0.72,
+            "state": 2
+        },
+        {
+            "time": 1.96,
+            "state": 1
+        }
+    ],
+    "FallLeftS03": [
+        {
+            "time": 4.36,
+            "state": 2
+        },
+        {
+            "time": 5.24,
+            "state": 1
+        }
+    ],
+    "FallLeftS04": [
+        {
+            "time": 1.96,
+            "state": 2
+        },
+        {
+            "time": 3.48,
+            "state": 1
+        }
+    ],
+    "FallLeftS05": [
+        {
+            "time": 2,
+            "state": 2
+        },
+        {
+            "time": 4.24,
+            "state": 1
+        }
+    ],
+    "FallLeftS06": [
+        {
+            "time": 1.52,
+            "state": 2
+        },
+        {
+            "time": 3.2,
+            "state": 1
+        }
+    ],
+    "FallLeftS07": [
+        {
+            "time": 2.24,
+            "state": 2
+        },
+        {
+            "time": 4.24,
+            "state": 1
+        }
+    ],
+    "FallLeftS08": [
+        {
+            "time": 1.12,
+            "state": 2
+        },
+        {
+            "time": 3.68,
+            "state": 1
+        }
+    ],
+    "FallLeftS09": [
+        {
+            "time": 1.2,
+            "state": 2
+        },
+        {
+            "time": 3.28,
+            "state": 1
+        }
+    ],
+    "FallLeftS10": [
+        {
+            "time": 1,
+            "state": 2
+        },
+        {
+            "time": 3.28,
+            "state": 1
+        }
+    ],
+    "FallRightS01": [
+        {
+            "time": 1.48,
+            "state": 2
+        },
+        {
+            "time": 3.16,
+            "state": 1
+        }
+    ],
+    "FallRightS02": [
+        {
+            "time": 0.96,
+            "state": 2
+        },
+        {
+            "time": 2.44,
+            "state": 1
+        }
+    ],
+    "FallRightS03": [
+        {
+            "time": 1.80,
+            "state": 2
+        },
+        {
+            "time": 3.04,
+            "state": 1
+        }
+    ],
+    "FallRightS04": [
+        {
+            "time": 1.56,
+            "state": 2
+        },
+        {
+            "time": 3,
+            "state": 1
+        }
+    ],
+    "FallRightS05": [
+        {
+            "time": 2.72,
+            "state": 2
+        },
+        {
+            "time": 4.36,
+            "state": 1
+        }
+    ],
+    "FallRightS06": [
+        {
+            "time": 3.04,
+            "state": 2
+        },
+        {
+            "time": 4.64,
+            "state": 1
+        }
+    ],
+    "FallRightS07": [
+        {
+            "time": 1.12,
+            "state": 2
+        },
+        {
+            "time": 2.84,
+            "state": 1
+        }
+    ],
+    "FallRightS08": [
+        {
+            "time": 1.72,
+            "state": 2
+        },
+        {
+            "time": 3.60,
+            "state": 1
+        }
+    ],
+    "FallRightS09": [
+        {
+            "time": 1.68,
+            "state": 2
+        },
+        {
+            "time": 3.48,
+            "state": 1
+        }
+    ],
+    "FallRightS10": [
+        {
+            "time": 2.16,
+            "state": 2
+        },
+        {
+            "time": 4.2,
+            "state": 1
+        }
+    ],
+    "FallSittingS01": [
+        {
+            "time": 1.80,
+            "state": 2
+        },
+        {
+            "time": 5.76,
+            "state": 1
+        }
+    ],
+    "FallSittingS02": [
+        {
+            "time": 2.84,
+            "state": 2
+        },
+        {
+            "time": 4.19,
+            "state": 1
+        }
+    ],
+    "FallSittingS03": [
+        {
+            "time": 1.56,
+            "state": 2
+        },
+        {
+            "time": 3.20,
+            "state": 1
+        }
+    ],
+    "FallSittingS04": [
+        {
+            "time": 2.16,
+            "state": 2
+        },
+        {
+            "time": 3.96,
+            "state": 1
+        }
+    ],
+    "FallSittingS05": [
+        {
+            "time": 1.56,
+            "state": 2
+        },
+        {
+            "time": 4,
+            "state": 1
+        }
+    ],
+    "FallSittingS06": [
+        {
+            "time": 2.96,
+            "state": 2
+        },
+        {
+            "time": 5.88,
+            "state": 1
+        }
+    ],
+    "FallSittingS07": [
+        {
+            "time": 1,
+            "state": 2
+        },
+        {
+            "time": 3.22,
+            "state": 1
+        }
+    ],
+    "FallSittingS08": [
+        {
+            "time": 2.48,
+            "state": 2
+        },
+        {
+            "time": 4.84,
+            "state": 1
+        }
+    ],
+    "FallSittingS09": [
+        {
+            "time": 1.4,
+            "state": 2
+        },
+        {
+            "time": 4.96,
+            "state": 1
+        }
+    ],
+    "FallSittingS10": [
+        {
+            "time": 1.8,
+            "state": 2
+        },
+        {
+            "time": 4.72,
+            "state": 1
+        }
+    ]
+}

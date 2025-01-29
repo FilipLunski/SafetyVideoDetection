@@ -1,0 +1,550 @@
+{
+    "50ways-seg01": [
+        {
+            "time": 1.19,
+            "state": 2
+        },
+        {
+            "time": 1.72,
+            "state": 1
+        }
+    ],
+    "50ways-seg02": [
+        {
+            "time": 1.88,
+            "state": 2
+        },
+        {
+            "time": 2.79,
+            "state": 1
+        }
+    ],
+    "50ways-seg03": [
+        {
+            "time": 2.61,
+            "state": 2
+        },
+        {
+            "time": 3.10,
+            "state": 1
+        }
+    ],
+    "50ways-seg04": [
+        {
+            "time": 1.54,
+            "state": 2
+        },
+        {
+            "time": 1.95,
+            "state": 1
+        }
+    ],
+    "50ways-seg05": [
+        {
+            "time": 0.76,
+            "state": 2
+        },
+        {
+            "time": 1.41,
+            "state": 1
+        }
+    ],
+    "50ways-seg06": [
+        {
+            "time": 1.76,
+            "state": 2
+        },
+        {
+            "time": 2.11,
+            "state": 1
+        }
+    ],
+    "50ways-seg07": [
+        {
+            "time": 0.79,
+            "state": 2
+        },
+        {
+            "time": 1.17,
+            "state": 1,
+            "#": "kneeling"
+        },
+        {
+            "time": 1.76,
+            "state": 1
+        }
+    ],
+    "50ways-seg08": [
+        {
+            "time": 4.92,
+            "state": 2
+        },
+        {
+            "time": 6.16,
+            "state": 1
+        }
+    ],
+    "50ways-seg09": [
+        {
+            "time": 2.48,
+            "state": 2
+        },
+        {
+            "time": 3.33,
+            "state": 1
+        }
+    ],
+    "50ways-seg10": [
+        {
+            "time": 1,
+            "state": 2
+        },
+        {
+            "time": 1.18,
+            "state": 1,
+            "#": "kneeling"
+        },
+        {
+            "time": 1.51,
+            "state": 1
+        }
+    ],
+    "50ways-seg11": [
+        {
+            "time": 0.94,
+            "state": 0,
+            "#": "walking on hands"
+        },
+        {
+            "time": 2.06,
+            "state": 2
+        },
+        {
+            "time": 2.50,
+            "state": 1
+        }
+    ],
+    "50ways-seg12": [
+        {
+            "time": 0,
+            "state": 0,
+            "#": "drunk"
+        },
+        {
+            "time": 5.16,
+            "state": 2
+        },
+        {
+            "time": 5.91,
+            "state": 1
+        }
+    ],
+    "50ways-seg13": [
+        {
+            "time": 1.74,
+            "state": 2
+        },
+        {
+            "time": 3.90,
+            "state": 2,
+            "#": "kneeling"
+        },
+        {
+            "time": 4.47,
+            "state": 1
+        }
+    ],
+    "50ways-seg14": [
+        {
+            "time": 0.38,
+            "state": 2
+        },
+        {
+            "time": 1.08,
+            "state": 1
+        },
+        {
+            "time": 1.31,
+            "state": 0,
+            "#": "raising"
+        },
+        {
+            "time": 2.09,
+            "state": 0
+        }
+    ],
+    "50ways-seg15": [
+        {
+            "time": 1.96,
+            "state": 2
+        },
+        {
+            "time": 2.76,
+            "state": 1
+        }
+    ],
+    "50ways-seg16": [
+        {
+            "time": 0.63,
+            "state": 2
+        },
+        {
+            "time": 1.45,
+            "state": 2
+        },
+        {
+            "time": 2.93,
+            "state": 1
+        }
+    ],
+    "50ways-seg17": [
+        {
+            "time": 0.25,
+            "state": 2
+        },
+        {
+            "time": 0.70,
+            "state": 1
+        },
+        {
+            "time": 1.31,
+            "state": 0
+        }
+    ],
+    "50ways-seg18": [
+        {
+            "time": 0.38,
+            "state": 2
+        },
+        {
+            "time": 1.14,
+            "state": 1
+        }
+    ],
+    "50ways-seg19": [
+        {
+            "time": 0.61,
+            "state": 2
+        },
+        {
+            "time": 1.81,
+            "state": 1
+        },
+        {
+            "time": 2.02,
+            "state": 0,
+            "x": "raising"
+        },
+        {
+            "time": 2.47,
+            "state": 0
+        }
+    ],
+    "50ways-seg20": [
+        {
+            "time": 0.92,
+            "state": 2
+        },
+        {
+            "time": 1.36,
+            "state": 1
+        }
+    ],
+    "50ways-seg21": [
+        {
+            "time": 0,
+            "state": 0,
+            "#": "stumbling"
+        },
+        {
+            "time": 2.07,
+            "state": 2
+        },
+        {
+            "time": 2.79,
+            "state": 1
+        }
+    ],
+    "50ways-seg22": [
+        {
+            "time": 0.49,
+            "state": 2
+        },
+        {
+            "time": 1.40,
+            "state": 1
+        }
+    ],
+    "50ways-seg23": [
+        {
+            "time": 0.41,
+            "state": 2
+        },
+        {
+            "time": 1.08,
+            "state": 1
+        }
+    ],
+    "50ways-seg24": [
+        {
+            "time": 1.05,
+            "state": 2
+        },
+        {
+            "time": 1.57,
+            "state": 1
+        }
+    ],
+    "50ways-seg25": [
+        {
+            "time": 2.58,
+            "state": 2
+        },
+        {
+            "time": 3.50,
+            "state": 1
+        }
+    ],
+    "50ways-seg26": [
+        {
+            "time": 2.19,
+            "state": 2
+        },
+        {
+            "time": 3.07,
+            "state": 1
+        }
+    ],
+    "50ways-seg27": [
+        {
+            "time": 1.59,
+            "state": 2
+        },
+        {
+            "time": 3.26,
+            "state": 1
+        }
+    ],
+    "50ways-seg28": [
+        {
+            "time": 0.51,
+            "state": 2
+        },
+        {
+            "time": 2.47,
+            "state": 1
+        }
+    ],
+    "50ways-seg29": [
+        {
+            "time": 2.01,
+            "state": 2
+        },
+        {
+            "time": 2.41,
+            "state": 1
+        }
+    ],
+    "50ways-seg30": [],
+    "50ways-seg31": [
+        {
+            "time": 2.76,
+            "state": 2
+        },
+        {
+            "time": 3.20,
+            "state": 1
+        }
+    ],
+    "50ways-seg32": [
+        {
+            "time": 2.25,
+            "state": 2
+        },
+        {
+            "time": 3.37,
+            "state": 1
+        }
+    ],
+    "50ways-seg33": [
+        {
+            "time": 2.40,
+            "state": 2
+        },
+        {
+            "time": 3.56,
+            "state": 1
+        }
+    ],
+    "50ways-seg34": [
+        {
+            "time": 1.75,
+            "state": 2
+        },
+        {
+            "time": 2.50,
+            "state": 1
+        }
+    ],
+    "50ways-seg35": [
+        {
+            "time": 2.97,
+            "state": 2
+        },
+        {
+            "time": 3.48,
+            "state": 1
+        }
+    ],
+    "50ways-seg36": [
+        {
+            "time": 3.46,
+            "state": 2
+        },
+        {
+            "time": 4.06,
+            "state": 1
+        }
+    ],
+    "50ways-seg37": [
+        {
+            "time": 0.87,
+            "state": 2
+        },
+        {
+            "time": 2.56,
+            "state": 1
+        }
+    ],
+    "50ways-seg38": [
+        {
+            "time": 0.43,
+            "state": 2
+        },
+        {
+            "time": 0.99,
+            "state": 1
+        },
+        {
+            "time": 1.15,
+            "state": 0,
+            "#": "raising"
+        }
+    ],
+    "50ways-seg39": [
+        {
+            "time": 1.83,
+            "state": 2
+        },
+        {
+            "time": 3.23,
+            "state": 1
+        }
+    ],
+    "50ways-seg40": [
+        {
+            "time": 1.50,
+            "state": 2
+        },
+        {
+            "time": 2.40,
+            "state": 1
+        }
+    ],
+    "50ways-seg41": [
+        {
+            "time": 0,
+            "state": 0,
+            "#": "on one leg"
+        },
+        {
+            "time": 3.59,
+            "state": 2
+        },
+        {
+            "time": 4.71,
+            "state": 1
+        }
+    ],
+    "50ways-seg42": [
+        {
+            "time": 2.71,
+            "state": 2
+        },
+        {
+            "time": 4.22,
+            "state": 1
+        }
+    ],
+    "50ways-seg43": [
+        {
+            "time": 1.35,
+            "state": 2
+        },
+        {
+            "time": 5.93,
+            "state": 1
+        }
+    ],
+    "50ways-seg44": [
+        {
+            "time": 5.27,
+            "state": 2
+        },
+        {
+            "time": 6.99,
+            "state": 1
+        }
+    ],
+    "50ways-seg45": [],
+    "50ways-seg46": [
+        {
+            "time": 0.58,
+            "state": 2
+        },
+        {
+            "time": 1.04,
+            "state": 1
+        }
+    ],
+    "50ways-seg47": [
+        {
+            "time": 0.74,
+            "state": 2
+        },
+        {
+            "time": 1.53,
+            "state": 1
+        }
+    ],
+    "50ways-seg48": [
+        {
+            "time": 0.52,
+            "state": 2
+        },
+        {
+            "time": 1.22,
+            "state": 1
+        }
+    ],
+    "50ways-seg49": [
+        {
+            "time": 3.37,
+            "state": 2
+        },
+        {
+            "time": 4.38,
+            "state": 1
+        }
+    ],
+    "50ways-seg50": [
+        {
+            "time": 0.65,
+            "state": 2
+        },
+        {
+            "time": 1.91,
+            "state": 1
+        }
+    ]
+}
