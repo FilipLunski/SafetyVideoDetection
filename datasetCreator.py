@@ -59,9 +59,11 @@ def processFile(file, out_filename):
         fileName = fileName_ext[:dot_index]
 
         video_group = f.create_group(fileName)
-        frames_group = video_group.create_group('frames')
 
         frame_number = 0
+
+        dataset_keypoints = []
+        dataset_categories = []
 
         if (fileName in labels):
             label = labels[fileName]
@@ -106,12 +108,8 @@ def processFile(file, out_filename):
                     else:
                         next_state_time = label[state_number + 1]["time"]
 
-                frame_group = frames_group.create_group(
-                    f'frame_{frame_number:04d}')
-
-                frame_group.create_dataset(
-                    'keypoints', data=normalized_keypoints)
-                frame_group.create_dataset('category', data=state)
+                dataset_keypoints.append(normalized_keypoints)
+                dataset_categories.append(state)
 
                 # print(normalized_keypoints)
 
@@ -121,6 +119,10 @@ def processFile(file, out_filename):
                 break
 
             frame_number += 1
+
+        dataset_group = video_group.create_group('dataset')
+        dataset_group.create_dataset('keypoints', data=dataset_keypoints, dtype='float32')
+        dataset_group.create_dataset('categories', data=dataset_categories)
 
         metadata_group = video_group.create_group('metadata')
         metadata_group.create_dataset(
@@ -141,8 +143,8 @@ main('samples\\video\\cauca\\validation',
 
 
 main('samples\\video\\fifty_ways\\train',
-     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_train.h5", "avi")
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_train.h5", "mp4")
 main('samples\\video\\fifty_ways\\test',
-     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_test.h5", "avi")
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_test.h5", "mp4")
 main('samples\\video\\fifty_ways\\validation',
-     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_validation.h5", "avi")
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_validation.h5", "mp4")
