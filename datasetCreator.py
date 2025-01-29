@@ -138,3 +138,11 @@ main('samples\\video\\cauca\\test',
      'samples\\labels\\caucafall_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_cauca_test.h5", "avi")
 main('samples\\video\\cauca\\validation',
      'samples\\labels\\caucafall_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_cauca_validation.h5", "avi")
+
+
+main('samples\\video\\fifty_ways\\train',
+     'samples\\labels\\50ways_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_fifty_ways_train.h5", "avi")
+main('samples\\video\\fifty_ways\\test',
+     'samples\\labels\\50ways_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_fifty_ways_test.h5", "avi")
+main('samples\\video\\fifty_ways\\validation',
+     'samples\\labels\\50ways_labels.json', "C:\\Users\\d5pd69\\source\\repos\\python\\samples\\dataset_fifty_ways_validation.h5", "avi")
