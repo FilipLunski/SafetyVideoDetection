@@ -22,15 +22,13 @@ pose_model = YOLO("yolov8n-pose.pt")
 
 
 def normalize_keypoints(keypoints):
-    global keypoints_model
-    keypoints_model = KeypointClassifier()
 
     x_min, y_min = np.min(keypoints, axis=0)
     x_max, y_max = np.max(keypoints, axis=0)
 
     keypoints[(keypoints[:, 0] == 0) & (keypoints[:, 1] == 0)] = [-1, -1]
 
-    return np.where(keypoints != -1, (keypoints - [x_min, y_min]) / [x_max - x_min, y_max - y_min], keypoints)
+    return np.where(keypoints != -1, (keypoints - [x_min, y_min]) / [x_max - x_min, y_max - y_min], keypoints).flatten()
 
 
 def main(video_folder, labels_file, out_filename, input_format="mp4", new_file=True):
@@ -107,9 +105,8 @@ def processFile(file, out_filename):
                         next_state_time = float('inf')
                     else:
                         next_state_time = label[state_number + 1]["time"]
-
                 dataset_keypoints.append(normalized_keypoints)
-                dataset_categories.append(state)
+                dataset_categories.append(state==1)
 
                 # print(normalized_keypoints)
 
@@ -119,10 +116,9 @@ def processFile(file, out_filename):
                 break
 
             frame_number += 1
-
         dataset_group = video_group.create_group('dataset')
         dataset_group.create_dataset('keypoints', data=dataset_keypoints, dtype='float32')
-        dataset_group.create_dataset('categories', data=dataset_categories)
+        dataset_group.create_dataset('categories', data=dataset_categories, dtype='bool')
 
         metadata_group = video_group.create_group('metadata')
         metadata_group.create_dataset(
