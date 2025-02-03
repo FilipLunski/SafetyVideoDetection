@@ -1,26 +1,64 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import time
+import matplotlib.pyplot as plt
 
+def plot_losses(train_losses, val_losses):
+    """
+    Plots training and validation loss curves.
+    
+    Args:
+        train_losses (list): List of training losses per epoch
+        val_losses (list): List of validation losses per epoch
+    """
+    plt.figure(figsize=(10, 6))
+    epochs = range(1, len(train_losses) + 1)
+    
+    plt.plot(epochs, train_losses, 'b', label='Training loss')
+    plt.plot(epochs, val_losses, 'r', label='Validation loss')
+    
+    plt.title('Training and Validation Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.grid(True)
+    
+    # Auto-save the plot
+    plt.savefig('loss_plot.png', dpi=300, bbox_inches='tight')
+    plt.show()
 
 class KeypointClassifier(nn.Module):
-    def __init__(self, input_size=34, hidden_size1=128, hidden_size2=256, hidden_size3=64, output_size=1):
+    def __init__(self, input_size=34, hidden_sizes = [ 256, 128, 64], output_size=1, device=None):
         super(KeypointClassifier, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size1)
-        self.fc2 = nn.Linear(hidden_size1, hidden_size2)
-        self.fc3 = nn.Linear(hidden_size2, hidden_size3)
-        self.fc4 = nn.Linear(hidden_size3, output_size)
+        # self.cuda()
+        self.fc_first = nn.Linear(input_size, hidden_sizes[0])
+        self.bn1 = nn.BatchNorm1d(hidden_sizes[0])
+        self.fcs = nn.ModuleList()
+        self.bns = nn.ModuleList()
+        for i in range(len(hidden_sizes)-1):
+            self.fcs.append(nn.Linear(hidden_sizes[i], hidden_sizes[i+1]))
+            self.bns.append(nn.BatchNorm1d(hidden_sizes[i+1]))
+            
+        self.fc_last=nn.Linear(hidden_sizes[-1], output_size)
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
 
-        self.optimizer = optim.Adam(self.parameters())
+        self.optimizer = optim.Adam(self.parameters(), lr=0.001, weight_decay=1e-4)
         self.criterion = nn.BCELoss()
+        self.dropout = nn.Dropout(0.5)
+
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() and device!="cpu" else "cpu")
+        self.to(self.device)
 
     def forward(self, x):
-        x = self.relu(self.fc1(x))
-        x = self.relu(self.fc2(x))
-        x = self.relu(self.fc3(x))
-        x = self.sigmoid(self.fc4(x))
+        x = self.relu(self.bn1(self.fc_first(x)))
+        for fc, bn in zip(self.fcs, self.bns):
+            x = fc(x)
+            x = bn(x)
+            x = self.relu(x)
+            x = self.dropout(x)
+        x = self.sigmoid(self.fc_last(x))
         return x
 
     def save(self, path):
@@ -29,21 +67,33 @@ class KeypointClassifier(nn.Module):
     def load(self, path):
         self.load_state_dict(torch.load(path))
 
-    def trainn(self, train_data, val_data=None, batch_size=32, epochs=10, device='cpu'):
+    def trainn(self, train_data, val_data=None, batch_size=32, epochs=10):
         train_loader = torch.utils.data.DataLoader(
-            train_data, batch_size=batch_size, shuffle=True)
-
+            train_data, batch_size=batch_size, pin_memory=True)
+        t=0
+        train_losses = []
+        val_losses = []
         for epoch in range(epochs):
             print(f"\nEpoch {epoch+1}/{epochs}", end="")
-            self.train_epoch(train_loader, device)
-            
+            start = time.time()
+            train_loss,train_accuracy=self.train_epoch(train_loader)
+            train_losses.append(train_loss)
+            print(f"\tTraining Loss: {train_loss:.4f}, Training Accuracy: {train_accuracy:.4f}", end="")
+            stop = time.time()
+            t+=stop-start
+            # print(f"\tTime: {stop-start:.2f}s", end="", flush=True)
             if val_data:
-                val_loader = torch.utils.data.DataLoader(val_data)
+                val_loader = torch.utils.data.DataLoader(val_data, batch_size=batch_size, pin_memory=True)
+                start = time.time()
                 val_loss, val_accuracy = self.evaluate(val_loader)
-                print(f"Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.4f}")
-        
+                val_losses.append(val_loss)
+                stop = time.time()
+                print(f"\tValidation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.4f}", end="")
+                # print(f"\tTime: {stop-start:.2f}s", end="")
+        print(f"\nAverage time: {t/epochs:.2f}s", end="", flush=True)
+        plot_losses(train_losses, val_losses)
 
-    def train_epoch(self, train_loader, device='cpu'):
+    def train_epoch(self, train_loader):
         """
         Train the model for one epoch
         Args:
@@ -56,13 +106,20 @@ class KeypointClassifier(nn.Module):
         total_loss = 0.0
         correct = 0
         total = 0
-
-        for batch_idx, (data, target) in enumerate(train_loader):
-            # print('.', end="")
-            data, target = data.to(device), target.to(device).float()
+        # with torch.autograd.profiler.profile(use_device = 'cuda') as prof:
+        t = 0
+        strt = time.time()
+        for data, target in train_loader:
+            start = time.time()
+            # print('.', end="", flush=True)
+            data, target = data.to(self.device), target.to(self.device).float()
             # Forward pass
+            stop = time.time()
+            t += stop-start  
             self.optimizer.zero_grad()
+
             output = self(data)
+            # print(output.shape, target.shape, data.shape, flush=True)
             loss = self.criterion(output, target)
 
             # Backward pass and optimize
@@ -74,12 +131,15 @@ class KeypointClassifier(nn.Module):
             predicted = (output >= 0.5).float()
             correct += (predicted == target).sum().item()
             total += target.size(0)
-
+        stp = time.time()
+        print(f"\tinner: {t:.2f}s", end="", flush=True)
+        print(f"\ttotal: {stp-strt:.2f}s", end="", flush=True)
+        # print(prof.key_averages().table(sort_by="cuda_time_total"))
         avg_loss = total_loss / total
         accuracy = 100. * correct / total
         return avg_loss, accuracy
 
-    def evaluate(self, test_loader, device='cpu'):
+    def evaluate(self, test_loader):
         """
         Evaluate model performance
         Args:
@@ -93,16 +153,16 @@ class KeypointClassifier(nn.Module):
         correct = 0
         total = 0
 
-        with torch.no_grad():
-            for data, target in test_loader:
-                data, target = data.to(device), target.to(device).float()
-                output = self(data)
-                loss = self.criterion(output, target)
+        for data, target in test_loader:
+            data, target = data.to(self.device), target.to(self.device).float()
+            output = self(data)
+            loss = self.criterion(output, target)
 
-                total_loss += loss.item() * data.size(0)
-                predicted = (output >= 0.5).float()
-                correct += (predicted == target).sum().item()
-                total += target.size(0)
+            total_loss += loss.item() * data.size(0)
+            predicted = (output >= 0.5).float()
+            correct += (predicted == target).sum().item()
+            total += target.size(0)
+        # print(prof.key_averages().table(sort_by="cuda_time_total"))
 
         avg_loss = total_loss / total
         accuracy = 100. * correct / total
