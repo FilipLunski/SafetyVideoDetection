@@ -94,10 +94,10 @@ def processFile(file, out_filename):
                 if results[0].keypoints.has_visible == False:
                     continue
 
-                
                 normalized_keypoints = normalize_keypoints(
                     results[0].keypoints.xy[0].cpu().numpy())
 
+                print(normalized_keypoints)
                 if timestamp_s >= next_state_time:
                     state_number += 1
                     state = label[state_number]["state"]
@@ -130,16 +130,18 @@ def processFile(file, out_filename):
 
 
 # main(r'samples\50ways', r'samples\50ways\50ways_labels.json')
-main('samples\\video\\cauca\\train',
-     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_train.h5", "avi")
-main('samples\\video\\cauca\\test',
-     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_test.h5", "avi")
-main('samples\\video\\cauca\\validation',
-     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_validation.h5", "avi")
+
+ 
+# main('samples\\video\\cauca\\train',
+#      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_train.h5", "avi")
+# main('samples\\video\\cauca\\test',
+#      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_test.h5", "avi")
+# main('samples\\video\\cauca\\validation',
+#      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_validation.h5", "avi")
 
 
 main('samples\\video\\fifty_ways\\train',
-     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_train.h5", "mp4")
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_trainnnnnn.h5", "mp4")
 main('samples\\video\\fifty_ways\\test',
      'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_test.h5", "mp4")
 main('samples\\video\\fifty_ways\\validation',

@@ -4,61 +4,95 @@ import torch.optim as optim
 import time
 import matplotlib.pyplot as plt
 
+
 def plot_losses(train_losses, val_losses):
     """
     Plots training and validation loss curves.
-    
+
     Args:
         train_losses (list): List of training losses per epoch
         val_losses (list): List of validation losses per epoch
     """
     plt.figure(figsize=(10, 6))
     epochs = range(1, len(train_losses) + 1)
-    
+
     plt.plot(epochs, train_losses, 'b', label='Training loss')
     plt.plot(epochs, val_losses, 'r', label='Validation loss')
-    
+
     plt.title('Training and Validation Loss')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.legend()
+    plt.ylim(0, 0.8)
     plt.grid(True)
-    
+
     # Auto-save the plot
     plt.savefig('loss_plot.png', dpi=300, bbox_inches='tight')
     plt.show()
 
+
 class KeypointClassifier(nn.Module):
-    def __init__(self, input_size=34, hidden_sizes = [ 256, 128, 64], output_size=1, device=None):
+    def __init__(self, layers =[
+            {
+                "size": 34,
+                "activation": nn.Mish(),
+                "dropout": True,
+                "batch_norm": True
+            },
+            {
+                "size": 128,
+                "activation": nn.PReLU(device="cuda"),
+                "dropout": True,
+                "batch_norm": True
+            },
+            {
+                "size": 64,
+                "activation": nn.Mish(),
+                "dropout": True,
+                "batch_norm": True
+            },
+            {
+                "size": 32,
+                "activation": nn.Sigmoid(),
+                "dropout": False,
+                "batch_norm": False
+            }
+        ], output_size=1, device=None):
         super(KeypointClassifier, self).__init__()
         # self.cuda()
-        self.fc_first = nn.Linear(input_size, hidden_sizes[0])
-        self.bn1 = nn.BatchNorm1d(hidden_sizes[0])
+        self.layers = layers
         self.fcs = nn.ModuleList()
         self.bns = nn.ModuleList()
-        for i in range(len(hidden_sizes)-1):
-            self.fcs.append(nn.Linear(hidden_sizes[i], hidden_sizes[i+1]))
-            self.bns.append(nn.BatchNorm1d(hidden_sizes[i+1]))
-            
-        self.fc_last=nn.Linear(hidden_sizes[-1], output_size)
-        self.relu = nn.ReLU()
+
+        for i in range(len(self.layers)-1):
+            self.fcs.append(nn.Linear(self.layers[i]["size"], self.layers[i+1]["size"]))
+            self.bns.append(nn.BatchNorm1d(self.layers[i+1]["size"]) if self.layers[i+1]["batch_norm"] else nn.Identity())
+        
+        self.fcs.append(nn.Linear(self.layers[-1]["size"], output_size))
+        self.bns.append(nn.BatchNorm1d(output_size) if self.layers[-1]["batch_norm"] else nn.Identity())
+
         self.sigmoid = nn.Sigmoid()
 
-        self.optimizer = optim.Adam(self.parameters(), lr=0.001, weight_decay=1e-4)
+        self.optimizer = optim.Adam(
+            self.parameters(), lr=0.001, weight_decay=1e-5)
         self.criterion = nn.BCELoss()
-        self.dropout = nn.Dropout(0.5)
+        self.dropout = nn.Dropout(0.35)
 
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() and device!="cpu" else "cpu")
+        self.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
         self.to(self.device)
 
     def forward(self, x):
-        x = self.relu(self.bn1(self.fc_first(x)))
-        for fc, bn in zip(self.fcs, self.bns):
-            x = fc(x)
-            x = bn(x)
-            x = self.relu(x)
-            x = self.dropout(x)
-        x = self.sigmoid(self.fc_last(x))
+        
+        for i,layer in enumerate(self.layers):
+            x= self.fcs[i](x)
+            if(layer["batch_norm"]):
+                x = self.bns[i](x)
+            x = layer["activation"](x)
+            if(layer["dropout"]):
+                x = self.dropout(x)
+
+
         return x
 
     def save(self, path):
@@ -70,20 +104,21 @@ class KeypointClassifier(nn.Module):
     def trainn(self, train_data, val_data=None, batch_size=32, epochs=10):
         train_loader = torch.utils.data.DataLoader(
             train_data, batch_size=batch_size, pin_memory=True)
-        t=0
+        t = 0
         train_losses = []
         val_losses = []
         for epoch in range(epochs):
             print(f"\nEpoch {epoch+1}/{epochs}", end="")
             start = time.time()
-            train_loss,train_accuracy=self.train_epoch(train_loader)
+            train_loss, train_accuracy = self.train_epoch(train_loader)
             train_losses.append(train_loss)
             print(f"\tTraining Loss: {train_loss:.4f}, Training Accuracy: {train_accuracy:.4f}", end="")
             stop = time.time()
-            t+=stop-start
+            t += stop-start
             # print(f"\tTime: {stop-start:.2f}s", end="", flush=True)
             if val_data:
-                val_loader = torch.utils.data.DataLoader(val_data, batch_size=batch_size, pin_memory=True)
+                val_loader = torch.utils.data.DataLoader(
+                    val_data, batch_size=batch_size, pin_memory=True)
                 start = time.time()
                 val_loss, val_accuracy = self.evaluate(val_loader)
                 val_losses.append(val_loss)
@@ -115,7 +150,7 @@ class KeypointClassifier(nn.Module):
             data, target = data.to(self.device), target.to(self.device).float()
             # Forward pass
             stop = time.time()
-            t += stop-start  
+            t += stop-start
             self.optimizer.zero_grad()
 
             output = self(data)

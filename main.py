@@ -3,7 +3,6 @@ import cv2
 import glob
 import json
 import os
-import keyboard
 import numpy as np
 from KeypointClassifier import KeypointClassifier
 
