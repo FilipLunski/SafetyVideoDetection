@@ -41,7 +41,7 @@ class KeypointClassifier(nn.Module):
             },
             {
                 "size": 128,
-                "activation": nn.PReLU(device="cuda"),
+                "activation": nn.PReLU(device="cpu"),
                 "dropout": True,
                 "batch_norm": True
             },
@@ -59,7 +59,6 @@ class KeypointClassifier(nn.Module):
             }
         ], output_size=1, device=None):
         super(KeypointClassifier, self).__init__()
-        # self.cuda()
         self.layers = layers
         self.fcs = nn.ModuleList()
         self.bns = nn.ModuleList()
@@ -81,6 +80,7 @@ class KeypointClassifier(nn.Module):
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
         self.to(self.device)
+        self.eval()
 
     def forward(self, x):
         
@@ -99,7 +99,7 @@ class KeypointClassifier(nn.Module):
         torch.save(self.state_dict(), path)
 
     def load(self, path):
-        self.load_state_dict(torch.load(path))
+        self.load_state_dict(torch.load(path, map_location=self.device))
 
     def trainn(self, train_data, val_data=None, batch_size=32, epochs=10):
         train_loader = torch.utils.data.DataLoader(

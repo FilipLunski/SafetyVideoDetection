@@ -97,7 +97,7 @@ def processFile(file, out_filename):
                 normalized_keypoints = normalize_keypoints(
                     results[0].keypoints.xy[0].cpu().numpy())
 
-                print(normalized_keypoints)
+                # print(normalized_keypoints)
                 if timestamp_s >= next_state_time:
                     state_number += 1
                     state = label[state_number]["state"]

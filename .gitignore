@@ -178,4 +178,5 @@ pyrightconfig.json
 runs/
 # samples/video/
 samples/source
+samples/out
 *.h5
