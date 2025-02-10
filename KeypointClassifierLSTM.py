@@ -33,30 +33,30 @@ def plot_losses(train_losses, val_losses):
 
 class KeypointClassifierLSTM(nn.Module):
     def __init__(self, input_size=34, layers=[
+        # {
+        #     "size": 34,
+        #     "activation": nn.Mish(),
+        #     "dropout": True,
+        #     "batch_norm": True
+        # },
+        # {
+        #     "size": 128,
+        #     "activation": nn.Mish(),
+        #     "dropout": True,
+        #     "batch_norm": True
+        # },
         {
-            "size": 128,
-            "activation": nn.Mish(),
-            "dropout": True,
-            "batch_norm": True
-        },
-        {
-            "size": 64,
-            "activation": nn.Mish(),
-            "dropout": True,
-            "batch_norm": True
-        },
-        {
-            "size": 32,
+            "size": 34,
             "activation": nn.Sigmoid(),
             "dropout": False,
-            "batch_norm": False
+            "batch_norm": True
         }
     ], output_size=1, device=None):
         super(KeypointClassifierLSTM, self).__init__()
         self.layers = layers
         self.fcs = nn.ModuleList()
         self.bns = nn.ModuleList()
-        self.lstm = nn.LSTM(input_size, layers[0]["size"], 1, batch_first=True)
+        self.lstm = nn.LSTM(input_size, layers[0]["size"], 4, dropout=0.3, batch_first=True)
 
         for i in range(len(self.layers)-1):
             self.fcs.append(
@@ -71,9 +71,9 @@ class KeypointClassifierLSTM(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
         self.optimizer = optim.Adam(
-            self.parameters(), lr=0.001, weight_decay=1e-5)
+            self.parameters(), lr=0.0005, weight_decay=1e-5)
         self.criterion = nn.BCELoss()
-        self.dropout = nn.Dropout(0.35)
+        self.dropout = nn.Dropout(0.3)
 
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
@@ -112,8 +112,7 @@ class KeypointClassifierLSTM(nn.Module):
             start = time.time()
             train_loss, train_accuracy = self.train_epoch(train_loader)
             train_losses.append(train_loss)
-            print(f"\tTraining Loss: {train_loss:.4f}, Training Accuracy: {
-                  train_accuracy:.4f}", end="")
+            print(f"\tTraining Loss: {train_loss:.4f}, Training Accuracy: {train_accuracy:.4f}", end="")
             stop = time.time()
             t += stop-start
             # print(f"\tTime: {stop-start:.2f}s", end="", flush=True)
@@ -124,8 +123,7 @@ class KeypointClassifierLSTM(nn.Module):
                 val_loss, val_accuracy = self.evaluate(val_loader)
                 val_losses.append(val_loss)
                 stop = time.time()
-                print(f"\tValidation Loss: {val_loss:.4f}, Validation Accuracy: {
-                      val_accuracy:.4f}", end="")
+                print(f"\tValidation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.4f}", end="")
                 # print(f"\tTime: {stop-start:.2f}s", end="")
         print(f"\nAverage time: {t/epochs:.2f}s", end="", flush=True)
         plot_losses(train_losses, val_losses)
