@@ -37,5 +37,5 @@ def main(train_dataset_paths, dev_dataset_paths=[], model_path=None, save=True, 
     model.save(model_path) if save else None
 
 # main([r'samples\dataset_fifty_ways_train.h5'], [r'samples\dataset_fifty_ways_validation.h5'], model_path="model_basic.pt")
-main([r'samples\dataset_cauca_train.h5', r'samples\dataset_fifty_ways_train.h5'], [r'samples\dataset_cauca_validation.h5', r'samples\dataset_fifty_ways_validation.h5'], model_path="model_lstm.pt")
+main([r'samples\dataset_cauca_train.h5', r'samples\dataset_fifty_ways_train.h5'], [r'samples\dataset_cauca_test.h5', r'samples\dataset_fifty_ways_test.h5'], model_path="model_lstm.pt")
 # main(r'samples\dataset_cauca_train.h5', r'samples\dataset_cauca_validation.h5', device='cpu')
