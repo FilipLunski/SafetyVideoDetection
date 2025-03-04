@@ -17,7 +17,7 @@ orange = (0, 165, 255)
 
 
 
-pose_model = YOLO("yolov8n-pose.pt")
+pose_model = YOLO("yolov8s-pose.pt")
 
 
 def normalize_keypoints(keypoints):
@@ -136,7 +136,7 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_
                         confidence = (state-treshold) / (1-treshold)
                         state = 1
                     else:
-                        confidence = state / treshold
+                        confidence = (treshold - state) / treshold
                         state = 0
                     
                     
@@ -209,6 +209,7 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_
 
 # main(r'samples\50ways', r'samples\50ways\50ways_labels.json')
 
-main(r'samples\video\cauca\test', "samples\\out", "avi", 3, 2, 0.3)
+main(r'samples\video\cauca\test', "samples\\out\\lstm", "avi", 3, 2, 0.5)
+main(r'samples\video\fifty_ways\test', "samples\\out\\lstm", "mp4", 3, 2, 0.5)
 
 # main('samples\\video\\cauca\\test', "samples\\video\\cauca\\out", "avi")

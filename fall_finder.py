@@ -3,7 +3,6 @@ import cv2
 import glob
 import json
 import os
-import keyboard
 import torch
 import numpy as np
 from collections import deque
@@ -27,7 +26,11 @@ def normalize_keypoints(keypoints):
     return np.where(keypoints != -1, (keypoints - [x_min, y_min]) / [x_max - x_min, y_max - y_min], keypoints).flatten()
 
 
-def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seconds_after=2, treshold = 0.5):
+def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seconds_after=2, treshold=0.5, device="cuda"):
+
+    device = torch.device("cuda:0" if torch.cuda.is_available()
+                          and device != "cpu" else "cpu")
+
     global labels
 
     global fall_model
@@ -48,10 +51,11 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seco
 
     for file in files:
         # print(file)
-        processFile(file, out_folder, seconds_before=2, seconds_after=2, treshold=treshold)
+        processFile(file, out_folder, seconds_before=2,
+                    seconds_after=2, treshold=treshold, device=device)
 
 
-def processFile(file, out_folder, seconds_before, seconds_after, treshold):
+def processFile(file, out_folder, seconds_before, seconds_after, treshold, device):
 
     cap = cv2.VideoCapture(file)
 
@@ -69,7 +73,6 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold):
     frame_rate = int(cap.get(cv2.CAP_PROP_FPS))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
 
-
     buffer1 = deque(maxlen=fps * seconds_before)
     buffer2 = deque(maxlen=fps * seconds_after)
     frames_after = fps * seconds_after
@@ -86,7 +89,6 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold):
     out_video2 = None
     out_video_number = 0
 
-    
     text = 'normal'
     position = (50, 50)  # (x, y) coordinates
     font_scale = 1
@@ -104,10 +106,14 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold):
             state = 0
             if results[0].keypoints.has_visible == True:
                 for keypoints in results[0].keypoints.xy:
-                    normalized_keypoints = normalize_keypoints(keypoints.numpy())
+                    if device != "cpu":
+                        keypoints = keypoints.cpu()
+                    normalized_keypoints = normalize_keypoints(
+                        keypoints.numpy())
                     # print(normalized_keypoints)
-                    state = fall_model(torch.from_numpy(
-                        np.array([normalized_keypoints])))
+                    normalized_keypoints
+                    inn = torch.tensor([normalized_keypoints]).to(device)
+                    state = fall_model(inn)
 
                     if state >= treshold:
                         state = 1
@@ -136,13 +142,12 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold):
                         out_folder, f"{filename_without_extension}_out_{out_video_number}.avi")
                     fourcc = cv2.VideoWriter_fourcc(*'XVID')
                     out_video1 = cv2.VideoWriter(out_file1, fourcc, frame_rate,
-                                                (frame_width, frame_height))
-                    
-                    
+                                                 (frame_width, frame_height))
+
                     out_file2 = os.path.join(
                         out_folder, f"{filename_without_extension}_out_{out_video_number}_l.avi")
                     out_video2 = cv2.VideoWriter(out_file2, fourcc, frame_rate,
-                                                (frame_width, frame_height))
+                                                 (frame_width, frame_height))
 
                     out_video_number += 1
                 for buffered_frame in buffer1:
@@ -174,6 +179,7 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold):
 
 # main(r'samples\50ways', r'samples\50ways\50ways_labels.json')
 
-main(r'samples\video\people', "samples\\out", "mp4", 1, 1)
+main(r'samples\video\cauca\test', "samples\\out\\basic", "avi", 3, 2)
+main(r'samples\video\fifty_ways\test', "samples\\out\\basic", "mp4", 3, 2)
 
 # main('samples\\video\\cauca\\test', "samples\\video\\cauca\\out", "avi")

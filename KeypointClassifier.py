@@ -41,7 +41,7 @@ class KeypointClassifier(nn.Module):
             },
             {
                 "size": 128,
-                "activation": nn.PReLU(device="cpu"),
+                "activation": nn.PReLU(device="cuda"),
                 "dropout": True,
                 "batch_norm": True
             },
