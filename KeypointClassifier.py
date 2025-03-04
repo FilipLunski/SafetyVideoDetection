@@ -32,7 +32,12 @@ def plot_losses(train_losses, val_losses):
 
 
 class KeypointClassifier(nn.Module):
-    def __init__(self, layers =[
+    def __init__(self, layers = None, output_size=1, device=None):
+        super(KeypointClassifier, self).__init__()
+        self.device = torch.device(
+            "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
+        if layers is None:
+            layers = [
             {
                 "size": 34,
                 "activation": nn.Mish(),
@@ -41,7 +46,7 @@ class KeypointClassifier(nn.Module):
             },
             {
                 "size": 128,
-                "activation": nn.PReLU(device="cuda"),
+                "activation": nn.PReLU(device=self.device),
                 "dropout": True,
                 "batch_norm": True
             },
@@ -57,8 +62,8 @@ class KeypointClassifier(nn.Module):
                 "dropout": False,
                 "batch_norm": False
             }
-        ], output_size=1, device=None):
-        super(KeypointClassifier, self).__init__()
+        ]
+
         self.layers = layers
         self.fcs = nn.ModuleList()
         self.bns = nn.ModuleList()
@@ -77,8 +82,7 @@ class KeypointClassifier(nn.Module):
         self.criterion = nn.BCELoss()
         self.dropout = nn.Dropout(0.35)
 
-        self.device = torch.device(
-            "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
+        
         self.to(self.device)
         self.eval()
 
