@@ -179,4 +179,5 @@ runs/
 # samples/video/
 samples/source
 samples/out
+samples/**/out
 *.h5
