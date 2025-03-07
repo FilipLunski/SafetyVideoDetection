@@ -1,13 +1,10 @@
 import torch
 import torchvision
 import cv2
-import argparse
 import time
 from PIL import Image
 from torchvision.transforms import transforms as transforms
-import re
 import pandas as pd
-import pickle
 import matplotlib
 import glob
 from ultralytics import YOLO
@@ -16,13 +13,23 @@ import mediapipe as mp
 import numpy as np
 from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision
-from mediapipe.framework.formats import landmark_pb2
+import logging
+import tensorflow as tf
 
+
+logging.basicConfig(
+    filename=f'app_{time.time()}.log',
+    level=logging.INFO,
+    format='%(message)s'
+)
+
+logger = logging.getLogger(__name__)
 
 class PoseEstimator:
     def __init__(self, model_type, version):
         self.device = torch.device(
             'cuda' if torch.cuda.is_available() else 'cpu')
+        print(self.device)
         self.model_type = model_type
         self.models = {
             "torchvision": (self.torchvision_initialize, self.torchvision_process_image),
@@ -110,6 +117,7 @@ class PoseEstimator:
 
         model_path = versions[self.version]
         self.model = YOLO(model_path)
+        self.model.to(self.device)
 
     def yolo_process_image(self, frame, frame_width, frame_height, timestamp):
         results = self.model(frame, show=False, verbose=False, tracker=None)
@@ -134,7 +142,7 @@ class PoseEstimator:
         min_pose_presence_confidence = 0.5
         min_tracking_confidence = 0.5
 
-        base_options = mp_python.BaseOptions(model_asset_path=model_path)
+        base_options = mp_python.BaseOptions(model_asset_path=model_path,delegate=mp_python.BaseOptions.Delegate.GPU)
         options = vision.PoseLandmarkerOptions(
             base_options=base_options,
             running_mode=vision.RunningMode.IMAGE,
@@ -177,12 +185,13 @@ class PoseEstimator:
         cap = cv2.VideoCapture(filename)
         if not cap.isOpened():
             print("Error reading video file")
+            logger.error("Error reading video file")
             return
 
         filename_without_extension = os.path.basename(
             filename)[:filename.rfind('.')]
 
-        print(filename_without_extension)
+        logger.info(filename_without_extension)
 
         frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -203,7 +212,7 @@ class PoseEstimator:
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         out_video = cv2.VideoWriter(out_file, fourcc, frame_rate,
                                     (frame_width, frame_height))
-        print(out_file)
+        # print(out_file)
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret:
@@ -221,7 +230,6 @@ class PoseEstimator:
 
             output_frame = self.draw_keypoints(keypoints, scores, frame)
 
-            print(".")
             if frame_number % 10 == 0:
                 print(".", end="", flush=True)
                 # print(f"Frame {frame_number}:\tTime: {t/frame_number:.2f}s")
@@ -230,15 +238,18 @@ class PoseEstimator:
 
         out_video.release()
         cap.release()
-        print(f"Frames: {frame_number}:\tTime: {t/frame_number:.2f}s")
+        logger.info(f"Frames: {frame_number}:\tTime: {t/frame_number:.2f}s")
         return frame_number, t
 
 
 def main(video_folder, out_folder, model_type, version="", input_format="mp4"):
+    
+    print(f"\nTest for {model_type} {version}........................................................................................")
+    logger.info(f"Test for {model_type} {version}........................................................................................")
 
     if (out_folder == ""):
         out_folder = video_folder + "\\out"
-    print(out_folder)
+    logger.info(out_folder)
 
     if not os.path.exists(out_folder):
         os.makedirs(out_folder)
@@ -247,6 +258,7 @@ def main(video_folder, out_folder, model_type, version="", input_format="mp4"):
 
     if len(files) == 0:
         print("No files found")
+        logger.error("No files found")
 
     pose_estimator = PoseEstimator(model_type, version)
     
@@ -258,15 +270,16 @@ def main(video_folder, out_folder, model_type, version="", input_format="mp4"):
         frame_number += f
         tim += t
     
-    print(f"Average time/frame for {model_type} {version}:\t{tim/frame_number:.4f}s, {frame_number/tim}fps")
+    logger.info(f"Average time/frame for {model_type} {version}:\t{tim/frame_number:.4f}s, {frame_number/tim}fps")
 
 
-main(r'samples\video\fifty_ways\test', "samples\\out",
-     "mediapipe", version="lite", input_format="mp4")
-main(r'samples\video\fifty_ways\test', "samples\\out",
-     "mediapipe", version="full", input_format="mp4")
-main(r'samples\video\fifty_ways\test', "samples\\out",
-     "mediapipe", version="heavy", input_format="mp4")
+# main(r'samples\video\fifty_ways\test', "samples\\out",
+#      "mediapipe", version="lite", input_format="mp4")
+# main(r'samples\video\fifty_ways\test', "samples\\out",
+#      "mediapipe", version="full", input_format="mp4")
+# main(r'samples\video\fifty_ways\test', "samples\\out",
+#      "mediapipe", version="heavy", input_format="mp4")
+
 main(r'samples\video\fifty_ways\test', "samples\\out",
      "yolo", version="nano", input_format="mp4")
 main(r'samples\video\fifty_ways\test', "samples\\out",
