@@ -183,3 +183,4 @@ samples/**/out
 *.h5
 
 *.pt
+.pre-commit-config.yaml

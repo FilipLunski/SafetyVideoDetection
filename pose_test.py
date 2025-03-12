@@ -127,9 +127,9 @@ class PoseEstimator:
 
     def mediapipe_initialize(self):
         versions = {
-            "lite": "pose_landmarker_full.task",
-            "full": "pose_landmarker_heavy.task",
-            "heavy": "pose_landmarker_lite.task"
+            "lite": "pose_landmarker_lite.task"
+            "full": "pose_landmarker_full.task",
+            "heavy": "pose_landmarker_heavy.task",
         }
 
         if self.version == "":
@@ -142,7 +142,7 @@ class PoseEstimator:
         min_pose_presence_confidence = 0.5
         min_tracking_confidence = 0.5
 
-        base_options = mp_python.BaseOptions(model_asset_path=model_path,delegate=mp_python.BaseOptions.Delegate.GPU)
+        base_options = mp_python.BaseOptions(model_asset_path=model_path)
         options = vision.PoseLandmarkerOptions(
             base_options=base_options,
             running_mode=vision.RunningMode.IMAGE,
@@ -242,19 +242,22 @@ class PoseEstimator:
         return frame_number, t
 
 
-def main(video_folder, out_folder, model_type, version="", input_format="mp4"):
+def main(video_folders, out_folder, model_type, version="", input_formats=["mp4", "avi"]):
     
     print(f"\nTest for {model_type} {version}........................................................................................")
     logger.info(f"Test for {model_type} {version}........................................................................................")
 
     if (out_folder == ""):
-        out_folder = video_folder + "\\out"
+        out_folder = "\\out"
     logger.info(out_folder)
 
     if not os.path.exists(out_folder):
         os.makedirs(out_folder)
 
-    files = glob.glob(video_folder + "\\*." + input_format)
+    files = []
+    for folder in video_folders:
+        for input_format in input_formats:
+            files += glob.glob(folder + "\\*." + input_format)
 
     if len(files) == 0:
         print("No files found")
@@ -272,21 +275,15 @@ def main(video_folder, out_folder, model_type, version="", input_format="mp4"):
     
     logger.info(f"Average time/frame for {model_type} {version}:\t{tim/frame_number:.4f}s, {frame_number/tim}fps")
 
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "torchvision", version="")
 
-# main(r'samples\video\fifty_ways\test', "samples\\out",
-#      "mediapipe", version="lite", input_format="mp4")
-# main(r'samples\video\fifty_ways\test', "samples\\out",
-#      "mediapipe", version="full", input_format="mp4")
-# main(r'samples\video\fifty_ways\test', "samples\\out",
-#      "mediapipe", version="heavy", input_format="mp4")
+main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="lite")
+main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="full")
+main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="heavy")
 
-main(r'samples\video\fifty_ways\test', "samples\\out",
-     "yolo", version="nano", input_format="mp4")
-main(r'samples\video\fifty_ways\test', "samples\\out",
-     "yolo", version="small", input_format="mp4")
-main(r'samples\video\fifty_ways\test', "samples\\out",
-     "yolo", version="medium", input_format="mp4")
-main(r'samples\video\fifty_ways\test', "samples\\out",
-     "yolo", version="large", input_format="mp4")
-main(r'samples\video\fifty_ways\test', "samples\\out",
-     "yolo", version="xlarge", input_format="mp4")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="nano")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="small")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="medium")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="large")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="xlarge")
+
