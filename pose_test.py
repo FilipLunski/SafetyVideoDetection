@@ -127,7 +127,7 @@ class PoseEstimator:
 
     def mediapipe_initialize(self):
         versions = {
-            "lite": "pose_landmarker_lite.task"
+            "lite": "pose_landmarker_lite.task",
             "full": "pose_landmarker_full.task",
             "heavy": "pose_landmarker_heavy.task",
         }
