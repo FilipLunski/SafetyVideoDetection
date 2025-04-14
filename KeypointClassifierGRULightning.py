@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 import lightning as L
 
 
-class KeypointClassifierLSTMLightning(L.LightningModule):
+class KeypointClassifierGRULightning(L.LightningModule):
     def __init__(self, input_size=34, rnn_hidden_size=128, rnn_layers_count=2, fc_size = 128, output_size=1, rnn_dropout=0.3, fc_droupout=0.3, device=None):
-        super(KeypointClassifierLSTMLightning, self).__init__()
+        super(KeypointClassifierGRULightning, self).__init__()
         
-        self.lstm = nn.LSTM(
+        self.gru = nn.GRU(
             input_size, rnn_hidden_size, rnn_layers_count, dropout=rnn_dropout, batch_first=True)
 
         self.classifier = nn.Sequential(
@@ -42,7 +42,7 @@ class KeypointClassifierLSTMLightning(L.LightningModule):
         return optimizer
 
     def forward(self, x):
-        _, (x, _) = self.lstm(x)
+        _, x = self.gru(x)
         x = x[-1]
 
         x = self.classifier(x)

@@ -63,6 +63,6 @@ def main(train_dataset_paths, dev_dataset_paths=[], model_path=None, save=True, 
 
 # main([r'samples\dataset_fifty_ways_train.h5'], [r'samples\dataset_fifty_ways_validation.h5'], model_path="model_basic.pt")
 main([r'samples\dataset_cauca_multi_train.h5', r'samples\dataset_fifty_ways_multi_train.h5'], [
-     r'samples\dataset_cauca_multi_validation.h5', r'samples\dataset_fifty_ways_multi_validation.h5'], model_path="model_lstm_lightning_multi.pt",
+     r'samples\dataset_cauca_multi_validation.h5', r'samples\dataset_fifty_ways_multi_validation.h5'], model_path="model_lstm_multi.pt",
      from_checkpoint=False)
 # main(r'samples\dataset_cauca_train.h5', r'samples\dataset_cauca_validation.h5', device='cpu')

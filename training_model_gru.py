@@ -1,7 +1,7 @@
 from pathlib import Path
 import h5py
 import torch
-from KeypointClassifierLSTMLightning import KeypointClassifierLSTMLightning
+from KeypointClassifierGRULightning import KeypointClassifierGRULightning
 from torch.utils.data import TensorDataset, ChainDataset
 from torch.nn.utils.rnn import pack_sequence
 from H5PoseDataset import H5PoseDataset
@@ -68,7 +68,7 @@ def train(train_dataset_paths, dev_dataset_paths=[], model_path=None, epochs=400
             # Read the contents of the file
             best_model_path = file.read()
 
-    model = KeypointClassifierLSTMLightning(device=device, rnn_hidden_size=rnn_hidden_size,
+    model = KeypointClassifierGRULightning(device=device, rnn_hidden_size=rnn_hidden_size,
                                             rnn_layers_count=rnn_layers, rnn_dropout=rnn_dropout, fc_droupout=fc_droupout)
 
     train_loader = load_dataset(train_dataset_paths, batch_size, timesteps)
@@ -103,39 +103,39 @@ def main(timesteps=None):
 
     # main([r'samples\dataset_fifty_ways_train.h5'], [r'samples\dataset_fifty_ways_validation.h5'], model_path="model_basic.pt")
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, timesteps=timesteps)
     
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, rnn_dropout=0.3, fc_droupout=0.3, timesteps=timesteps)
     
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, rnn_dropout=0.4, fc_droupout=0.4, timesteps=timesteps)
     
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, rnn_layers=1, rnn_hidden_size=128, fc_size=64, rnn_dropout=0.2, fc_droupout=0.2, timesteps=timesteps)
 
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, rnn_layers=1, rnn_hidden_size=64, fc_size=64, rnn_dropout=0.2, fc_droupout=0.2, timesteps=timesteps)
     
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, rnn_layers=2, rnn_hidden_size=256, fc_size=256, rnn_dropout=0.3, fc_droupout=0.3, timesteps=timesteps)
 
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, rnn_layers=3, rnn_hidden_size=128, fc_size=64, rnn_dropout=0.3, fc_droupout=0.3, timesteps=timesteps)
     
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, rnn_layers=3, rnn_hidden_size=256, fc_size=128, rnn_dropout=0.3, fc_droupout=0.3, timesteps=timesteps)
 
     train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_lstm.pt",
+        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], model_path="model_gru.pt",
         from_checkpoint=False, rnn_layers=3, rnn_hidden_size=256, fc_size=256, rnn_dropout=0.3, fc_droupout=0.3, timesteps=timesteps)
 
     # main(r'samples\dataset_cauca_train.h5', r'samples\dataset_cauca_validation.h5', device='cpu')

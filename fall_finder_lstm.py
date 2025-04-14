@@ -37,7 +37,7 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seco
 
     global fall_model
     fall_model = KeypointClassifierLSTMLightning()
-    fall_model.load("model_lstm_lightning.pt")
+    fall_model.load("model_lstm.pt")
 
     if (out_folder == ""):
         out_folder = video_folder + "\\out"
