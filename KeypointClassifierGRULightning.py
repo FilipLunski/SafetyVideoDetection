@@ -26,6 +26,7 @@ class KeypointClassifierGRULightning(L.LightningModule):
         self.hparams.output_size = output_size
         self.hparams.rnn_dropout = rnn_dropout
         self.hparams.fc_droupout = fc_droupout
+        self.hparams.fc_size = fc_size
         self.hparams.device = device
 
         
