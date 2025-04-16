@@ -182,5 +182,5 @@ samples/out
 samples/**/out
 *.h5
 
-*.pt
+/models_pose
 .pre-commit-config.yaml

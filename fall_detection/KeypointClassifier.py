@@ -3,101 +3,87 @@ import torch.nn as nn
 import torch.optim as optim
 import time
 import matplotlib.pyplot as plt
+import lightning as L
+from torchmetrics.classification import BinaryAccuracy
 
 
-def plot_losses(train_losses, val_losses):
-    """
-    Plots training and validation loss curves.
-
-    Args:
-        train_losses (list): List of training losses per epoch
-        val_losses (list): List of validation losses per epoch
-    """
-    plt.figure(figsize=(10, 6))
-    epochs = range(1, len(train_losses) + 1)
-
-    plt.plot(epochs, train_losses, 'b', label='Training loss')
-    plt.plot(epochs, val_losses, 'r', label='Validation loss')
-
-    plt.title('Training and Validation Loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.legend()
-    plt.ylim(0, 0.8)
-    plt.grid(True)
-
-    # Auto-save the plot
-    plt.savefig('loss_plot.png', dpi=300, bbox_inches='tight')
-    plt.show()
-
-
-class KeypointClassifier(nn.Module):
-    def __init__(self, layers = None, output_size=1, device=None):
+class KeypointClassifier(L.LightningModule):
+    def __init__(self, layers, activation, dropout=0.3, device=None):
         super(KeypointClassifier, self).__init__()
-        self.device = torch.device(
+        
+        device = torch.device(
             "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
-        if layers is None:
-            layers = [
-            {
-                "size": 34,
-                "activation": nn.Mish(),
-                "dropout": True,
-                "batch_norm": True
-            },
-            {
-                "size": 128,
-                "activation": nn.PReLU(device=self.device),
-                "dropout": True,
-                "batch_norm": True
-            },
-            {
-                "size": 64,
-                "activation": nn.Mish(),
-                "dropout": True,
-                "batch_norm": True
-            },
-            {
-                "size": 32,
-                "activation": nn.Sigmoid(),
-                "dropout": False,
-                "batch_norm": False
-            }
-        ]
+        self.to(device)
 
+        activations={
+            "relu": nn.ReLU(),
+            "sigmoid": nn.Sigmoid(),
+            "prelu": nn.PReLU(device=self.device),
+            "tanh": nn.Tanh(),
+            "leaky_relu": nn.LeakyReLU(),
+            "mish": nn.Mish(),
+        }
+        
+        self.classifier = nn.Sequential()
+        for i in range(len(layers)-1):
+            self.classifier.add_module(
+                f'layer_{i}', nn.Linear(layers[i], layers[i+1]))
+            self.classifier.add_module(f'batch_norm_{i}', nn.BatchNorm1d(layers[i+1]))
+            self.classifier.add_module(f'activation_{i}', activations[activation])
+            self.classifier.add_module(f'dropout_{i}', nn.Dropout(dropout))
+        self.classifier.add_module(
+            f'layer_{len(layers)-1}', nn.Linear(layers[-1], 1))
+        
+        self.hparams.input_size = layers[0]
+        self.hparams.output_size = 1
+        self.hparams.dropout = dropout
+        self.hparams.device = device
+        self.hparams.activation = activation
+        self.hparams.layers = layers
+        
+
+        self.criterion = nn.BCEWithLogitsLoss()
+        self.accuracy = BinaryAccuracy(threshold=0.5)
         self.layers = layers
-        self.fcs = nn.ModuleList()
-        self.bns = nn.ModuleList()
 
-        for i in range(len(self.layers)-1):
-            self.fcs.append(nn.Linear(self.layers[i]["size"], self.layers[i+1]["size"]))
-            self.bns.append(nn.BatchNorm1d(self.layers[i+1]["size"]) if self.layers[i+1]["batch_norm"] else nn.Identity())
-        
-        self.fcs.append(nn.Linear(self.layers[-1]["size"], output_size))
-        self.bns.append(nn.BatchNorm1d(output_size) if self.layers[-1]["batch_norm"] else nn.Identity())
-
-        self.sigmoid = nn.Sigmoid()
-
-        self.optimizer = optim.Adam(
-            self.parameters(), lr=0.001, weight_decay=1e-5)
-        self.criterion = nn.BCELoss()
-        self.dropout = nn.Dropout(0.35)
-
-        
+        self.sigmoid = nn.Sigmoid()        
         self.to(self.device)
         self.eval()
 
-    def forward(self, x):
-        
-        for i,layer in enumerate(self.layers):
-            x= self.fcs[i](x)
-            if(layer["batch_norm"]):
-                x = self.bns[i](x)
-            x = layer["activation"](x)
-            if(layer["dropout"]):
-                x = self.dropout(x)
 
+
+    def configure_optimizers(self):
+        optimizer = optim.Adam(self.parameters(), lr=1e-4)
+        return optimizer
+    
+    def forward(self, x):
+        x = self.classifier(x)
 
         return x
+    
+    
+    def training_step(self, batch, batch_idx):
+        input, target = batch
+        output = self(input)
+
+        loss = self.criterion(output, target.float())
+        
+        self.log("train_loss", loss, on_epoch=True, on_step=False)
+        return loss
+
+    def validation_step(self, batch, batch_idx):
+
+        data, target = batch
+        output = self(data)
+
+
+        loss = self.criterion(output, target.float())
+
+        self.log('val_loss', loss, on_epoch=True, on_step=False)
+        output = self.sigmoid(output)
+        accuracy = self.accuracy(output, target.int())    
+        self.log('val_accuracy', accuracy, on_epoch=True, on_step=False)
+        return loss
 
     def save(self, path):
         torch.save(self.state_dict(), path)
@@ -105,107 +91,107 @@ class KeypointClassifier(nn.Module):
     def load(self, path):
         self.load_state_dict(torch.load(path, map_location=self.device))
 
-    def trainn(self, train_data, val_data=None, batch_size=32, epochs=10):
-        train_loader = torch.utils.data.DataLoader(
-            train_data, batch_size=batch_size, pin_memory=True)
-        t = 0
-        train_losses = []
-        val_losses = []
-        for epoch in range(epochs):
-            print(f"\nEpoch {epoch+1}/{epochs}", end="")
-            start = time.time()
-            train_loss, train_accuracy = self.train_epoch(train_loader)
-            train_losses.append(train_loss)
-            print(f"\tTraining Loss: {train_loss:.4f}, Training Accuracy: {train_accuracy:.4f}", end="")
-            stop = time.time()
-            t += stop-start
-            # print(f"\tTime: {stop-start:.2f}s", end="", flush=True)
-            if val_data:
-                val_loader = torch.utils.data.DataLoader(
-                    val_data, batch_size=batch_size, pin_memory=True)
-                start = time.time()
-                val_loss, val_accuracy = self.evaluate(val_loader)
-                val_losses.append(val_loss)
-                stop = time.time()
-                print(f"\tValidation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.4f}", end="")
-                # print(f"\tTime: {stop-start:.2f}s", end="")
-        print(f"\nAverage time: {t/epochs:.2f}s", end="", flush=True)
-        plot_losses(train_losses, val_losses)
+    # def trainn(self, train_data, val_data=None, batch_size=32, epochs=10):
+    #     train_loader = torch.utils.data.DataLoader(
+    #         train_data, batch_size=batch_size, pin_memory=True)
+    #     t = 0
+    #     train_losses = []
+    #     val_losses = []
+    #     for epoch in range(epochs):
+    #         print(f"\nEpoch {epoch+1}/{epochs}", end="")
+    #         start = time.time()
+    #         train_loss, train_accuracy = self.train_epoch(train_loader)
+    #         train_losses.append(train_loss)
+    #         print(f"\tTraining Loss: {train_loss:.4f}, Training Accuracy: {train_accuracy:.4f}", end="")
+    #         stop = time.time()
+    #         t += stop-start
+    #         # print(f"\tTime: {stop-start:.2f}s", end="", flush=True)
+    #         if val_data:
+    #             val_loader = torch.utils.data.DataLoader(
+    #                 val_data, batch_size=batch_size, pin_memory=True)
+    #             start = time.time()
+    #             val_loss, val_accuracy = self.evaluate(val_loader)
+    #             val_losses.append(val_loss)
+    #             stop = time.time()
+    #             print(f"\tValidation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.4f}", end="")
+    #             # print(f"\tTime: {stop-start:.2f}s", end="")
+    #     print(f"\nAverage time: {t/epochs:.2f}s", end="", flush=True)
+    #     plot_losses(train_losses, val_losses)
 
-    def train_epoch(self, train_loader):
-        """
-        Train the model for one epoch
-        Args:
-            train_loader (DataLoader): Training data loader
-            device (str): Compute device ('cpu' or 'cuda')
-        Returns:
-            float: Average training loss for the epoch
-        """
-        self.train()
-        total_loss = 0.0
-        correct = 0
-        total = 0
-        # with torch.autograd.profiler.profile(use_device = 'cuda') as prof:
-        t = 0
-        strt = time.time()
-        for data, target in train_loader:
-            start = time.time()
-            # print('.', end="", flush=True)
-            data, target = data.to(self.device), target.to(self.device).float()
-            # Forward pass
-            stop = time.time()
-            t += stop-start
-            self.optimizer.zero_grad()
+    # def train_epoch(self, train_loader):
+    #     """
+    #     Train the model for one epoch
+    #     Args:
+    #         train_loader (DataLoader): Training data loader
+    #         device (str): Compute device ('cpu' or 'cuda')
+    #     Returns:
+    #         float: Average training loss for the epoch
+    #     """
+    #     self.train()
+    #     total_loss = 0.0
+    #     correct = 0
+    #     total = 0
+    #     # with torch.autograd.profiler.profile(use_device = 'cuda') as prof:
+    #     t = 0
+    #     strt = time.time()
+    #     for data, target in train_loader:
+    #         start = time.time()
+    #         # print('.', end="", flush=True)
+    #         data, target = data.to(self.device), target.to(self.device).float()
+    #         # Forward pass
+    #         stop = time.time()
+    #         t += stop-start
+    #         self.optimizer.zero_grad()
 
-            output = self(data)
-            # print(output.shape, target.shape, data.shape, flush=True)
-            loss = self.criterion(output, target)
+    #         output = self(data)
+    #         # print(output.shape, target.shape, data.shape, flush=True)
+    #         loss = self.criterion(output, target)
 
-            # Backward pass and optimize
-            loss.backward()
-            self.optimizer.step()
+    #         # Backward pass and optimize
+    #         loss.backward()
+    #         self.optimizer.step()
 
-            # Calculate metrics
-            total_loss += loss.item() * data.size(0)
-            predicted = (output >= 0.5).float()
-            correct += (predicted == target).sum().item()
-            total += target.size(0)
-        stp = time.time()
-        print(f"\tinner: {t:.2f}s", end="", flush=True)
-        print(f"\ttotal: {stp-strt:.2f}s", end="", flush=True)
-        # print(prof.key_averages().table(sort_by="cuda_time_total"))
-        avg_loss = total_loss / total
-        accuracy = 100. * correct / total
-        return avg_loss, accuracy
+    #         # Calculate metrics
+    #         total_loss += loss.item() * data.size(0)
+    #         predicted = (output >= 0.5).float()
+    #         correct += (predicted == target).sum().item()
+    #         total += target.size(0)
+    #     stp = time.time()
+    #     print(f"\tinner: {t:.2f}s", end="", flush=True)
+    #     print(f"\ttotal: {stp-strt:.2f}s", end="", flush=True)
+    #     # print(prof.key_averages().table(sort_by="cuda_time_total"))
+    #     avg_loss = total_loss / total
+    #     accuracy = 100. * correct / total
+    #     return avg_loss, accuracy
 
-    def evaluate(self, test_loader):
-        """
-        Evaluate model performance
-        Args:
-            test_loader (DataLoader): Test/validation data loader
-            device (str): Compute device ('cpu' or 'cuda')
-        Returns:
-            tuple: (loss, accuracy)
-        """
-        self.eval()
-        total_loss = 0.0
-        correct = 0
-        total = 0
+    # def evaluate(self, test_loader):
+    #     """
+    #     Evaluate model performance
+    #     Args:
+    #         test_loader (DataLoader): Test/validation data loader
+    #         device (str): Compute device ('cpu' or 'cuda')
+    #     Returns:
+    #         tuple: (loss, accuracy)
+    #     """
+    #     self.eval()
+    #     total_loss = 0.0
+    #     correct = 0
+    #     total = 0
 
-        for data, target in test_loader:
-            data, target = data.to(self.device), target.to(self.device).float()
-            output = self(data)
-            loss = self.criterion(output, target)
+    #     for data, target in test_loader:
+    #         data, target = data.to(self.device), target.to(self.device).float()
+    #         output = self(data)
+    #         loss = self.criterion(output, target)
 
-            total_loss += loss.item() * data.size(0)
-            predicted = (output >= 0.5).float()
-            correct += (predicted == target).sum().item()
-            total += target.size(0)
-        # print(prof.key_averages().table(sort_by="cuda_time_total"))
+    #         total_loss += loss.item() * data.size(0)
+    #         predicted = (output >= 0.5).float()
+    #         correct += (predicted == target).sum().item()
+    #         total += target.size(0)
+    #     # print(prof.key_averages().table(sort_by="cuda_time_total"))
 
-        avg_loss = total_loss / total
-        accuracy = 100. * correct / total
-        return avg_loss, accuracy
+    #     avg_loss = total_loss / total
+    #     accuracy = 100. * correct / total
+    #     return avg_loss, accuracy
 
     # def evaluate(self, X, y):
     #     self.eval()

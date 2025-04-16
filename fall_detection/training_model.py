@@ -10,6 +10,7 @@ from lightning.pytorch.loggers import TensorBoardLogger
 
 CHECKPOINTS_FILE = "models_fall/checkpoints.json"
 
+
 def load_dataset(paths, batch_size):
     keypoints = []
     labels = []
@@ -20,8 +21,8 @@ def load_dataset(paths, batch_size):
                 labels.extend(f[video]['dataset']['categories'][()])
     keypoints = torch.tensor(keypoints)
     labels = torch.tensor(labels).unsqueeze(1)
-            # print(labels)
-            # print (keypoints.shape)
+    # print(labels)
+    # print (keypoints.shape)
     dataset = TensorDataset(keypoints, labels)
     loader = torch.utils.data.DataLoader(
         dataset, batch_size=batch_size, pin_memory=True, shuffle=True)
@@ -34,38 +35,146 @@ def load_checkpoint_map():
             return json.load(f)
     return {}
 
+
 def save_checkpoint_path(model_version, checkpoint_path):
     checkpoint_map = load_checkpoint_map()
     checkpoint_map[model_version] = checkpoint_path
     with open(CHECKPOINTS_FILE, 'w') as f:
         json.dump(checkpoint_map, f, indent=4)
 
+
 def get_checkpoint_path(model_version):
     return load_checkpoint_map().get(model_version, None)
 
-def train(train_dataset_paths, dev_dataset_paths=[], epochs =500, save=True, device='cuda', from_checkpoint=True, checkpoint_path=None, batch_size=4096, layers=[34,128,64,32], dropout=0.4):
-    
+default_train_dataset_paths = [
+    r'samples\dataset_cauca_s_train.h5',
+    r'samples\dataset_fifty_ways_s_train.h5'
+]
+
+default_dev_dataset_paths = [
+    r'samples\dataset_cauca_s_validation.h5',
+    r'samples\dataset_fifty_ways_s_validation.h5'
+]
+
+
+def train(train_dataset_paths = default_train_dataset_paths, dev_dataset_paths=default_dev_dataset_paths, epochs=500, save=True, device='cuda', from_checkpoint=True, checkpoint_path=None, batch_size=4096, layers=[34, 128, 64, 32], activation="relu", dropout=0.4):
+
     try:
 
-        name = f"{layers}_{dropout}"
-        print(f"----------------------------------Training {name} model ---------------------------------------")
+        name = f"ffnn_{layers}_{dropout}_{activation}"
+        print(
+            f"----------------------------------Training {name} model ---------------------------------------")
 
-        model = KeypointClassifier(device=device)
-        train_loader = load_dataset(train_dataset_paths)
-        val_loader = load_dataset(dev_dataset_paths) if len(dev_dataset_paths)>0 else None
+        model = KeypointClassifier(
+            layers=layers, activation=activation, dropout=dropout, device=device)
+        train_loader = load_dataset(train_dataset_paths, batch_size)
+        val_loader = load_dataset(dev_dataset_paths, batch_size) if len(
+            dev_dataset_paths) > 0 else None
 
-        
+        if checkpoint_path is None:
+            checkpoint_path = get_checkpoint_path(name)
 
         logger = TensorBoardLogger(
             "logs", name=name)
         trainer = L.Trainer(max_epochs=epochs, logger=logger)
+
+        model.hparams.previous_model_path = checkpoint_path
+        model.hparams.train_dataset_paths = train_dataset_paths
+        model.hparams.dev_dataset_paths = dev_dataset_paths
+        model.hparams.save = save
+        model.hparams.from_checkpoint = from_checkpoint
+        model.hparams.batch_size = batch_size
+        model.hparams.epochs = epochs
+        model.save_hyperparameters()
+
+        if not from_checkpoint:
+            checkpoint_path = None
+
+        trainer.fit(model=model, train_dataloaders=train_loader,
+                    val_dataloaders=val_loader, ckpt_path=checkpoint_path)
+
+        if save:
+            if model_path is None:
+                model_path = f"models_fall/model_{name}.pt"
+            model.save(model_path)
+        save_checkpoint_path(name, trainer.checkpoint_callback.best_model_path)
+
     except Exception as e:
         print(f"Error: {e}")
         return
 
 
-def main(train_dataset_paths, dev_dataset_paths=[], model_path=None, save=True, device='cuda'):
-    pass
-# main([r'samples\dataset_fifty_ways_train.h5'], [r'samples\dataset_fifty_ways_validation.h5'], model_path="model_basic.pt")
-main([r'samples\dataset_cauca_train.h5', r'samples\dataset_fifty_ways_train.h5'], [r'samples\dataset_cauca_validation.h5', r'samples\dataset_fifty_ways_validation.h5'], model_path="model_basic.pt")
-# main(r'samples\dataset_cauca_train.h5', r'samples\dataset_cauca_validation.h5', device='cpu')
+train(epochs=500,  layers=[34, 64, 32], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 32], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64], activation="relu", dropout=0.3)
+
+train(epochs=500,  layers=[34, 256, 64], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64, 32], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64, 32], activation="relu", dropout=0.3)
+
+train(epochs=500,  layers=[34, 256, 64, 32], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 256, 128, 32], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 256, 128, 32], activation="relu", dropout=0.3)
+
+train(epochs=500,  layers=[34, 256, 128, 64, 32], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 512, 128, 64, 32], activation="relu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.4)
+
+
+
+train(epochs=500,  layers=[34, 64, 32], activation="prelu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64], activation="prelu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64], activation="prelu", dropout=0.3)
+
+train(epochs=500,  layers=[34, 128, 64, 32], activation="prelu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64, 32], activation="prelu", dropout=0.3)
+
+train(epochs=500,  layers=[34, 256, 128, 32], activation="prelu", dropout=0.4)
+
+train(epochs=500,  layers=[34, 256, 128, 32], activation="prelu", dropout=0.3)
+
+
+
+
+train(epochs=500,  layers=[34, 64, 32], activation="tanh", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64], activation="tanh", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64], activation="tanh", dropout=0.3)
+
+train(epochs=500,  layers=[34, 128, 64, 32], activation="tanh", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64, 32], activation="tanh", dropout=0.3)
+
+train(epochs=500,  layers=[34, 256, 128, 32], activation="tanh", dropout=0.4)
+
+train(epochs=500,  layers=[34, 256, 128, 32], activation="tanh", dropout=0.3)
+
+
+
+train(epochs=500,  layers=[34, 64, 32], activation="mish", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64], activation="mish", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64], activation="mish", dropout=0.3)
+
+train(epochs=500,  layers=[34, 128, 64, 32], activation="mish", dropout=0.4)
+
+train(epochs=500,  layers=[34, 128, 64, 32], activation="mish", dropout=0.3)
+
+train(epochs=500,  layers=[34, 256, 128, 32], activation="mish", dropout=0.4)
+
+train(epochs=500,  layers=[34, 256, 128, 32], activation="mish", dropout=0.3)
