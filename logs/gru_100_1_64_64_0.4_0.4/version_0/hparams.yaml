@@ -1,0 +1,20 @@
+batch_size: 4096
+dev_dataset_paths:
+- samples\dataset_cauca_s_validation.h5
+- samples\dataset_fifty_ways_s_validation.h5
+device: cuda
+epochs: 400
+fc_droupout: 0.4
+from_checkpoint: true
+input_size: 34
+model_path: null
+output_size: 1
+previous_model_path: null
+rnn_dropout: 0.4
+rnn_hidden_size: 64
+rnn_layers_count: 1
+save: true
+timesteps: 30
+train_dataset_paths:
+- samples\dataset_cauca_s_train.h5
+- samples\dataset_fifty_ways_s_train.h5
