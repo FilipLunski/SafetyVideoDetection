@@ -11,7 +11,7 @@ import lightning as L
 import os
 from lightning.pytorch.loggers import TensorBoardLogger
 
-CHECKPOINTS_FILE = "models/checkpoints.json"
+CHECKPOINTS_FILE = "models_fall/checkpoints.json"
 
 class VariableLengthDataset(torch.utils.data.Dataset):
     def __init__(self, data):
@@ -128,7 +128,7 @@ def train(train_dataset_paths, dev_dataset_paths=[], rnn_type="gru", model_path=
 
         if save :
             if model_path is None:
-                model_path = f"models/model_{name}.pt"
+                model_path = f"models_fall/model_{name}.pt"
             model.save(model_path) 
 
         save_checkpoint_path(name, trainer.checkpoint_callback.best_model_path)

@@ -17,7 +17,7 @@ orange = (0, 165, 255)
 
 
 
-pose_model = YOLO("yolov8s-pose.pt")
+pose_model = YOLO("../pose_models/yolov8s-pose.pt")
 
 
 def normalize_keypoints(keypoints):
