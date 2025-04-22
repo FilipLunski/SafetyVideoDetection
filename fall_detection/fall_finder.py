@@ -13,7 +13,7 @@ red = (0, 0, 255)
 orange = (0, 165, 255)
 
 
-pose_model = YOLO("../pose_models/yolov8n-pose.pt")
+pose_model = YOLO("../models_pose/yolov8s-pose.pt")
 
 
 def normalize_keypoints(keypoints):
@@ -34,8 +34,8 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seco
     global labels
 
     global fall_model
-    fall_model = KeypointClassifier()
-    fall_model.load("model_basic.pt")
+    fall_model = KeypointClassifier.load_from_checkpoint("./logs/ffnn_[34, 64, 32]_0.4_tanh/version_0/checkpoints/epoch=499-step=2500.ckpt")
+
 
     if (out_folder == ""):
         out_folder = video_folder + "\\out"

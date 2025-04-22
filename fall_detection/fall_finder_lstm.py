@@ -9,7 +9,6 @@ import numpy as np
 from collections import deque
 import time
 from KeypointClassifierLSTMLightning import KeypointClassifierLSTMLightning
-from KeypointClassifierLSTM import KeypointClassifierLSTM
 
 green = (0, 255, 0)
 red = (0, 0, 255)
@@ -17,7 +16,7 @@ orange = (0, 165, 255)
 
 
 
-pose_model = YOLO("../pose_models/yolov8s-pose.pt")
+pose_model = YOLO("../models_pose/yolov8s-pose.pt")
 
 
 def normalize_keypoints(keypoints):
@@ -28,39 +27,6 @@ def normalize_keypoints(keypoints):
     keypoints[(keypoints[:, 0] == 0) & (keypoints[:, 1] == 0)] = [-1, -1]
 
     return np.where(keypoints != -1, (keypoints - [x_min, y_min]) / [x_max - x_min, y_max - y_min], keypoints).flatten()
-
-
-def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seconds_after=2, treshold = 0.5, lstm_timestamps = 30, device="cuda"):
-    global labels
-
-    device = torch.device("cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
-
-    global fall_model
-    fall_model = KeypointClassifierLSTMLightning()
-    fall_model.load("model_lstm.pt")
-
-    if (out_folder == ""):
-        out_folder = video_folder + "\\out"
-    print(out_folder)
-
-    if not os.path.exists(out_folder):
-        os.makedirs(out_folder)
-
-    files = glob.glob(video_folder + "\\*." + input_format)
-
-    if len(files) == 0:
-        print("No files found")
-
-    time_all = 0
-    frames_all = 0
-
-    for file in files:
-        # print(file)
-        (f,t)=processFile(file, out_folder, seconds_before=2, seconds_after=2, treshold=treshold, lstm_timestamps=lstm_timestamps, device=device)
-        time_all += t
-        frames_all += f
-    
-    print(f"Average time: {time_all/frames_all:.2f}s")
 
 
 def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_timestamps, device):
@@ -85,7 +51,7 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_
     buffer_clear = deque(maxlen=fps * seconds_before)
     buffer_labelled = deque(maxlen=fps * seconds_after)
 
-    buffer_keypoints = deque()
+    buffer_keypoints = deque(maxlen=lstm_timestamps)
 
     frames_after = fps * seconds_after
 
@@ -122,9 +88,10 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_
                     if device!="cpu":
                         keypoints = keypoints.cpu()
                     normalized_keypoints = normalize_keypoints(keypoints.numpy())
+                    print (buffer_keypoints)
                     buffer_keypoints.append(normalized_keypoints)
                     if len(buffer_keypoints) < lstm_timestamps:
-                        continue
+                        pass
                     # print(normalized_keypoints)
                     input_tensor = torch.tensor(buffer_keypoints).unsqueeze(0).to(device)
                     state = fall_model(input_tensor)
@@ -205,6 +172,40 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_
         out_video1.release()
     cv2.destroyAllWindows()
     return (frame_number, t)
+
+
+def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seconds_after=2, treshold = 0.5, lstm_timestamps = 50, device="cuda"):
+    global labels
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
+
+    global fall_model
+    fall_model = KeypointClassifierLSTMLightning.load_from_checkpoint("./logs/lstm_50_1_64_64_0.4_0.4/version_0/checkpoints/epoch=399-step=2000.ckpt")
+
+    if (out_folder == ""):
+        out_folder = video_folder + "\\out"
+    print(out_folder)
+
+    if not os.path.exists(out_folder):
+        os.makedirs(out_folder)
+
+    files = glob.glob(video_folder + "\\*." + input_format)
+
+    if len(files) == 0:
+        print("No files found")
+
+    time_all = 0
+    frames_all = 0
+
+    for file in files:
+        # print(file)
+        (f,t)=processFile(file, out_folder, seconds_before=2, seconds_after=2, treshold=treshold, lstm_timestamps=lstm_timestamps, device=device)
+        time_all += t
+        frames_all += f
+    
+    print(f"Average time: {time_all/frames_all:.2f}s")
+
+
 
 
 # main(r'samples\50ways', r'samples\50ways\50ways_labels.json')

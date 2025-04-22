@@ -9,6 +9,7 @@ import numpy as np
 import threading
 from collections import deque
 from KeypointClassifier import KeypointClassifier
+from ultralytics.engine.model import Model
 
 
 ip_addresses = [
@@ -30,7 +31,7 @@ red = (0, 0, 255)
 orange = (0, 165, 255)
 
 
-pose_model = YOLO("../pose_models/yolov8m-pose.pt")
+pose_model:Model = YOLO("../models_pose/yolov8m-pose.pt")
 
 
 def normalize_keypoints(keypoints):
@@ -98,7 +99,7 @@ def processCamera(i):
         if success:
 
             results = pose_model(
-                frame, show=False, verbose=False, tracker=None)
+                frame, show=False, verbose=False, tracker="bytetrack.yaml")
 
             state = 0
             labelled_frame = frame.copy()

@@ -105,11 +105,11 @@ class PoseEstimator:
 
     def yolo_initialize(self):
         versions = {
-            "nano": "../pose_models/yolo11n-pose.pt",
-            "small": "../pose_models/yolo11s-pose.pt",
-            "medium": "../pose_models/yolo11m-pose.pt",
-            "large": "../pose_models/yolo11l-pose.pt",
-            "xlarge": "../pose_models/yolo11x-pose.pt"
+            "nano": "../models_pose/yolo11n-pose.pt",
+            "small": "../models_pose/yolo11s-pose.pt",
+            "medium": "../models_pose/yolo11m-pose.pt",
+            "large": "../models_pose/yolo11l-pose.pt",
+            "xlarge": "../models_pose/yolo11x-pose.pt"
         }
 
         if self.version == "":
@@ -127,9 +127,9 @@ class PoseEstimator:
 
     def mediapipe_initialize(self):
         versions = {
-            "lite": "../pose_models/pose_landmarker_lite.task",
-            "full": "../pose_models/pose_landmarker_full.task",
-            "heavy": "../pose_models/pose_landmarker_heavy.task",
+            "lite": "../models_pose/pose_landmarker_lite.task",
+            "full": "../models_pose/pose_landmarker_full.task",
+            "heavy": "../models_pose/pose_landmarker_heavy.task",
         }
 
         if self.version == "":
