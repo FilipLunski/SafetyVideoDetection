@@ -9,14 +9,14 @@ import numpy as np
 from collections import deque
 import time
 from KeypointClassifierLSTMLightning import KeypointClassifierLSTMLightning
+from FallFinder import FallFinder
 
 green = (0, 255, 0)
 red = (0, 0, 255)
 orange = (0, 165, 255)
 
 
-
-pose_model = YOLO("../models_pose/yolov8s-pose.pt")
+pose_model = "../models_pose/yolov8s-pose.pt"
 
 
 def normalize_keypoints(keypoints):
@@ -40,147 +40,54 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_
     filename = os.path.basename(file)
     dot_index = filename.rfind('.')
     filename_without_extension = filename[:dot_index]
-    print(filename_without_extension, end="", flush=True)
+    print(filename_without_extension,"------------------------------")
 
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     frame_rate = int(cap.get(cv2.CAP_PROP_FPS))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
 
+    output_filename = os.path.join(
+        out_folder, f"{filename_without_extension}_out_{"{}"}.avi")
+    output_annotated_filename = os.path.join(
+        out_folder, f"a_{filename_without_extension}_out_{"{}"}.avi")
+    print(output_filename, output_annotated_filename)
 
-    buffer_clear = deque(maxlen=fps * seconds_before)
-    buffer_labelled = deque(maxlen=fps * seconds_after)
-
-    buffer_keypoints = deque(maxlen=lstm_timestamps)
-
-    frames_after = fps * seconds_after
-
-    # Define the codec and create a VideoWriter object
-    # You can use other codecs like 'MJPG', 'DIVX', etc.
-    # print("Frame width:", frame_width)
-    # print("Frame height:", frame_height)
-    # print("Frame rate:", frame_rate)
+    fall_finder = FallFinder(pose_model, fall_model, lstm_timestamps, frame_width,
+                             frame_height, frame_rate, output_filename, output_annotated_filename)
 
     frame_number = 0
-    frames_left = 0
-    out_video1 = None
-    out_video2 = None
-    out_video_number = 0
+    t = 0
 
-    
-    text = 'normal'
-    position = (50, 50)  # (x, y) coordinates
-    font_scale = 1
-    color = (0, 255, 0)  # Green color in BGR
-    thickness = 2
-    t= 0
     while cap.isOpened():
         success, frame = cap.read()
         start = time.time()
         if success:
-
-            results = pose_model(
-                frame, show=False, verbose=False, tracker=None)
-            confidence = 0
-            if results[0].keypoints.has_visible == True:
-                state = 0
-                for keypoints in results[0].keypoints.xy:
-                    if device!="cpu":
-                        keypoints = keypoints.cpu()
-                    normalized_keypoints = normalize_keypoints(keypoints.numpy())
-                    print (buffer_keypoints)
-                    buffer_keypoints.append(normalized_keypoints)
-                    if len(buffer_keypoints) < lstm_timestamps:
-                        pass
-                    # print(normalized_keypoints)
-                    input_tensor = torch.tensor(buffer_keypoints).unsqueeze(0).to(device)
-                    state = fall_model(input_tensor)
-                    # print(state)
-                    
-                    state = state.item()
-
-                    if state >= treshold:
-                        confidence = (state-treshold) / (1-treshold)
-                        state = 1
-                    else:
-                        confidence = (treshold - state) / treshold
-                        state = 0
-                    
-                    
-                labelled_frame = results[0].plot()
-                if state < 0.5:
-                    text = 'normal'
-                    color = green
-                elif state < 1.5:
-                    text = 'fallen'
-                    color = orange
-                else:
-                    text = 'normal'
-                    color = green
-
-            cv2.putText(labelled_frame, text + f"  {confidence:.2f}", position,
-                        cv2.FONT_HERSHEY_SIMPLEX, font_scale, color, thickness)
-
-            buffer_clear.append(frame)
-            buffer_labelled.append(labelled_frame)
-
-            frames_left = frames_after if state == 1 else (
-                0 if frames_left <= 0 else frames_left - 1)
-
-            if state == 1 or frames_left > 0:
-                if out_video1 is None:
-                    out_file1 = os.path.join(
-                        out_folder, f"{filename_without_extension}_out_{out_video_number}.avi")
-                    fourcc = cv2.VideoWriter_fourcc(*'XVID')
-                    out_video1 = cv2.VideoWriter(out_file1, fourcc, frame_rate,
-                                                (frame_width, frame_height))
-                    
-                    
-                    out_file2 = os.path.join(
-                        out_folder, f"{filename_without_extension}_out_{out_video_number}_l.avi")
-                    out_video2 = cv2.VideoWriter(out_file2, fourcc, frame_rate,
-                                                (frame_width, frame_height))
-
-                    out_video_number += 1
-                for buffered_frame in buffer_clear:
-                    out_video1.write(buffered_frame)
-
-                for buffered_frame in buffer_labelled:
-                    out_video2.write(buffered_frame)
-                buffer_clear.clear()
-                buffer_labelled.clear()
-            elif out_video1 is not None:
-                out_video1.release()
-                out_video1 = None
-                out_video2.release()
-                out_video2 = None
-
-                # Print the frame number and timestamp
-                # print(f"Frame {frame_number}: {timestamp_s:.2f} seconds")
-
+            fall_finder.process_frame(frame)
         else:
             break
 
         frame_number += 1
         stop = time.time()
         t += stop-start
+    fall_finder.release_video_writers()
     print(f"\tAverage time: {t/frame_number:.2f}s")
-    
 
     cap.release()
-    if out_video1 is not None:
-        out_video1.release()
+
     cv2.destroyAllWindows()
     return (frame_number, t)
 
 
-def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seconds_after=2, treshold = 0.5, lstm_timestamps = 50, device="cuda"):
+def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seconds_after=2, treshold=0.5, lstm_timestamps=50, device="cuda"):
     global labels
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available()
+                          and device != "cpu" else "cpu")
 
-    global fall_model
-    fall_model = KeypointClassifierLSTMLightning.load_from_checkpoint("./logs/lstm_50_1_64_64_0.4_0.4/version_0/checkpoints/epoch=399-step=2000.ckpt")
+    global fall_model  
+    fall_model = KeypointClassifierLSTMLightning.load_from_checkpoint(
+        "./logs/lstm_50_1_64_64_0.4_0.4/version_0/checkpoints/epoch=399-step=2000.ckpt")
 
     if (out_folder == ""):
         out_folder = video_folder + "\\out"
@@ -199,17 +106,15 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seco
 
     for file in files:
         # print(file)
-        (f,t)=processFile(file, out_folder, seconds_before=2, seconds_after=2, treshold=treshold, lstm_timestamps=lstm_timestamps, device=device)
+        (f, t) = processFile(file, out_folder, seconds_before=2, seconds_after=2,
+                             treshold=treshold, lstm_timestamps=lstm_timestamps, device=device)
         time_all += t
         frames_all += f
-    
+
     print(f"Average time: {time_all/frames_all:.2f}s")
 
 
-
-
 # main(r'samples\50ways', r'samples\50ways\50ways_labels.json')
-
 main(r'samples\video\cauca\test', "samples\\out\\lstm", "avi", 3, 2, 0.5)
 main(r'samples\video\fifty_ways\test', "samples\\out\\lstm", "mp4", 3, 2, 0.5)
 

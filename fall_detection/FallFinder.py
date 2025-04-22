@@ -1,4 +1,6 @@
 from collections import deque
+from ultralytics import YOLO
+from ultralytics.engine.model import Model
 from ultralytics.engine.results import Results
 import numpy as np
 from torch import tensor
@@ -11,7 +13,7 @@ green = (0, 255, 0)
 red = (0, 0, 255)
 orange = (0, 165, 255)
 
-annotations:dict = {
+annotations: dict = {
     0: {
         "color": green,
         "text": "Normal"
@@ -109,7 +111,6 @@ class FallFinderPerson:
         self._fallen_frames = value
 
 
-
 def normalize_keypoints(keypoints):
 
     x_min, y_min = np.min(keypoints, axis=0)
@@ -125,11 +126,11 @@ class FallFinder:
                  frame_width, frame_height, frame_rate,
                  video_output_file=None, annotated_video_output_file=None,
                  frames_buffer_size=200, threshold=0.5, device="cpu"):
-        self._pose_model = pose_model
+        self._pose_model: Model = YOLO(pose_model)
         self._fall_model: KeypointClassifierGRULightning | KeypointClassifierLSTMLightning = fall_model
         self._sequence_length = sequence_length
-        self._video_output_file:str = video_output_file
-        self._annotated_video_output_file:str = annotated_video_output_file
+        self._video_output_file: str = video_output_file
+        self._annotated_video_output_file: str = annotated_video_output_file
         self._video_number = 0
         self._frame_width = frame_width
         self._frame_height = frame_height
@@ -143,14 +144,16 @@ class FallFinder:
         self._annotated_video = None
         self._frames_left = 0
         self._fall_finder_persons = {}
+        print(self._fall_model)
 
-    def process_frame(self, frame):
+    def process_frame(self, frame, release=False):
         self._frames_left = max(0, self._frames_left - 1)
         for person in self._fall_finder_persons.values():
             person.unseen_frames += 1
-        
+
         self._frame_buffer.append(frame)
-        results = self._pose_model(frame, show=False, verbose=False)
+        results = self._pose_model.track(
+            frame, show=False, verbose=False, persist=True)
         result: Results = results[0]
 
         if result.keypoints.has_visible == False:
@@ -161,12 +164,17 @@ class FallFinder:
         if self._device != "cpu":
             result = result.cpu()
 
-        seen_persons:list[FallFinderPerson] = []
-        
-        for keypoints, bounding_box, bounding_box_abs, id in zip(result.keypoints.xy, result.boxes.xywhn, result.boxes.xyxy, result.boxes.ids):
+        seen_persons: list[FallFinderPerson] = []
+
+        # print(result.keypoints.xy.shape if result.keypoints.xy is not None else None, result.boxes.xywhn.shape if result.boxes.xywhn is not None else None, result.boxes.xyxy.shape if result.boxes.xyxy is not None else None, result.boxes.id.shape if result.boxes.id is not None else None)
+        if (result.boxes.id is None):
+            print("No IDs detected!!!")
+            return
+        for keypoints, bounding_box, bounding_box_abs, id in zip(result.keypoints.xy, result.boxes.xywhn, result.boxes.xyxy, result.boxes.id):
             person: FallFinderPerson = None
-            normalized_keypoints = normalize_keypoints(keypoints.numpy())
-            if (np.sum(np.all(normalized_keypoints == -1, axis=1)) < 8):
+            id = int(id.item())
+            if (np.sum(np.all(keypoints.numpy() == 0, axis=1)) < 8):
+                normalized_keypoints = normalize_keypoints(keypoints.numpy())
                 if (id in self._fall_finder_persons):
                     person = self._fall_finder_persons[id]
                 else:
@@ -179,14 +187,15 @@ class FallFinder:
                     (bounding_box_abs[0], bounding_box_abs[1]))
                 self.update_state(person)
                 seen_persons.append(person)
-                
+
                 if (self._annotated_video_output_file != None):
-                    cv2.putText(annotated_frame, f"{annotations[person.state].text} {person.confidence:.2f}", person.text_position ,
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, annotations[person.state].color, 2)
-        
+                    print(f"{annotations[person.state]['text']} {person.confidence:.2f}",
+                         person.text_position, annotations[person.state]["color"])
+                    cv2.putText(annotated_frame, f"{annotations[person.state]['text']} {person.confidence:.2f}", person.text_position,
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, annotations[person.state]["color"], 2)
+        if (self._annotated_video_output_file != None):
+            self._annotated_frame_buffer.append(annotated_frame)
 
-
-        
         if (self._frames_left > 0):
             self.initialize_video_writers()
             if self._video != None:
@@ -194,34 +203,43 @@ class FallFinder:
                     self._video.write(self._frame_buffer.popleft())
             if self._annotated_video != None:
                 while len(self._annotated_frame_buffer) > 0:
-                    self._annotated_video.write(self._annotated_frame_buffer.popleft())
-        else:
-            if self._video != None:
-                self._video.release()
-            if self._annotated_video != None:
-                self._annotated_video.release()
+                    self._annotated_video.write(
+                        self._annotated_frame_buffer.popleft())
+        if (self._frames_left <= 0 or release):
+            self.release_video_writers()
 
-        
     def initialize_video_writers(self):
         if self._video == None and self._video_output_file != None:
             path = self._video_output_file.format(self._video_number)
-            self._video = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(*'XVID'), self._frame_rate, (self._frame_width, self._frame_height))
+            self._video = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(
+                *'XVID'), self._frame_rate, (self._frame_width, self._frame_height))
         if self._annotated_video == None and self._annotated_video_output_file != None:
             path = self._annotated_video_output_file.format(self._video_number)
-            self._annotated_video = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(*'XVID'), self._frame_rate, (self._frame_width, self._frame_height))
+            self._annotated_video = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(
+                *'XVID'), self._frame_rate, (self._frame_width, self._frame_height))
 
         self._video_number += 1
+
+    def release_video_writers(self):
+        if self._video != None:
+            self._video.release()
+            self._video = None
+        if self._annotated_video != None:
+            self._annotated_video.release()
+            self._annotated_video = None
+
     def update_state(self, person: FallFinderPerson):
-        if len(person.buffer_keypoints) > 1:
+        if len(person.buffer_keypoints) >= 1:
             input_tensor = tensor(person.buffer_keypoints).unsqueeze(
                 0).to(self._device)
-            state = self._fall_model(input_tensor)
+            state = self._fall_model(input_tensor).item()
+            print(state)
             if state >= self._threshold:
-                state = 1
                 confidence = (state - self._threshold) / (1 - self._threshold)
+                state = 1
             else:
-                state = 0
                 confidence = (self._threshold - state) / self._threshold
+                state = 0
             person.state = state
             person.confidence = confidence
             if state == 1:
@@ -230,10 +248,9 @@ class FallFinder:
             else:
                 person.fallen_frames = 0
 
-
     def normalize_text_position(self, position):
-        position_x = position[0]
-        position_y = position[1]
+        position_x = position[0].item()
+        position_y = position[1].item()-20
         position_x = max(5, min(position_x, self._frame_width - 80))
         position_y = max(5, min(position_y, self._frame_height - 30))
-        return (position_x, position_y)
+        return (int(position_x), int(position_y))
