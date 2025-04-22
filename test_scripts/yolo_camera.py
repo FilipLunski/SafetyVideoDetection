@@ -3,7 +3,7 @@ import cv2
 from ultralytics import YOLO
 import supervision as sv
 
-model = YOLO("../models_pose/yolov8n-pose.pt")
+model = YOLO("./models_pose/yolov8n-pose.pt")
 
 video = cv2.VideoCapture(0)
 
