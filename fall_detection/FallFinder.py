@@ -25,13 +25,12 @@ annotations: dict = {
 }
 
 
-class FallFinderPerson:
+class Person:
     def __init__(self, id, sequence_length):
         self._id = id
         self._sequence_length = sequence_length
         self._buffer_keypoints = deque(maxlen=sequence_length)
         self._state = 0
-        self._confidence = 0
         self._confidence = 0
         self._bounding_box = [0, 0, 0, 0]
         self._text_position = (50, 50)
@@ -79,14 +78,6 @@ class FallFinderPerson:
         self._bounding_box = value
 
     @property
-    def confidence(self):
-        return self._confidence
-
-    @confidence.setter
-    def confidence(self, value):
-        self._confidence = value
-
-    @property
     def unseen_frames(self):
         return self._unseen_frames
 
@@ -121,7 +112,7 @@ def normalize_keypoints(keypoints):
     return np.where(keypoints != -1, (keypoints - [x_min, y_min]) / [x_max - x_min, y_max - y_min], keypoints).flatten()
 
 
-class FallFinder:
+class FallDetector:
     def __init__(self, pose_model, fall_model, sequence_length,
                  frame_width, frame_height, frame_rate,
                  video_output_file=None, annotated_video_output_file=None,
@@ -150,8 +141,8 @@ class FallFinder:
         self._frames_left = max(0, self._frames_left - 1)
         for person in self._fall_finder_persons.values():
             person.unseen_frames += 1
-
-        self._frame_buffer.append(frame)
+        if (self._video != None):
+            self._frame_buffer.append(frame)
         results = self._pose_model.track(
             frame, show=False, verbose=False, persist=True)
         result: Results = results[0]
@@ -164,21 +155,21 @@ class FallFinder:
         if self._device != "cpu":
             result = result.cpu()
 
-        seen_persons: list[FallFinderPerson] = []
+        seen_persons: list[Person] = []
 
         # print(result.keypoints.xy.shape if result.keypoints.xy is not None else None, result.boxes.xywhn.shape if result.boxes.xywhn is not None else None, result.boxes.xyxy.shape if result.boxes.xyxy is not None else None, result.boxes.id.shape if result.boxes.id is not None else None)
         if (result.boxes.id is None):
             print("No IDs detected!!!")
             return
         for keypoints, bounding_box, bounding_box_abs, id in zip(result.keypoints.xy, result.boxes.xywhn, result.boxes.xyxy, result.boxes.id):
-            person: FallFinderPerson = None
+            person: Person = None
             id = int(id.item())
             if (np.sum(np.all(keypoints.numpy() == 0, axis=1)) < 8):
                 normalized_keypoints = normalize_keypoints(keypoints.numpy())
                 if (id in self._fall_finder_persons):
                     person = self._fall_finder_persons[id]
                 else:
-                    person = FallFinderPerson(id, self._sequence_length)
+                    person = Person(id, self._sequence_length)
                     self._fall_finder_persons[id] = person
                 person.bounding_box = bounding_box
                 person.buffer_keypoints = normalized_keypoints
@@ -189,8 +180,8 @@ class FallFinder:
                 seen_persons.append(person)
 
                 if (self._annotated_video_output_file != None):
-                    print(f"{annotations[person.state]['text']} {person.confidence:.2f}",
-                         person.text_position, annotations[person.state]["color"])
+                    # print(f"{annotations[person.state]['text']} {person.confidence:.2f}",
+                    #      person.text_position, annotations[person.state]["color"])
                     cv2.putText(annotated_frame, f"{annotations[person.state]['text']} {person.confidence:.2f}", person.text_position,
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, annotations[person.state]["color"], 2)
         if (self._annotated_video_output_file != None):
@@ -207,6 +198,12 @@ class FallFinder:
                         self._annotated_frame_buffer.popleft())
         if (self._frames_left <= 0 or release):
             self.release_video_writers()
+        print(len(self._fall_finder_persons), end=" ")
+        for person in self._fall_finder_persons.values():
+            print(f"\t{person.id}: {person.state} {person.unseen_frames} {person.fallen_frames}", end=" ")
+        print()
+
+        return [p.state for p in seen_persons]
 
     def initialize_video_writers(self):
         if self._video == None and self._video_output_file != None:
@@ -228,12 +225,12 @@ class FallFinder:
             self._annotated_video.release()
             self._annotated_video = None
 
-    def update_state(self, person: FallFinderPerson):
+    def update_state(self, person: Person):
         if len(person.buffer_keypoints) >= 1:
             input_tensor = tensor(person.buffer_keypoints).unsqueeze(
                 0).to(self._device)
             state = self._fall_model(input_tensor).item()
-            print(state)
+            # print(state)
             if state >= self._threshold:
                 confidence = (state - self._threshold) / (1 - self._threshold)
                 state = 1

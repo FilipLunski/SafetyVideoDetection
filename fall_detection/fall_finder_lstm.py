@@ -9,14 +9,14 @@ import numpy as np
 from collections import deque
 import time
 from KeypointClassifierLSTMLightning import KeypointClassifierLSTMLightning
-from FallFinder import FallFinder
+from FallDetector import FallDetector
 
 green = (0, 255, 0)
 red = (0, 0, 255)
 orange = (0, 165, 255)
 
 
-pose_model = "../models_pose/yolov8s-pose.pt"
+pose_model = "./models_pose/yolo11m-pose.pt"
 
 
 def normalize_keypoints(keypoints):
@@ -53,7 +53,7 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_
         out_folder, f"a_{filename_without_extension}_out_{"{}"}.avi")
     print(output_filename, output_annotated_filename)
 
-    fall_finder = FallFinder(pose_model, fall_model, lstm_timestamps, frame_width,
+    fall_finder = FallDetector(pose_model, fall_model, lstm_timestamps, frame_width,
                              frame_height, frame_rate, output_filename, output_annotated_filename)
 
     frame_number = 0
@@ -115,7 +115,8 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seco
 
 
 # main(r'samples\50ways', r'samples\50ways\50ways_labels.json')
-main(r'samples\video\cauca\test', "samples\\out\\lstm", "avi", 3, 2, 0.5)
-main(r'samples\video\fifty_ways\test', "samples\\out\\lstm", "mp4", 3, 2, 0.5)
+# main(r'samples\video\cauca\test', "samples\\out\\lstm", "avi", 3, 2, 0.5)
+# main(r'samples\video\fifty_ways\test', "samples\\out\\lstm", "mp4", 3, 2, 0.5)
+main(r'samples\source\MPFDD-main\Scene_1', "samples\\out\\lstm\\MP", "mp4", 3, 2, 0.5)
 
 # main('samples\\video\\cauca\\test', "samples\\video\\cauca\\out", "avi")
