@@ -110,7 +110,7 @@ def train(train_dataset_paths, dev_dataset_paths=[], rnn_type="gru", model_path=
         model.train()
 
         logger = TensorBoardLogger(
-            "logs", name=name)
+            "logs_m", name=name)
         trainer = L.Trainer(max_epochs=epochs, logger=logger)
 
         model.hparams.model_path = model_path
@@ -143,49 +143,49 @@ def train(train_dataset_paths, dev_dataset_paths=[], rnn_type="gru", model_path=
 
 def main(rnn_type="gru", timesteps=None):
 
-    train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
         rnn_layers=1, rnn_hidden_size=64, fc_size=32, timesteps=timesteps)
 
-    train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
         rnn_layers=1, rnn_hidden_size=64, fc_size=64, timesteps=timesteps)
 
-    train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
         rnn_layers=1, rnn_hidden_size=128, fc_size=64, timesteps=timesteps)
 
-    train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
         rnn_layers=1, rnn_hidden_size=128, fc_size=64,  rnn_dropout=0.3, fc_droupout=0.3, timesteps=timesteps)
 
-    train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
         rnn_layers=2, rnn_hidden_size=128, fc_size=128, timesteps=timesteps)
 
-    train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
         rnn_layers=2, rnn_hidden_size=128, fc_size=128, rnn_dropout=0.3, fc_droupout=0.3, timesteps=timesteps)
 
-    train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-        r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
         rnn_layers=2, rnn_hidden_size=256, fc_size=128, timesteps=timesteps, epochs=200)
 
     if timesteps is not None and timesteps < 100:
-        train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-            r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+        train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+            r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
             rnn_layers=2, rnn_hidden_size=256, fc_size=256, timesteps=timesteps, epochs=200)
 
-        train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-            r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+        train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+            r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
             rnn_layers=3, rnn_hidden_size=128, fc_size=64, timesteps=timesteps, epochs=200)
 
-        train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-            r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+        train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+            r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
             rnn_layers=3, rnn_hidden_size=256, fc_size=128, timesteps=timesteps, epochs=200)
 
-        train([r'samples\dataset_cauca_s_train.h5', r'samples\dataset_fifty_ways_s_train.h5'], [
-            r'samples\dataset_cauca_s_validation.h5', r'samples\dataset_fifty_ways_s_validation.h5'], rnn_type,
+        train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
+            r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,
             rnn_layers=3, rnn_hidden_size=256, fc_size=256, timesteps=timesteps, epochs=200)
 
 

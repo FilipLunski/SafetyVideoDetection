@@ -58,7 +58,7 @@ class KeypointClassifier(L.LightningModule):
     
     def forward(self, x):
         x = self.classifier(x)
-
+        # x= self.sigmoid(x)
         return x
     
     

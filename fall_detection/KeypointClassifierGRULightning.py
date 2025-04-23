@@ -19,7 +19,7 @@ class KeypointClassifierGRULightning(L.LightningModule):
             nn.ReLU(),
             nn.Dropout(fc_droupout),
             nn.Linear(fc_size, output_size),
-            nn.Sigmoid()
+            # nn.Sigmoid()
         )   
 
         self.hparams.input_size = input_size
@@ -31,7 +31,7 @@ class KeypointClassifierGRULightning(L.LightningModule):
         self.hparams.fc_size = fc_size
         self.hparams.device = device
 
-        self.criterion = nn.BCELoss()
+        self.criterion = nn.BCEWithLogitsLoss()
         self.accuracy = BinaryAccuracy(threshold=0.5)
 
         device = torch.device(

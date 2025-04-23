@@ -18,7 +18,7 @@ class KeypointClassifierLSTMLightning(L.LightningModule):
             nn.ReLU(),
             nn.Dropout(fc_droupout),
             nn.Linear(fc_size, output_size),
-            nn.Sigmoid()
+            # nn.Sigmoid()
         )
 
         self.hparams.input_size = input_size
@@ -32,7 +32,7 @@ class KeypointClassifierLSTMLightning(L.LightningModule):
 
         
         
-        self.criterion = nn.BCELoss ()
+        self.criterion = nn.BCEWithLogitsLoss ()
 
         device = torch.device(
             "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
