@@ -180,7 +180,6 @@ runs/
 samples/source
 samples/out
 samples/**/out
-*.h5
 
 /models_pose
 .pre-commit-config.yaml

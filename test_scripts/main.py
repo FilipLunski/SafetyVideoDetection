@@ -19,7 +19,7 @@ def parse_json(file_path):
     return data
 
 
-pose_model = YOLO("../models_pose/yolov8n-pose.pt")
+pose_model = YOLO("./models_pose/yolov8n-pose.pt")
 
 
 def normalize_keypoints(keypoints):

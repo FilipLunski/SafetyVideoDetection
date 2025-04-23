@@ -17,7 +17,7 @@ def parse_json(file_path):
     return data
 
 
-pose_model = YOLO("../models_pose/yolov8s-pose.pt")
+pose_model = YOLO("./pose_models/yolo11m-pose")
 
 
 def normalize_keypoints(keypoints):
@@ -132,16 +132,16 @@ def processFile(file, out_filename):
 
  
 main('samples\\video\\cauca\\train',
-     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_s_train.h5", "avi")
-# main('samples\\video\\cauca\\test',
-#      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_s_test.h5", "avi")
-# main('samples\\video\\cauca\\validation',
-#      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_s_validation.h5", "avi")
+     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_m_train.h5", "avi")
+main('samples\\video\\cauca\\test',
+     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_m_test.h5", "avi")
+main('samples\\video\\cauca\\validation',
+     'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_m_validation.h5", "avi")
 
 
-# main('samples\\video\\fifty_ways\\train',
-#      'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_s_train.h5", "mp4")
-# main('samples\\video\\fifty_ways\\test',
-#      'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_s_test.h5", "mp4")
-# main('samples\\video\\fifty_ways\\validation',
-#      'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_s_validation.h5", "mp4")
+main('samples\\video\\fifty_ways\\train',
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_m_train.h5", "mp4")
+main('samples\\video\\fifty_ways\\test',
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_m_test.h5", "mp4")
+main('samples\\video\\fifty_ways\\validation',
+     'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_m_validation.h5", "mp4")

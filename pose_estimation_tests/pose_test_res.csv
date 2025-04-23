@@ -12,6 +12,13 @@ yolo small gpu, 0.0152, 65.9717806367005
 yolo medium gpu, 0.0174, 57.5001504688788
 yolo large gpu, 0.0244, 41.025916403472124
 yolo xlarge gpu, 0.0244, 41.00455404907248
+
+yolo nano gpu track, 0.0274, 36.49993432946052
+yolo small gpu track, 0.0277, 36.14849744520849
+yolo medium gpu track, 0.0295, 33.88226705742545
+yolo large gpu track, 0.0375, 26.663753062433376
+yolo xlarge gpu track, 0.0405, 24.69518323409046
+
 openpifpaf shufflenetv2k16-apollo-24, 0.0320, 31.293453481612836
 openpifpaf shufflenetv2k16-apollo-66, 0.0384, 26.046095149101856
 openpifpaf shufflenetv2k30-apollo-66, 0.0661, 15.122976213182007

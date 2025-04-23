@@ -47,13 +47,13 @@ def get_checkpoint_path(model_version):
     return load_checkpoint_map().get(model_version, None)
 
 default_train_dataset_paths = [
-    r'samples\dataset_cauca_s_train.h5',
-    r'samples\dataset_fifty_ways_s_train.h5'
+    r'samples\dataset_cauca_m_train.h5',
+    r'samples\dataset_fifty_ways_m_train.h5'
 ]
 
 default_dev_dataset_paths = [
-    r'samples\dataset_cauca_s_validation.h5',
-    r'samples\dataset_fifty_ways_s_validation.h5'
+    r'samples\dataset_cauca_m_validation.h5',
+    r'samples\dataset_fifty_ways_m_validation.h5'
 ]
 
 
@@ -75,7 +75,7 @@ def train(train_dataset_paths = default_train_dataset_paths, dev_dataset_paths=d
             checkpoint_path = get_checkpoint_path(name)
 
         logger = TensorBoardLogger(
-            "logs", name=name)
+            "logs_m", name=name)
         trainer = L.Trainer(max_epochs=epochs, logger=logger)
 
         model.hparams.previous_model_path = checkpoint_path

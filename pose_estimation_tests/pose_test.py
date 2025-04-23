@@ -105,11 +105,11 @@ class PoseEstimator:
 
     def yolo_initialize(self):
         versions = {
-            "nano": "../models_pose/yolo11n-pose.pt",
-            "small": "../models_pose/yolo11s-pose.pt",
-            "medium": "../models_pose/yolo11m-pose.pt",
-            "large": "../models_pose/yolo11l-pose.pt",
-            "xlarge": "../models_pose/yolo11x-pose.pt"
+            "nano": "./models_pose/yolo11n-pose.pt",
+            "small": "./models_pose/yolo11s-pose.pt",
+            "medium": "./models_pose/yolo11m-pose.pt",
+            "large": "./models_pose/yolo11l-pose.pt",
+            "xlarge": "./models_pose/yolo11x-pose.pt"
         }
 
         if self.version == "":
@@ -120,16 +120,16 @@ class PoseEstimator:
         self.model.to(self.device)
 
     def yolo_process_image(self, frame, frame_width, frame_height, timestamp):
-        results = self.model(frame, show=False, verbose=False, tracker=None)
+        results = self.model.track(frame, show=False, verbose=False, persist=True)
         keypoints = [pose.keypoints.xy[0].cpu().numpy() for pose in results]
         scores = [int(pose.keypoints.has_visible) for pose in results]
         return keypoints, scores
 
     def mediapipe_initialize(self):
         versions = {
-            "lite": "../models_pose/pose_landmarker_lite.task",
-            "full": "../models_pose/pose_landmarker_full.task",
-            "heavy": "../models_pose/pose_landmarker_heavy.task",
+            "lite": "./models_pose/pose_landmarker_lite.task",
+            "full": "./models_pose/pose_landmarker_full.task",
+            "heavy": "./models_pose/pose_landmarker_heavy.task",
         }
 
         if self.version == "":
@@ -263,12 +263,12 @@ def main(video_folders, out_folder, model_type, version="", input_formats=["mp4"
         print("No files found")
         logger.error("No files found")
 
-    pose_estimator = PoseEstimator(model_type, version)
     
     frame_number = 0
     tim = 0
     
     for file in files:
+        pose_estimator = PoseEstimator(model_type, version)
         f,t = pose_estimator.process_video(file, out_folder)
         frame_number += f
         tim += t
@@ -277,13 +277,13 @@ def main(video_folders, out_folder, model_type, version="", input_formats=["mp4"
 
 # main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "torchvision", version="")
 
-main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="lite")
-main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="full")
-main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="heavy")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="lite")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="full")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="heavy")
 
-# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="nano")
-# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="small")
-# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="medium")
-# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="large")
-# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="xlarge")
+main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="nano")
+main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="small")
+main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="medium")
+main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="large")
+main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="xlarge")
 
