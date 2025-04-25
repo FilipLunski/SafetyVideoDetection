@@ -94,21 +94,7 @@
             "state": 1
         }
     ],
-    "50ways-seg10": [
-        {
-            "time": 1,
-            "state": 2
-        },
-        {
-            "time": 1.18,
-            "state": 1,
-            "#": "kneeling"
-        },
-        {
-            "time": 1.51,
-            "state": 1
-        }
-    ],
+    "50ways-seg10": [],
     "50ways-seg11": [
         {
             "time": 0.94,
@@ -431,16 +417,7 @@
             "#": "raising"
         }
     ],
-    "50ways-seg39": [
-        {
-            "time": 1.83,
-            "state": 2
-        },
-        {
-            "time": 3.23,
-            "state": 1
-        }
-    ],
+    "50ways-seg39": [],
     "50ways-seg40": [
         {
             "time": 1.50,
@@ -497,16 +474,7 @@
         }
     ],
     "50ways-seg45": [],
-    "50ways-seg46": [
-        {
-            "time": 0.58,
-            "state": 2
-        },
-        {
-            "time": 1.04,
-            "state": 1
-        }
-    ],
+    "50ways-seg46": [],
     "50ways-seg47": [
         {
             "time": 0.74,
