@@ -46,16 +46,16 @@ def load_dataset(paths, batch_size, timesteps=None):
         with h5py.File(path, 'r') as f:
             for video in f:
                 frames = f[video]['dataset']['keypoints'][()]
+                for j in range(1, 3):
+                    for i in range(len(frames)):
+                        start = 0
+                        if timesteps is not None and i > timesteps * j:
+                            start = i - timesteps * j + 1
 
-                for i in range(len(frames)):
-                    start = 0
-                    if timesteps is not None and i > timesteps:
-                        start = i - timesteps+1
-
-                    k = frames[start:i+1]
-                    l = [float(f[video]['dataset']['categories'][i])]
-                    data.append((k, l))
-                # print(f[video]['dataset']['keypoints'][()].shape)
+                        k = frames[start: i + 1]
+                        l = [float(f[video]['dataset']['categories'][i])]
+                        data.append((k, l))
+                    # print(f[video]['dataset']['keypoints'][()].shape)
 
     dataset = VariableLengthDataset(data)
     loader = torch.utils.data.DataLoader(
@@ -110,7 +110,7 @@ def train(train_dataset_paths, dev_dataset_paths=[], rnn_type="gru", model_path=
         model.train()
 
         logger = TensorBoardLogger(
-            "logs_m", name=name)
+            "logs_m_v", name=name)
         trainer = L.Trainer(max_epochs=epochs, logger=logger)
 
         model.hparams.model_path = model_path
@@ -192,8 +192,8 @@ def main(rnn_type="gru", timesteps=None):
 main("gru", 50)
 main("gru", 100)
 
-main("lstm",50)
-main("lstm",100)
+main("lstm", 50)
+main("lstm", 100)
 
 main("gru")
 main("lstm")

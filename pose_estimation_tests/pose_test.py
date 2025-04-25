@@ -67,6 +67,8 @@ class PoseEstimator:
                         ie/float(len(self.edges)), 1.0, 1.0
                     ])
                     rgb = rgb*255
+                    if(keypoints[e, 0][0] == 0 and keypoints[e, 1][0] == 0) or (keypoints[e, 0][1] == 0 and keypoints[e, 1][1] == 0):
+                        continue
                     # join the keypoint pairs to draw the skeletal structure
                     cv2.line(frame, (int(keypoints[e, 0][0]), int(keypoints[e, 1][0])),
                              (int(keypoints[e, 0][1]),
@@ -105,6 +107,12 @@ class PoseEstimator:
 
     def yolo_initialize(self):
         versions = {
+            "nano": "./models_pose/yolov8n-pose.pt",
+            "small": "./models_pose/yolov8s-pose.pt",
+            "medium": "./models_pose/yolov8m-pose.pt",
+            "large": "./models_pose/yolov8l-pose.pt",
+            "xlarge": "./models_pose/yolov8x-pose.pt"
+        } if False else  {
             "nano": "./models_pose/yolo11n-pose.pt",
             "small": "./models_pose/yolo11s-pose.pt",
             "medium": "./models_pose/yolo11m-pose.pt",
@@ -120,7 +128,7 @@ class PoseEstimator:
         self.model.to(self.device)
 
     def yolo_process_image(self, frame, frame_width, frame_height, timestamp):
-        results = self.model.track(frame, show=False, verbose=False, persist=True)
+        results = self.model(frame, show=False, verbose=False, conf=0.1)
         keypoints = [pose.keypoints.xy[0].cpu().numpy() for pose in results]
         scores = [int(pose.keypoints.has_visible) for pose in results]
         return keypoints, scores
@@ -283,7 +291,7 @@ def main(video_folders, out_folder, model_type, version="", input_formats=["mp4"
 
 main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="nano")
 main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="small")
-main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="medium")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="medium")
 main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="large")
 main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="xlarge")
 
