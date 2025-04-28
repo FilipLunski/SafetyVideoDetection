@@ -6,14 +6,14 @@ import os
 import torch
 import numpy as np
 from collections import deque
-from KeypointClassifier import KeypointClassifier
+from KeypointClassifierFFNN import KeypointClassifierFFNN
 
 green = (0, 255, 0)
 red = (0, 0, 255)
 orange = (0, 165, 255)
 
 
-pose_model = YOLO("./models_pose/yolov8s-pose.pt")
+pose_model = YOLO("./models_pose/yolo11m-pose.pt")
 
 
 def normalize_keypoints(keypoints):
@@ -34,7 +34,7 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seco
     global labels
 
     global fall_model
-    fall_model = KeypointClassifier.load_from_checkpoint("./logs/ffnn_[34, 64, 32]_0.4_tanh/version_0/checkpoints/epoch=499-step=2500.ckpt")
+    fall_model = KeypointClassifierFFNN.load_from_checkpoint("./logs_m/ffnn_[34, 64, 32]_0.2_relu/version_0/checkpoints/epoch=599-step=3000.ckpt")
 
 
     if (out_folder == ""):

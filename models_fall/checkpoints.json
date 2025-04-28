@@ -48,5 +48,6 @@
     "lstm_None_1_128_64_0.3_0.3": "logs_m_v\\lstm_None_1_128_64_0.3_0.3\\version_0\\checkpoints\\epoch=399-step=3600.ckpt",
     "lstm_None_2_128_128_0.4_0.4": "logs_m_v\\lstm_None_2_128_128_0.4_0.4\\version_0\\checkpoints\\epoch=399-step=3600.ckpt",
     "lstm_None_2_128_128_0.3_0.3": "logs_m_v\\lstm_None_2_128_128_0.3_0.3\\version_0\\checkpoints\\epoch=399-step=3600.ckpt",
-    "lstm_None_2_256_128_0.4_0.4": "logs_m_v\\lstm_None_2_256_128_0.4_0.4\\version_0\\checkpoints\\epoch=199-step=1800.ckpt"
+    "lstm_None_2_256_128_0.4_0.4": "logs_m_v\\lstm_None_2_256_128_0.4_0.4\\version_0\\checkpoints\\epoch=199-step=1800.ckpt",
+    "gru_50_1_64_32_0.4_0.4_512": "logs_m\\gru_50_1_64_32_0.4_0.4_512\\version_1\\checkpoints\\epoch=399-step=14400.ckpt"
 }

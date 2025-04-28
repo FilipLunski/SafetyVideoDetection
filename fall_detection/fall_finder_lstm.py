@@ -8,8 +8,8 @@ import torch
 import numpy as np
 from collections import deque
 import time
-from KeypointClassifierLSTMLightning import KeypointClassifierLSTMLightning
-from KeypointClassifierGRULightning import KeypointClassifierGRULightning
+from KeypointClassifierLSTM import KeypointClassifierLSTM
+from KeypointClassifierGRU import KeypointClassifierGRU
 from FallDetector import FallDetector
 
 green = (0, 255, 0)
@@ -55,7 +55,7 @@ def processFile(file, out_folder, seconds_before, seconds_after, treshold, lstm_
     print(output_filename, output_annotated_filename)
 
     fall_finder = FallDetector(pose_model, fall_model, lstm_timestamps, frame_width,
-                             frame_height, frame_rate)#, output_filename, output_annotated_filename)
+                             frame_height, frame_rate, output_filename, output_annotated_filename, device=device)
 
     frame_number = 0
     t = 0
@@ -87,8 +87,8 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seco
                           and device != "cpu" else "cpu")
 
     global fall_model  
-    fall_model = KeypointClassifierLSTMLightning.load_from_checkpoint(
-        "./logs_m/lstm_None_2_256_128_0.4_0.4/version_0/checkpoints/epoch=199-step=1000.ckpt")
+    fall_model = KeypointClassifierLSTM.load_from_checkpoint(
+        "./logs_m/lstm_None_1_128_64_0.3_0.3/version_0/checkpoints/epoch=399-step=2000.ckpt")
 
     if (out_folder == ""):
         out_folder = video_folder + "\\out"
@@ -118,6 +118,6 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before=2, seco
 # main(r'samples\50ways', r'samples\50ways\50ways_labels.json')
 # main(r'samples\video\cauca\test', "samples\\out\\lstm", "avi", 3, 2, 0.5)
 # main(r'samples\video\fifty_ways\test', "samples\\out\\lstm", "mp4", 3, 2, 0.5)
-main(r'samples\video\fifty_ways\test', "samples\\out\\GRU", "mp4", 3, 2, 0.5)
+main(r'samples\video\fifty_ways\test', "samples\\out\\lstm", "mp4", 3, 2, 0.5, device="cpu")
 
 # main('samples\\video\\cauca\\test', "samples\\video\\cauca\\out", "avi")

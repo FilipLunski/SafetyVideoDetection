@@ -5,8 +5,8 @@ from ultralytics.engine.model import Model
 from ultralytics.engine.results import Results
 import numpy as np
 from torch import tensor
-from KeypointClassifierGRULightning import KeypointClassifierGRULightning
-from KeypointClassifierLSTMLightning import KeypointClassifierLSTMLightning
+from KeypointClassifierGRU import KeypointClassifierGRU
+from KeypointClassifierLSTM import KeypointClassifierLSTM
 import cv2
 import time
 
@@ -119,7 +119,7 @@ class FallDetector:
                  video_output_file=None, annotated_video_output_file=None,
                  frames_buffer_size=200, threshold=0.5, device="cuda"):
         self._pose_model: Model = YOLO(pose_model)
-        self._fall_model: KeypointClassifierGRULightning | KeypointClassifierLSTMLightning = fall_model
+        self._fall_model: KeypointClassifierGRU | KeypointClassifierLSTM = fall_model
         self._sequence_length = sequence_length
         self._video_output_file: str = video_output_file
         self._annotated_video_output_file: str = annotated_video_output_file
@@ -240,7 +240,8 @@ class FallDetector:
                 0).to(self._device)
             start = time.perf_counter()
             state = self._fall_model(input_tensor).item()
-            torch.cuda.synchronize()
+            # if self._device != "cpu":
+            #     torch.cuda.synchronize()
             end = time.perf_counter()
             print(f"{end - start:.6f}\t", end="")
 

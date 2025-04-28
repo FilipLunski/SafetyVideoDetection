@@ -7,10 +7,10 @@ import lightning as L
 from torchmetrics.classification import BinaryAccuracy
 
 
-class KeypointClassifier(L.LightningModule):
+class KeypointClassifierFFNN(L.LightningModule):
     def __init__(self, layers, activation, dropout=0.3, device=None):
-        super(KeypointClassifier, self).__init__()
-        
+        super(KeypointClassifierFFNN, self).__init__()
+
         device = torch.device(
             "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
         self.to(device)
@@ -46,8 +46,7 @@ class KeypointClassifier(L.LightningModule):
         self.accuracy = BinaryAccuracy(threshold=0.5)
         self.layers = layers
 
-        self.sigmoid = nn.Sigmoid()        
-        self.to(self.device)
+        self.sigmoid = nn.Sigmoid()
         self.eval()
 
 

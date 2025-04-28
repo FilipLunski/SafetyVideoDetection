@@ -4,14 +4,13 @@ import torch.optim as optim
 import time
 import matplotlib.pyplot as plt
 import lightning as L
-from torchmetrics.classification import BinaryAccuracy
 
 
-class KeypointClassifierGRULightning(L.LightningModule):
-    def __init__(self, input_size=34, rnn_hidden_size=128, rnn_layers_count=2, fc_size=128, output_size=1, rnn_dropout=0.3, fc_droupout=0.3, device=None):
-        super(KeypointClassifierGRULightning, self).__init__()
-
-        self.gru = nn.GRU(
+class KeypointClassifierLSTM(L.LightningModule):
+    def __init__(self, input_size=34, rnn_hidden_size=128, rnn_layers_count=2, fc_size = 128, output_size=1, rnn_dropout=0.3, fc_droupout=0.3, device=None):
+        super(KeypointClassifierLSTM, self).__init__()
+        
+        self.lstm = nn.LSTM(
             input_size, rnn_hidden_size, rnn_layers_count, dropout=rnn_dropout, batch_first=True)
 
         self.classifier = nn.Sequential(
@@ -20,7 +19,7 @@ class KeypointClassifierGRULightning(L.LightningModule):
             nn.Dropout(fc_droupout),
             nn.Linear(fc_size, output_size),
             # nn.Sigmoid()
-        )   
+        )
 
         self.hparams.input_size = input_size
         self.hparams.rnn_hidden_size = rnn_hidden_size
@@ -31,20 +30,22 @@ class KeypointClassifierGRULightning(L.LightningModule):
         self.hparams.fc_size = fc_size
         self.hparams.device = device
 
-        self.criterion = nn.BCEWithLogitsLoss()
-        self.accuracy = BinaryAccuracy(threshold=0.5)
+        
+        
+        self.criterion = nn.BCEWithLogitsLoss ()
 
         device = torch.device(
             "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
         self.to(device)
         self.eval()
+        
 
     def configure_optimizers(self):
         optimizer = optim.Adam(self.parameters(), lr=1e-4)
         return optimizer
 
     def forward(self, x):
-        _, x = self.gru(x)
+        _, (x, _) = self.lstm(x)
         x = x[-1]
 
         x = self.classifier(x)
@@ -65,7 +66,7 @@ class KeypointClassifierGRULightning(L.LightningModule):
             print("train:\tOutput shape:", output.shape)
             print("train:\tError message:", str(e))
             raise
-
+        
         self.log("train_loss", loss, on_epoch=True, on_step=False)
         return loss
 
@@ -85,7 +86,10 @@ class KeypointClassifierGRULightning(L.LightningModule):
             raise
 
         self.log('val_loss', loss, on_epoch=True, on_step=False)
-        accuracy = self.accuracy(output, target.int()) * 100
+
+        predicted = (output >= 0.5).float()
+        correct = (predicted == target).sum().item()
+        accuracy = 100. * correct / target.size(0)
         self.log('val_accuracy', accuracy, on_epoch=True, on_step=False)
         return loss
 

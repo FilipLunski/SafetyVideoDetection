@@ -1,6 +1,6 @@
 import h5py
 import torch
-from KeypointClassifier import KeypointClassifier
+from KeypointClassifierFFNN import KeypointClassifierFFNN
 from torch.utils.data import TensorDataset, ChainDataset
 from H5PoseDataset import H5PoseDataset
 import json
@@ -65,7 +65,7 @@ def train(train_dataset_paths = default_train_dataset_paths, dev_dataset_paths=d
         print(
             f"----------------------------------Training {name} model ---------------------------------------")
 
-        model = KeypointClassifier(
+        model = KeypointClassifierFFNN(
             layers=layers, activation=activation, dropout=dropout, device=device)
         train_loader = load_dataset(train_dataset_paths, batch_size)
         val_loader = load_dataset(dev_dataset_paths, batch_size) if len(
@@ -102,79 +102,90 @@ def train(train_dataset_paths = default_train_dataset_paths, dev_dataset_paths=d
     except Exception as e:
         print(f"Error: {e}")
         return
+    
+    
+
+train(epochs=600,  layers=[34, 64, 32], activation="relu", dropout=0.3)
+
+# train(epochs=600,  layers=[34, 128, 32], activation="relu", dropout=0.2)
+
+# train(epochs=600,  layers=[34, 128, 64], activation="relu", dropout=0.2)
 
 
-train(epochs=500,  layers=[34, 64, 32], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 128, 32], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 128, 64], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 128, 64], activation="relu", dropout=0.3)
-
-train(epochs=500,  layers=[34, 256, 64], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 128, 64, 32], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 128, 64, 32], activation="relu", dropout=0.3)
-
-train(epochs=500,  layers=[34, 256, 64, 32], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 256, 128, 32], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 256, 128, 32], activation="relu", dropout=0.3)
-
-train(epochs=500,  layers=[34, 256, 128, 64, 32], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 512, 128, 64, 32], activation="relu", dropout=0.4)
-
-train(epochs=500,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.4)
+train(epochs=1000,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.2)
 
 
+# train(epochs=500,  layers=[34, 64, 32], activation="relu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 64, 32], activation="prelu", dropout=0.4)
+# train(epochs=500,  layers=[34, 128, 32], activation="relu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64], activation="prelu", dropout=0.4)
+# train(epochs=500,  layers=[34, 128, 64], activation="relu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64], activation="prelu", dropout=0.3)
+# train(epochs=500,  layers=[34, 128, 64], activation="relu", dropout=0.3)
 
-train(epochs=500,  layers=[34, 128, 64, 32], activation="prelu", dropout=0.4)
+# train(epochs=500,  layers=[34, 256, 64], activation="relu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64, 32], activation="prelu", dropout=0.3)
+# train(epochs=500,  layers=[34, 128, 64, 32], activation="relu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 256, 128, 32], activation="prelu", dropout=0.4)
+# train(epochs=500,  layers=[34, 128, 64, 32], activation="relu", dropout=0.3)
 
-train(epochs=500,  layers=[34, 256, 128, 32], activation="prelu", dropout=0.3)
+# train(epochs=500,  layers=[34, 256, 64, 32], activation="relu", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 256, 128, 32], activation="relu", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 256, 128, 32], activation="relu", dropout=0.3)
+
+# train(epochs=500,  layers=[34, 256, 128, 64, 32], activation="relu", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 512, 128, 64, 32], activation="relu", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.4)
 
 
 
+# train(epochs=500,  layers=[34, 64, 32], activation="prelu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 64, 32], activation="tanh", dropout=0.4)
+# train(epochs=500,  layers=[34, 128, 64], activation="prelu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64], activation="tanh", dropout=0.4)
+# train(epochs=500,  layers=[34, 128, 64], activation="prelu", dropout=0.3)
 
-train(epochs=500,  layers=[34, 128, 64], activation="tanh", dropout=0.3)
+# train(epochs=500,  layers=[34, 128, 64, 32], activation="prelu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64, 32], activation="tanh", dropout=0.4)
+# train(epochs=500,  layers=[34, 128, 64, 32], activation="prelu", dropout=0.3)
 
-train(epochs=500,  layers=[34, 128, 64, 32], activation="tanh", dropout=0.3)
+# train(epochs=500,  layers=[34, 256, 128, 32], activation="prelu", dropout=0.4)
 
-train(epochs=500,  layers=[34, 256, 128, 32], activation="tanh", dropout=0.4)
-
-train(epochs=500,  layers=[34, 256, 128, 32], activation="tanh", dropout=0.3)
-
+# train(epochs=500,  layers=[34, 256, 128, 32], activation="prelu", dropout=0.3)
 
 
-train(epochs=500,  layers=[34, 64, 32], activation="mish", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64], activation="mish", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64], activation="mish", dropout=0.3)
+# train(epochs=500,  layers=[34, 64, 32], activation="tanh", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64, 32], activation="mish", dropout=0.4)
+# train(epochs=500,  layers=[34, 128, 64], activation="tanh", dropout=0.4)
 
-train(epochs=500,  layers=[34, 128, 64, 32], activation="mish", dropout=0.3)
+# train(epochs=500,  layers=[34, 128, 64], activation="tanh", dropout=0.3)
 
-train(epochs=500,  layers=[34, 256, 128, 32], activation="mish", dropout=0.4)
+# train(epochs=500,  layers=[34, 128, 64, 32], activation="tanh", dropout=0.4)
 
-train(epochs=500,  layers=[34, 256, 128, 32], activation="mish", dropout=0.3)
+# train(epochs=500,  layers=[34, 128, 64, 32], activation="tanh", dropout=0.3)
+
+# train(epochs=500,  layers=[34, 256, 128, 32], activation="tanh", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 256, 128, 32], activation="tanh", dropout=0.3)
+
+
+
+# train(epochs=500,  layers=[34, 64, 32], activation="mish", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 128, 64], activation="mish", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 128, 64], activation="mish", dropout=0.3)
+
+# train(epochs=500,  layers=[34, 128, 64, 32], activation="mish", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 128, 64, 32], activation="mish", dropout=0.3)
+
+# train(epochs=500,  layers=[34, 256, 128, 32], activation="mish", dropout=0.4)
+
+# train(epochs=500,  layers=[34, 256, 128, 32], activation="mish", dropout=0.3)

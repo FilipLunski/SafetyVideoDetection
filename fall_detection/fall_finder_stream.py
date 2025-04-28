@@ -8,7 +8,7 @@ import torch
 import numpy as np
 import threading
 from collections import deque
-from KeypointClassifier import KeypointClassifier
+from KeypointClassifierFFNN import KeypointClassifierFFNN
 from ultralytics.engine.model import Model
 
 
@@ -198,7 +198,7 @@ def main():
     for thread in threads:
         thread.join()
 
-fall_model = KeypointClassifier()
+fall_model = KeypointClassifierFFNN()
 fall_model.load("model_basic.pt")
 
 
