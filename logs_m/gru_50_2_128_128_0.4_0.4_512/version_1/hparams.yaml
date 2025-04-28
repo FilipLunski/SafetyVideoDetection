@@ -1,0 +1,21 @@
+batch_size: 512
+dev_dataset_paths:
+- samples\dataset_cauca_m_validation.h5
+- samples\dataset_fifty_ways_m_validation.h5
+device: cuda
+epochs: 200
+fc_droupout: 0.4
+fc_size: 128
+from_checkpoint: false
+input_size: 34
+model_path: null
+output_size: 1
+previous_model_path: logs_m\gru_50_2_128_128_0.4_0.4_512\version_0\checkpoints\epoch=399-step=28400.ckpt
+rnn_dropout: 0.4
+rnn_hidden_size: 128
+rnn_layers_count: 2
+save: true
+timesteps: 50
+train_dataset_paths:
+- samples\dataset_cauca_m_train.h5
+- samples\dataset_fifty_ways_m_train.h5

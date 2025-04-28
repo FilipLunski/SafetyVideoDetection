@@ -8,7 +8,7 @@ from torchmetrics.classification import BinaryAccuracy
 
 
 class KeypointClassifierFFNN(L.LightningModule):
-    def __init__(self, layers, activation, dropout=0.3, device=None):
+    def __init__(self, layers, activation, dropout=0.3, batch_norm = True, device=None):
         super(KeypointClassifierFFNN, self).__init__()
 
         device = torch.device(
@@ -28,9 +28,11 @@ class KeypointClassifierFFNN(L.LightningModule):
         for i in range(len(layers)-1):
             self.classifier.add_module(
                 f'layer_{i}', nn.Linear(layers[i], layers[i+1]))
-            self.classifier.add_module(f'batch_norm_{i}', nn.BatchNorm1d(layers[i+1]))
+            if batch_norm:
+                self.classifier.add_module(f'batch_norm_{i}', nn.BatchNorm1d(layers[i+1]))
             self.classifier.add_module(f'activation_{i}', activations[activation])
-            self.classifier.add_module(f'dropout_{i}', nn.Dropout(dropout))
+            if dropout > 0:
+                self.classifier.add_module(f'dropout_{i}', nn.Dropout(dropout))
         self.classifier.add_module(
             f'layer_{len(layers)-1}', nn.Linear(layers[-1], 1))
         

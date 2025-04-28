@@ -46,6 +46,7 @@ def save_checkpoint_path(model_version, checkpoint_path):
 def get_checkpoint_path(model_version):
     return load_checkpoint_map().get(model_version, None)
 
+
 default_train_dataset_paths = [
     r'samples\dataset_cauca_m_train.h5',
     r'samples\dataset_fifty_ways_m_train.h5'
@@ -57,16 +58,17 @@ default_dev_dataset_paths = [
 ]
 
 
-def train(train_dataset_paths = default_train_dataset_paths, dev_dataset_paths=default_dev_dataset_paths, epochs=500, save=True, device='cuda', from_checkpoint=True, checkpoint_path=None, batch_size=4096, layers=[34, 128, 64, 32], activation="relu", dropout=0.4):
+def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=default_dev_dataset_paths, epochs=500, save=True, device='cuda', from_checkpoint=True,
+          checkpoint_path=None, batch_size=4096, layers=[34, 128, 64, 32], activation="relu", dropout=0.4, batch_norm=True):
 
     try:
 
-        name = f"ffnn_{layers}_{dropout}_{activation}"
+        name = f"ffnn_{layers}_{dropout}_{activation}_{batch_size}{'_bn' if batch_norm else ''}"
         print(
             f"----------------------------------Training {name} model ---------------------------------------")
 
         model = KeypointClassifierFFNN(
-            layers=layers, activation=activation, dropout=dropout, device=device)
+            layers=layers, activation=activation, dropout=dropout, device=device, batch_norm=batch_norm)
         train_loader = load_dataset(train_dataset_paths, batch_size)
         val_loader = load_dataset(dev_dataset_paths, batch_size) if len(
             dev_dataset_paths) > 0 else None
@@ -75,7 +77,7 @@ def train(train_dataset_paths = default_train_dataset_paths, dev_dataset_paths=d
             checkpoint_path = get_checkpoint_path(name)
 
         logger = TensorBoardLogger(
-            "logs_m", name=name)
+            "logs_m_fnn2", name=name)
         trainer = L.Trainer(max_epochs=epochs, logger=logger)
 
         model.hparams.previous_model_path = checkpoint_path
@@ -102,17 +104,22 @@ def train(train_dataset_paths = default_train_dataset_paths, dev_dataset_paths=d
     except Exception as e:
         print(f"Error: {e}")
         return
-    
-    
 
-train(epochs=600,  layers=[34, 64, 32], activation="relu", dropout=0.3)
+
+
+# train(epochs=600,  layers=[34, 512, 128, 64, 32], activation="relu", dropout=0.4)
+train(epochs=600,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.5)
+# train(epochs=600,  layers=[34, 256, 128, 64, 32], activation="relu", dropout=0.4)
+
 
 # train(epochs=600,  layers=[34, 128, 32], activation="relu", dropout=0.2)
 
 # train(epochs=600,  layers=[34, 128, 64], activation="relu", dropout=0.2)
 
 
-train(epochs=1000,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.2)
+
+# train(epochs=1000,  layers=[34, 512, 256, 64, 32],
+#       activation="relu", dropout=0.2)
 
 
 # train(epochs=500,  layers=[34, 64, 32], activation="relu", dropout=0.4)
@@ -142,7 +149,6 @@ train(epochs=1000,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.
 # train(epochs=500,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.4)
 
 
-
 # train(epochs=500,  layers=[34, 64, 32], activation="prelu", dropout=0.4)
 
 # train(epochs=500,  layers=[34, 128, 64], activation="prelu", dropout=0.4)
@@ -158,8 +164,6 @@ train(epochs=1000,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.
 # train(epochs=500,  layers=[34, 256, 128, 32], activation="prelu", dropout=0.3)
 
 
-
-
 # train(epochs=500,  layers=[34, 64, 32], activation="tanh", dropout=0.4)
 
 # train(epochs=500,  layers=[34, 128, 64], activation="tanh", dropout=0.4)
@@ -173,7 +177,6 @@ train(epochs=1000,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.
 # train(epochs=500,  layers=[34, 256, 128, 32], activation="tanh", dropout=0.4)
 
 # train(epochs=500,  layers=[34, 256, 128, 32], activation="tanh", dropout=0.3)
-
 
 
 # train(epochs=500,  layers=[34, 64, 32], activation="mish", dropout=0.4)
