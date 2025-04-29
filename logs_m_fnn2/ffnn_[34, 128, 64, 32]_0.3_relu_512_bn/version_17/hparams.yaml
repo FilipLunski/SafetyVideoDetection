@@ -1,0 +1,23 @@
+activation: relu
+batch_size: 512
+dev_dataset_paths:
+- samples\dataset_cauca_m_validation.h5
+- samples\dataset_fifty_ways_m_validation.h5
+device: !!python/object/apply:torch.device
+- cuda
+- 0
+dropout: 0.3
+epochs: 600
+from_checkpoint: true
+input_size: 34
+layers:
+- 34
+- 128
+- 64
+- 32
+output_size: 1
+previous_model_path: logs_m_fnn2\ffnn_[34, 128, 64, 32]_0.3_relu\version_0\checkpoints\epoch=499-step=2500.ckpt
+save: true
+train_dataset_paths:
+- samples\dataset_cauca_m_train.h5
+- samples\dataset_fifty_ways_m_train.h5

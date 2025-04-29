@@ -119,22 +119,36 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
             test_loader = load_dataset(
                 test_dataset_paths, batch_size, shuffle=False)  
             print (checkpoint_path)
-            model.eval()
             trainer.test(model=model, dataloaders=test_loader,
                          ckpt_path=checkpoint_path)
-            time_sum = 0
-            sample_count = 0
-            for inputs, _ in test_loader:
-                for i in range(inputs.size(0)): 
-                    sample = inputs[i].unsqueeze(0)
-                    start_time = time.perf_counter()
-                    output = model.predict_step(sample, i)
-                    end_time = time.perf_counter()
-                    elapsed_time = end_time - start_time
-                    time_sum += elapsed_time
-                    sample_count += 1
-            avg_time = time_sum / sample_count   # Convert to seconds
-            print(f"Average time per sample: {avg_time:.6f} seconds")
+            model = KeypointClassifierFFNN.load_from_checkpoint(checkpoint_path)
+            model.eval()
+            print(model.device)
+            # if device == "cpu":
+            #     model.cpu()
+            # else:
+            #     model.cuda()
+            model.to(device)
+            while(True):    
+                time_sum = 0
+                sample_count = 0
+                for inputs, _ in test_loader:
+                    # if device == "cpu":
+                    #     inputs = inputs.cpu()
+                    # else:
+                    inputs = inputs.to(device)
+                    for i in range(inputs.size(0)): 
+                        sample = inputs[i].unsqueeze(0)
+                        start_time = time.perf_counter()
+                        output = model.predict_step(sample)
+                        if device != "cpu":
+                            torch.cuda.synchronize(device)  # Wait for GPU to finish
+                        end_time = time.perf_counter()
+                        elapsed_time = end_time - start_time
+                        time_sum += elapsed_time
+                        sample_count += 1
+                avg_time = time_sum / sample_count   # Convert to seconds
+                print(f"Average time per sample: {avg_time:.6f} seconds")
 
     except Exception as e:
         print(f"Error: {e}")
@@ -142,7 +156,7 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
 
 
 # train(epochs=600,  layers=[34, 512, 128, 64, 32], activation="relu", dropout=0.4)
-train(epochs=600,  layers=[34, 128, 64, 32], activation="relu", dropout=0.3, test=True, checkpoint_path="logs_m_fnn2\\ffnn_[34, 128, 64, 32]_0.3_relu\\version_0\\checkpoints\\epoch=499-step=2500.ckpt")
+train(epochs=600,  layers=[34, 128, 64, 32], activation="relu", dropout=0.3, test=True, device="cpu", checkpoint_path="logs_m_fnn2\\ffnn_[34, 128, 64, 32]_0.3_relu\\version_0\\checkpoints\\epoch=499-step=2500.ckpt")
 # train(epochs=600,  layers=[34, 256, 128, 64, 32], activation="relu", dropout=0.4)
 
 

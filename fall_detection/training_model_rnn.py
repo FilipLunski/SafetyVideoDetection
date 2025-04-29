@@ -173,14 +173,21 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
             model.eval()
             trainer.test(model=model, dataloaders=test_loader,
                          ckpt_path=checkpoint_path)
+            
+            model = KeypointClassifierGRU.load_from_checkpoint(checkpoint_path)
+            model.eval()
+            print(model.device)
+            model.to(device)
             time_sum = 0
             sample_count = 0
             for inputs, _ in test_loader:
-                data = inputs.data  
-                for i in range(data.size(0)): 
+                inputs = inputs.to(device)
+                data = inputs.data
+                for i in range(data.size(0)):
                     sample = data[i].unsqueeze(0)
                     start_time = time.perf_counter()
                     output = model.predict_step(sample, i)
+                    torch.cuda.synchronize()
                     end_time = time.perf_counter()
                     elapsed_time = end_time - start_time
                     time_sum += elapsed_time
@@ -202,8 +209,32 @@ def main(rnn_type="gru", timesteps=None):
     #     r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=200,
     #     rnn_layers=2, rnn_hidden_size=128, fc_size=128, timesteps=timesteps, from_checkpoint=False, batch_size=1024)
 
-    train(rnn_type=rnn_type, epochs=700, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
-          timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=True, checkpoint_path="logs_m\\gru_50_1_64_64_0.15_0.4\\version_2\\checkpoints\\epoch=699-step=3500.ckpt")
+    # train(rnn_type=rnn_type, epochs=350, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=False, rnn_dropout=0.15, test=False)
+    # train(rnn_type=rnn_type, epochs=400, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
+    # train(rnn_type=rnn_type, epochs=450, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
+    # train(rnn_type=rnn_type, epochs=500, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
+    # train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
+    # train(rnn_type=rnn_type, epochs=600, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
+    # train(rnn_type=rnn_type, epochs=650, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
+    # train(rnn_type=rnn_type, epochs=700, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
+
+    # train(rnn_type=rnn_type, epochs=750, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       # , checkpoint_path="logs_m\\gru_50_1_64_64_0.15_0.4\\version_2\\checkpoints\\epoch=699-step=3500.ckpt")
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
+
+    train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+          timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=True, device="cpu", checkpoint_path="logs_m\\gru_50_1_64_64_0.15_0.4\\version_91\\checkpoints\\epoch=549-step=2750.ckpt")
+    
+    # train(rnn_type=rnn_type, epochs=700, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+    #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=True, checkpoint_path="logs_m\\gru_50_1_64_64_0.15_0.4\\version_2\\checkpoints\\epoch=699-step=3500.ckpt")
 
     # train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
     #     r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=500,

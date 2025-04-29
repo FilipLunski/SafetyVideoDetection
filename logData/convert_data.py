@@ -18,7 +18,7 @@ def create_dat_file_from_log(log_file, output_file):
             # epoch is now simply the line number (starting from 1)
             epoch = i
             print(parts[2])
-            value = float(parts[2])*100  # Value (from the third column)
+            value = float(parts[2]) # Value (from the third column)
             
             # Append the epoch and value to their respective lists
             epochs.append(epoch)
@@ -34,11 +34,9 @@ def create_dat_file_from_log(log_file, output_file):
 
 # create_dat_file_from_log("logData/gru_50_1_64_64_0.15_0.4_version_0.csv", "logData/gru_50_1_64_64_0.15_0.4_t_loss.dat")
 
-create_dat_file_from_log("logData/ffnn_[34, 128, 64, 32]_0.4_mish_version_0.csv", "logData/mish.dat")
-create_dat_file_from_log("logData/ffnn_[34, 128, 64, 32]_0.4_relu_version_0.csv", "logData/relu.dat")
-create_dat_file_from_log("logData/ffnn_[34, 128, 64, 32]_0.4_tanh_version_0.csv", "logData/tanh.dat")
-create_dat_file_from_log("logData/ffnn_[34, 128, 64, 32]_0.4_prelu_version_0.csv", "logData/prelu.dat")
-
+create_dat_file_from_log("logData/gru_50_1_64_64_0.15_0.4_version_87.csv", "logData/gru_50_1_64_64_0.15_0.4_tloss.dat")
+create_dat_file_from_log("logData/gru_loss/gru_50_1_64_64_0.15_0.4_version_87.csv", "logData/gru_acc/gru_50_1_64_64_0.15_0.4_loss.dat")
+create_dat_file_from_log("logData/gru_acc/gru_50_1_64_64_0.15_0.4_version_87.csv", "logData/gru_loss/gru_50_1_64_64_0.15_0.4_acc.dat")
 
 
 

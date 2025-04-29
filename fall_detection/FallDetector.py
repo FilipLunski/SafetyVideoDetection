@@ -117,7 +117,7 @@ class FallDetector:
     def __init__(self, pose_model, fall_model, sequence_length,
                  frame_width, frame_height, frame_rate,
                  video_output_file=None, annotated_video_output_file=None,
-                 frames_buffer_size=200, threshold=0.5, device="cuda"):
+                 frames_buffer_size=200, threshold=0.5, calc_statistics=True, print_statistics=True):
         self._pose_model: Model = YOLO(pose_model)
         self._fall_model: KeypointClassifierGRU | KeypointClassifierLSTM = fall_model
         self._sequence_length = sequence_length
@@ -128,7 +128,6 @@ class FallDetector:
         self._frame_height = frame_height
         self._frame_rate = frame_rate
         self._threshold = threshold
-        self._device = device
         self._frames_buffer_size = frames_buffer_size
         self._frame_buffer = deque(maxlen=frames_buffer_size)
         self._video = None
@@ -136,10 +135,25 @@ class FallDetector:
         self._annotated_video = None
         self._frames_left = 0
         self._fall_finder_persons = {}
-        print(self._fall_model)
+        self._statistics = calc_statistics
+        self._print_statistics = print_statistics
+
+        if(self._statistics):
+            self._frames_count = 0
+            self._total_time = 0
+
+        # print(self._fall_model)
+
+    @property
+    def avg_inf_time(self):
+        if self._statistics:
+            return self._total_time / self._frames_count
+        else:
+            return None
 
     def process_frame(self, frame, release=False):
-        start = time.perf_counter()
+        if(self._statistics):
+            start = time.perf_counter()
         self._frames_left = max(0, self._frames_left - 1)
         for person in self._fall_finder_persons.values():
             person.unseen_frames += 1
@@ -154,7 +168,7 @@ class FallDetector:
         if (self._annotated_video_output_file != None):
             annotated_frame = result.plot()
 
-        if self._device != "cpu":
+        if self._fall_model._device != "cpu":
             result = result.cpu()
 
         seen_persons: list[Person] = []
@@ -165,11 +179,12 @@ class FallDetector:
             return
         for keypoints, bounding_box, bounding_box_abs, id in zip(result.keypoints.xy, result.boxes.xywhn, result.boxes.xyxy, result.boxes.id):
             person: Person = None
-            if (self._device != "cpu"):
-                keypoints = keypoints.cpu()
-                bounding_box = bounding_box.cpu()
-                bounding_box_abs = bounding_box_abs.cpu()
-                id = id.cpu()
+
+            keypoints = keypoints.cpu()
+            bounding_box = bounding_box.cpu()
+            bounding_box_abs = bounding_box_abs.cpu()
+            id = id.cpu()
+
             id = int(id.item())
             if (np.sum(np.all(keypoints.numpy() == 0, axis=1)) < 8):
                 normalized_keypoints = normalize_keypoints(keypoints.numpy())
@@ -187,8 +202,6 @@ class FallDetector:
                 seen_persons.append(person)
 
                 if (self._annotated_video_output_file != None):
-                    # print(f"{annotations[person.state]['text']} {person.confidence:.2f}",
-                    #      person.text_position, annotations[person.state]["color"])
                     cv2.putText(annotated_frame, f"{annotations[person.state]['text']} {person.confidence:.2f}", person.text_position,
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, annotations[person.state]["color"], 2)
         if (self._annotated_video_output_file != None):
@@ -205,12 +218,16 @@ class FallDetector:
                         self._annotated_frame_buffer.popleft())
         if (self._frames_left <= 0 or release):
             self.release_video_writers()
-        end = time.perf_counter()
-        print(f"{end - start:.6f}\t", end="")
-        print(len(self._fall_finder_persons), end=" ")
-        for person in self._fall_finder_persons.values():
-            print(f"\t{person.id}: {person.state} {person.unseen_frames} {person.fallen_frames}", end=" ")
-        print()
+        if(self._statistics):
+            end = time.perf_counter()
+            if self._print_statistics:
+                print(f"{end - start:.6f}\t", end="")
+                print(len(self._fall_finder_persons), end=" ")
+                for person in self._fall_finder_persons.values():
+                    print(f"\t{person.id}: {person.state} {person.unseen_frames} {person.fallen_frames}", end=" ")
+                print()
+            self._frames_count += 1
+            self._total_time += end - start
 
         return [p.state for p in seen_persons]
 
@@ -236,14 +253,28 @@ class FallDetector:
 
     def update_state(self, person: Person):
         if len(person.buffer_keypoints) >= 1:
-            input_tensor = tensor(person.buffer_keypoints).unsqueeze(
-                0).to(self._device)
-            start = time.perf_counter()
+
+            if(self._sequence_length> 1):
+                keypoints = np.array(person.buffer_keypoints)
+            else:
+                keypoints = np.array(person.buffer_keypoints[0])
+
+            input_tensor = tensor(keypoints).unsqueeze(0)
+            if self._fall_model._device.type == "cpu":
+                input_tensor = input_tensor.cpu()
+            else:
+                input_tensor = input_tensor.cuda()
+            if(self._statistics):
+                start = time.perf_counter()
+            # print(self._fall_model._device)
             state = self._fall_model(input_tensor).item()
-            # if self._device != "cpu":
-            #     torch.cuda.synchronize()
-            end = time.perf_counter()
-            print(f"{end - start:.6f}\t", end="")
+            if self._fall_model._device.type != "cpu":
+                torch.cuda.synchronize()
+            if(self._statistics):
+                end = time.perf_counter()
+                if self._print_statistics:
+                    print(f"{end - start:.6f}\t", end="")
+                    print(f"{end - start:.6f}\t", end="")
 
             # print(state)
             if state >= self._threshold:
