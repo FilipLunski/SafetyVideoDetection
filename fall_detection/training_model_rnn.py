@@ -10,8 +10,25 @@ import json
 import lightning as L
 import os
 from lightning.pytorch.loggers import TensorBoardLogger
+import time
 
 CHECKPOINTS_FILE = "models_fall/checkpoints.json"
+
+default_train_dataset_paths = [
+    r'samples\dataset_cauca_m_train.h5',
+    r'samples\dataset_fifty_ways_m_train.h5'
+]
+
+default_dev_dataset_paths = [
+    r'samples\dataset_cauca_m_validation.h5',
+    r'samples\dataset_fifty_ways_m_validation.h5'
+]
+
+default_test_dataset_paths = [
+
+    r'samples\dataset_cauca_m_test.h5',
+    r'samples\dataset_fifty_ways_m_test.h5'
+]
 
 
 class VariableLengthDataset(torch.utils.data.Dataset):
@@ -51,7 +68,7 @@ def load_dataset(paths, batch_size, timesteps=None):
                         start = 0
                         if timesteps is not None and i > timesteps * j:
                             start = i - timesteps * j + 1
-                        
+
                         k = frames[start: i + 1: j]
                         l = [float(f[video]['dataset']['categories'][i])]
                         data.append((k, l))
@@ -81,18 +98,18 @@ def get_checkpoint_path(model_version):
     return load_checkpoint_map().get(model_version, None)
 
 
-def train(train_dataset_paths, dev_dataset_paths=[], rnn_type="gru", model_path=None, epochs=400, rnn_layers=2, rnn_hidden_size=128, fc_size=128, rnn_dropout=0.4, fc_droupout=0.4,
-          save=True, device='cuda', from_checkpoint=True, batch_size=4096, timesteps=None, checkpoint_path=None):
+def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=default_dev_dataset_paths, rnn_type="gru", model_path=None, epochs=400, rnn_layers=2, rnn_hidden_size=128, fc_size=128, rnn_dropout=0.4, fc_droupout=0.4,
+          save=True, device='cuda', from_checkpoint=True, batch_size=4096, timesteps=None, checkpoint_path=None, test=False, test_dataset_paths=default_test_dataset_paths):
 
     try:
-        name = f"{rnn_type}_{timesteps}_{rnn_layers}_{rnn_hidden_size}_{fc_size}_{rnn_dropout}_{fc_droupout}"#_{batch_size}"
+        # _{batch_size}"
+        name = f"{rnn_type}_{timesteps}_{rnn_layers}_{rnn_hidden_size}_{fc_size}_{rnn_dropout}_{fc_droupout}"
 
         print(
             f"----------------------------------Training {name} model ---------------------------------------")
 
         if checkpoint_path is None:
             checkpoint_path = get_checkpoint_path(name)
-        
 
         model = {
             "gru": KeypointClassifierGRU(device=device, rnn_hidden_size=rnn_hidden_size,
@@ -104,16 +121,11 @@ def train(train_dataset_paths, dev_dataset_paths=[], rnn_type="gru", model_path=
         if model is None:
             raise ValueError(f"Unknown RNN type: {rnn_type}")
 
-        train_loader = load_dataset(train_dataset_paths, batch_size, timesteps)
-        val_loader = load_dataset(dev_dataset_paths, batch_size, timesteps) if len(
-            dev_dataset_paths) > 0 else None
-
-        model.train()
-
         logger = TensorBoardLogger(
             "logs_m", name=name)
         trainer = L.Trainer(max_epochs=epochs, logger=logger)
 
+        model.train()
         model.hparams.model_path = model_path
         model.hparams.previous_model_path = checkpoint_path
         model.hparams.train_dataset_paths = train_dataset_paths
@@ -131,15 +143,50 @@ def train(train_dataset_paths, dev_dataset_paths=[], rnn_type="gru", model_path=
             checkpoint_path = None
             print("No checkpoint path provided, training from scratch")
 
-        trainer.fit(model=model, train_dataloaders=train_loader,
-                    val_dataloaders=val_loader, ckpt_path=checkpoint_path)
+        if not test:
 
-        if save:
-            if model_path is None:
-                model_path = f"models_fall/model_{name}.pt"
-            model.save(model_path)
+            train_loader = load_dataset(
+                train_dataset_paths, batch_size, timesteps)
+            val_loader = load_dataset(dev_dataset_paths, batch_size, timesteps) if len(
+                dev_dataset_paths) > 0 else None
 
-        save_checkpoint_path(name, trainer.checkpoint_callback.best_model_path)
+            trainer.fit(model=model, train_dataloaders=train_loader,
+                        val_dataloaders=val_loader, ckpt_path=checkpoint_path)
+
+            if save:
+                if model_path is None:
+                    model_path = f"models_fall/model_{name}.pt"
+                model.save(model_path)
+
+            save_checkpoint_path(
+                name, trainer.checkpoint_callback.best_model_path)
+        else:
+            if checkpoint_path is None:
+                raise ValueError(
+                    "Checkpoint path must be provided for testing")
+            if test_dataset_paths is None:
+                raise ValueError(
+                    "Test dataset paths must be provided for testing")
+            test_loader = load_dataset(
+                test_dataset_paths, batch_size, timesteps)
+
+            model.eval()
+            trainer.test(model=model, dataloaders=test_loader,
+                         ckpt_path=checkpoint_path)
+            time_sum = 0
+            sample_count = 0
+            for inputs, _ in test_loader:
+                data = inputs.data  
+                for i in range(data.size(0)): 
+                    sample = data[i].unsqueeze(0)
+                    start_time = time.perf_counter()
+                    output = model.predict_step(sample, i)
+                    end_time = time.perf_counter()
+                    elapsed_time = end_time - start_time
+                    time_sum += elapsed_time
+                    sample_count += 1
+            avg_time = time_sum / sample_count   # Convert to seconds
+            print(f"Average time per sample: {avg_time:.6f} seconds")
 
     except Exception as e:
         print(f"An error occurred during training: {e}")
@@ -151,33 +198,20 @@ def main(rnn_type="gru", timesteps=None):
     #     r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=200,
     #     rnn_layers=2, rnn_hidden_size=128, fc_size=128, timesteps=timesteps, from_checkpoint=False, batch_size=2048)
 
-    
-    
     # train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
     #     r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=200,
     #     rnn_layers=2, rnn_hidden_size=128, fc_size=128, timesteps=timesteps, from_checkpoint=False, batch_size=1024)
 
-    
-    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
-        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=600,
-        rnn_layers=1, rnn_hidden_size=64, fc_size=64, timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15)
-    
-    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
-        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=700,
-        rnn_layers=1, rnn_hidden_size=64, fc_size=64, timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15)
-    
-    train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
-        r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=800,
-        rnn_layers=1, rnn_hidden_size=64, fc_size=64, timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15)
-    
+    train(rnn_type=rnn_type, epochs=700, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
+          timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=True, checkpoint_path="logs_m\\gru_50_1_64_64_0.15_0.4\\version_2\\checkpoints\\epoch=699-step=3500.ckpt")
+
     # train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
     #     r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=500,
     #     rnn_layers=1, rnn_hidden_size=128, fc_size=64, timesteps=timesteps, from_checkpoint=False, rnn_dropout=0.15)
-    
+
     # train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
     #     r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type, epochs=500,
     #     rnn_layers=1, rnn_hidden_size=128, fc_size=128, timesteps=timesteps, from_checkpoint=False, rnn_dropout=0.15)
-
 
     # train([r'samples\dataset_cauca_m_train.h5', r'samples\dataset_fifty_ways_m_train.h5'], [
     #     r'samples\dataset_cauca_m_validation.h5', r'samples\dataset_fifty_ways_m_validation.h5'], rnn_type,

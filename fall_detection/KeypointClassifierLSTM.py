@@ -18,7 +18,7 @@ class KeypointClassifierLSTM(L.LightningModule):
             nn.ReLU(),
             nn.Dropout(fc_droupout),
             nn.Linear(fc_size, output_size),
-            # nn.Sigmoid()
+            nn.Sigmoid()
         )
 
         self.hparams.input_size = input_size
@@ -32,7 +32,7 @@ class KeypointClassifierLSTM(L.LightningModule):
 
         
         
-        self.criterion = nn.BCEWithLogitsLoss ()
+        self.criterion = nn.BCELoss()
 
         device = torch.device(
             "cuda:0" if torch.cuda.is_available() and device != "cpu" else "cpu")
@@ -98,3 +98,18 @@ class KeypointClassifierLSTM(L.LightningModule):
 
     def load(self, path):
         self.load_state_dict(torch.load(path, map_location=self.device))
+
+
+    def test_step(self, batch, batch_idx):
+        data, target = batch
+        
+        output = self(data)
+        loss = self.criterion(output, target)
+        
+        self.log('test_loss', loss, on_epoch=True, on_step=False)
+        accuracy = self.accuracy(output, target.int()) * 100
+        self.log('test_accuracy', accuracy, on_epoch=True, on_step=False)
+
+        
+    def predict_step(self, batch, batch_idx, dataloader_idx=0):
+        return self.sigmoid(self(batch))

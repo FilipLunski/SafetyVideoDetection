@@ -68,7 +68,7 @@
     "gru_50_2_64_64_0.4_0.4_8162": "logs_m\\gru_50_2_64_64_0.4_0.4_8162\\version_0\\checkpoints\\epoch=399-step=1200.ckpt",
     "gru_50_1_64_64_0.4_0.4_8162": "logs_m\\gru_50_1_64_64_0.4_0.4_8162\\version_0\\checkpoints\\epoch=599-step=1800.ckpt",
     "gru_50_2_128_128_0.15_0.4": "logs_m\\gru_50_2_128_128_0.15_0.4\\version_0\\checkpoints\\epoch=199-step=1000.ckpt",
-    "gru_50_1_64_64_0.15_0.4": "logs_m\\gru_50_1_64_64_0.15_0.4\\version_3\\checkpoints\\epoch=799-step=4000.ckpt",
+    "gru_50_1_64_64_0.15_0.4": "logs_m\\gru_50_1_64_64_0.15_0.4\\version_2\\checkpoints\\epoch=699-step=3500.ckpt",
     "gru_50_1_128_64_0.15_0.4": "logs_m\\gru_50_1_128_64_0.15_0.4\\version_0\\checkpoints\\epoch=499-step=2500.ckpt",
     "gru_50_1_128_128_0.15_0.4": "logs_m\\gru_50_1_128_128_0.15_0.4\\version_0\\checkpoints\\epoch=499-step=2500.ckpt"
 }

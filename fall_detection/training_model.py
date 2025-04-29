@@ -7,11 +7,12 @@ import json
 import lightning as L
 import os
 from lightning.pytorch.loggers import TensorBoardLogger
+import time
 
 CHECKPOINTS_FILE = "models_fall/checkpoints.json"
 
 
-def load_dataset(paths, batch_size):
+def load_dataset(paths, batch_size, shuffle=True):
     keypoints = []
     labels = []
     for path in paths:
@@ -25,7 +26,7 @@ def load_dataset(paths, batch_size):
     # print (keypoints.shape)
     dataset = TensorDataset(keypoints, labels)
     loader = torch.utils.data.DataLoader(
-        dataset, batch_size=batch_size, pin_memory=True, shuffle=True)
+        dataset, batch_size=batch_size, pin_memory=True, shuffle=shuffle)
     return loader
 
 
@@ -57,9 +58,15 @@ default_dev_dataset_paths = [
     r'samples\dataset_fifty_ways_m_validation.h5'
 ]
 
+default_test_dataset_paths = [
+    
+    r'samples\dataset_cauca_m_test.h5',
+    r'samples\dataset_fifty_ways_m_test.h5'
+]
+
 
 def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=default_dev_dataset_paths, epochs=500, save=True, device='cuda', from_checkpoint=True,
-          checkpoint_path=None, batch_size=4096, layers=[34, 128, 64, 32], activation="relu", dropout=0.4, batch_norm=True):
+          checkpoint_path=None, batch_size=512, layers=[34, 128, 64, 32], activation="relu", dropout=0.4, batch_norm=True, test=False, test_dataset_paths=default_test_dataset_paths):
 
     try:
 
@@ -69,9 +76,6 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
 
         model = KeypointClassifierFFNN(
             layers=layers, activation=activation, dropout=dropout, device=device, batch_norm=batch_norm)
-        train_loader = load_dataset(train_dataset_paths, batch_size)
-        val_loader = load_dataset(dev_dataset_paths, batch_size) if len(
-            dev_dataset_paths) > 0 else None
 
         if checkpoint_path is None:
             checkpoint_path = get_checkpoint_path(name)
@@ -92,30 +96,59 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
         if not from_checkpoint:
             checkpoint_path = None
 
-        trainer.fit(model=model, train_dataloaders=train_loader,
-                    val_dataloaders=val_loader, ckpt_path=checkpoint_path)
+        if not test:
+            train_loader = load_dataset(train_dataset_paths, batch_size)
+            val_loader = load_dataset(dev_dataset_paths, batch_size) if len(
+                dev_dataset_paths) > 0 else None
+            trainer.fit(model=model, train_dataloaders=train_loader,
+                        val_dataloaders=val_loader, ckpt_path=checkpoint_path)
 
-        if save:
-            if model_path is None:
-                model_path = f"models_fall/model_{name}.pt"
-            model.save(model_path)
-        save_checkpoint_path(name, trainer.checkpoint_callback.best_model_path)
+            if save:
+                if model_path is None:
+                    model_path = f"models_fall/model_{name}.pt"
+                model.save(model_path)
+            save_checkpoint_path(
+                name, trainer.checkpoint_callback.best_model_path)
+        else:
+            if checkpoint_path is None:
+                raise ValueError(
+                    "Checkpoint path must be provided for testing")
+            if test_dataset_paths is None:
+                raise ValueError(
+                    "Test dataset paths must be provided for testing")
+            test_loader = load_dataset(
+                test_dataset_paths, batch_size, shuffle=False)  
+            print (checkpoint_path)
+            model.eval()
+            trainer.test(model=model, dataloaders=test_loader,
+                         ckpt_path=checkpoint_path)
+            time_sum = 0
+            sample_count = 0
+            for inputs, _ in test_loader:
+                for i in range(inputs.size(0)): 
+                    sample = inputs[i].unsqueeze(0)
+                    start_time = time.perf_counter()
+                    output = model.predict_step(sample, i)
+                    end_time = time.perf_counter()
+                    elapsed_time = end_time - start_time
+                    time_sum += elapsed_time
+                    sample_count += 1
+            avg_time = time_sum / sample_count   # Convert to seconds
+            print(f"Average time per sample: {avg_time:.6f} seconds")
 
     except Exception as e:
         print(f"Error: {e}")
         return
 
 
-
 # train(epochs=600,  layers=[34, 512, 128, 64, 32], activation="relu", dropout=0.4)
-train(epochs=600,  layers=[34, 512, 256, 64, 32], activation="relu", dropout=0.5)
+train(epochs=600,  layers=[34, 128, 64, 32], activation="relu", dropout=0.3, test=True, checkpoint_path="logs_m_fnn2\\ffnn_[34, 128, 64, 32]_0.3_relu\\version_0\\checkpoints\\epoch=499-step=2500.ckpt")
 # train(epochs=600,  layers=[34, 256, 128, 64, 32], activation="relu", dropout=0.4)
 
 
 # train(epochs=600,  layers=[34, 128, 32], activation="relu", dropout=0.2)
 
 # train(epochs=600,  layers=[34, 128, 64], activation="relu", dropout=0.2)
-
 
 
 # train(epochs=1000,  layers=[34, 512, 256, 64, 32],
