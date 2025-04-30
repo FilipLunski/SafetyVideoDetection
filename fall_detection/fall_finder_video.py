@@ -45,7 +45,7 @@ def processFile(file, out_folder, seconds_before_after, threshold, lstm_timestam
         out_folder, f"a_{filename_without_extension}_out_{"{}"}.avi")
 
     fall_detector = FallDetector(pose_model, fall_model, lstm_timestamps, frame_width,
-                                 frame_height, frame_rate, output_filename, None, threshold=threshold, print_statistics=False)
+                                 frame_height, frame_rate, output_filename, output_annotated_filename, threshold=threshold, print_statistics=False)
 
     while cap.isOpened():
         success, frame = cap.read()
@@ -114,121 +114,6 @@ def main(video_folder, out_folder="", input_format="mp4", seconds_before_after=2
 
 
 
-main(r'samples\video\fifty_ways\test', "samples\\out\\gruu", "mp4", 3, 0.5, 50, "cuda")
-main(r'samples\video\cauca\test', "samples\\out\\gruu", "avi", 3, 0.5, 50, "cuda")
+main(r'samples/video/MPFDD', "samples\\out\\mpfdd\\gru", "mp4", 3, 0.5, 50, "cuda")
+# main(r'samples/video/MPFDD', "samples\\out\\mpfdd\\ffnn", "mp4", 3, 0.5, 1, "cuda")
 
-main(r'samples\video\fifty_ways\test', "samples\\out\\basicc", "mp4", 3, 0.5, 1, "cuda")
-main(r'samples\video\cauca\test', "samples\\out\\basicc", "avi", 3, 0.5, 1, "cuda")
-
-
-
-""" 
-cuda
-samples\out\gruu
-50ways-seg01 ------------------------------
-        Average time: 0.0546s
-50ways-seg09 ------------------------------
-        Average time: 0.0663s
-50ways-seg17 ------------------------------
-        Average time: 0.0549s
-50ways-seg21 ------------------------------
-        Average time: 0.0522s
-50ways-seg25 ------------------------------
-        Average time: 0.0599s
-50ways-seg33 ------------------------------
-        Average time: 0.0509s
-50ways-seg41 ------------------------------
-        Average time: 0.0511s
-50ways-seg49 ------------------------------
-        Average time: 0.0517s
-Average time: 0.0552s
-samples\out\gruu
-FallBackwardsS01 ------------------------------
-        Average time: 0.0484s
-FallForwardS02 ------------------------------
-        Average time: 0.0622s
-FallForwardS05 ------------------------------
-        Average time: 0.0467s
-FallLeftS06 ------------------------------
-        Average time: 0.0384s
-FallRightS03 ------------------------------
-        Average time: 0.0498s
-FallRightS07 ------------------------------
-        Average time: 0.0486s
-FallSittingS08 ------------------------------
-        Average time: 0.0446s
-HopS04 ------------------------------
-        Average time: 0.0553s
-HopS09 ------------------------------
-        Average time: 0.0519s
-KneelS10 ------------------------------
-        Average time: 0.0470s
-PickupobjectS03 ------------------------------
-        Average time: 0.0451s
-PickupobjectS05 ------------------------------
-        Average time: 0.0598s
-SitDownS02 ------------------------------
-        Average time: 0.0457s
-WalkS03 ------------------------------
-        Average time: 0.0453s
-WalkS06 ------------------------------
-        Average time: 0.0372s
-Average time: 0.0478s
-
-samples\out\basicc
-50ways-seg01 ------------------------------
-        Average time: 0.0589s
-50ways-seg09 ------------------------------
-        Average time: 0.0530s
-50ways-seg17 ------------------------------
-        Average time: 0.0548s
-50ways-seg21 ------------------------------
-        Average time: 0.0515s
-50ways-seg25 ------------------------------
-        Average time: 0.0517s
-50ways-seg33 ------------------------------
-        Average time: 0.0612s
-50ways-seg41 ------------------------------
-        Average time: 0.0548s
-50ways-seg49 ------------------------------
-        Average time: 0.0570s
-Average time: 0.0553s
-samples\out\basicc
-FallBackwardsS01 ------------------------------
-        Average time: 0.0591s
-FallForwardS02 ------------------------------
-        Average time: 0.0680s
-FallForwardS05 ------------------------------
-        Average time: 0.0589s
-FallLeftS06 ------------------------------
-        Average time: 0.0441s
-FallRightS03 ------------------------------
-        Average time: 0.0456s
-FallRightS07 ------------------------------
-        Average time: 0.0475s
-FallSittingS08 ------------------------------
-        Average time: 0.0379s
-HopS04 ------------------------------
-        Average time: 0.0464s
-HopS09 ------------------------------
-        Average time: 0.0650s
-KneelS10 ------------------------------
-        Average time: 0.0474s
-PickupobjectS03 ------------------------------
-        Average time: 0.0445s
-PickupobjectS05 ------------------------------
-        Average time: 0.0464s
-SitDownS02 ------------------------------
-        Average time: 0.0458s
-WalkS03 ------------------------------
-        Average time: 0.0453s
-WalkS06 ------------------------------
-        Average time: 0.0363s
-Average time: 0.0480s
-
- """
-
-""" 
-cpu
-
- """

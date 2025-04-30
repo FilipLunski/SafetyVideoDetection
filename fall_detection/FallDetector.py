@@ -166,7 +166,8 @@ class FallDetector:
         if result.keypoints.has_visible == False:
             return None
         if (self._annotated_video_output_file != None):
-            annotated_frame = result.plot()
+            annotated_frame = frame.copy()
+            # annotated_frame = result.plot()
 
         if self._fall_model._device != "cpu":
             result = result.cpu()
