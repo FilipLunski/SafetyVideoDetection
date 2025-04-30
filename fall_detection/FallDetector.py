@@ -267,7 +267,7 @@ class FallDetector:
             if(self._statistics):
                 start = time.perf_counter()
             # print(self._fall_model._device)
-            state = self._fall_model(input_tensor).item()
+            state = self._fall_model.predict_step(input_tensor).item()
             if self._fall_model._device.type != "cpu":
                 torch.cuda.synchronize()
             if(self._statistics):

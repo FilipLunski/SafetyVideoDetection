@@ -45,7 +45,7 @@ def processFile(file, out_folder, seconds_before_after, threshold, lstm_timestam
         out_folder, f"a_{filename_without_extension}_out_{"{}"}.avi")
 
     fall_detector = FallDetector(pose_model, fall_model, lstm_timestamps, frame_width,
-                                 frame_height, frame_rate, output_filename, output_annotated_filename, threshold=threshold, print_statistics=False)
+                                 frame_height, frame_rate, None, None, threshold=threshold, print_statistics=False)
 
     while cap.isOpened():
         success, frame = cap.read()
@@ -114,11 +114,11 @@ main(r'samples\video\cauca\test', "samples\\out\\basicc", "avi", 3, 0.5, 1)
 
 
 
-main(r'samples\video\fifty_ways\test', "samples\\out\\gruu", "mp4", 3, 0.5, 50, "cuda")
-main(r'samples\video\cauca\test', "samples\\out\\gruu", "avi", 3, 0.5, 50, "cuda")
+# main(r'samples\video\fifty_ways\test', "samples\\out\\gruu", "mp4", 3, 0.5, 50, "cuda")
+# main(r'samples\video\cauca\test', "samples\\out\\gruu", "avi", 3, 0.5, 50, "cuda")
 
-main(r'samples\video\fifty_ways\test', "samples\\out\\basicc", "mp4", 3, 0.5, 1, "cuda")
-main(r'samples\video\cauca\test', "samples\\out\\basicc", "avi", 3, 0.5, 1, "cuda")
+# main(r'samples\video\fifty_ways\test', "samples\\out\\basicc", "mp4", 3, 0.5, 1, "cuda")
+# main(r'samples\video\cauca\test', "samples\\out\\basicc", "avi", 3, 0.5, 1, "cuda")
 
 
 

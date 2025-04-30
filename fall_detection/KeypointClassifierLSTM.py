@@ -111,5 +111,5 @@ class KeypointClassifierLSTM(L.LightningModule):
         self.log('test_accuracy', accuracy, on_epoch=True, on_step=False)
 
         
-    def predict_step(self, batch, batch_idx, dataloader_idx=0):
+    def predict_step(self, batch, batch_idx=0, dataloader_idx=0):
         return self.sigmoid(self(batch))
