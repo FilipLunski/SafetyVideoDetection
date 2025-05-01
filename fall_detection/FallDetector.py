@@ -158,7 +158,7 @@ class FallDetector:
         if (self._video != None):
             self._frame_buffer.append(frame)
         results = self._pose_model.track(
-            frame, show=False, verbose=False, persist=True)
+            frame, show=False, verbose=False, persist=True, tracker="bytetrack.yaml")
         result: Results = results[0]
 
         if result.keypoints.has_visible == False:
@@ -264,17 +264,16 @@ class FallDetector:
                 input_tensor = input_tensor.cpu()
             else:
                 input_tensor = input_tensor.cuda()
-            if(self._statistics):
+            if(self._print_statistics):
                 start = time.perf_counter()
             # print(self._fall_model._device)
             state = self._fall_model.predict_step(input_tensor).item()
             if self._fall_model._device.type != "cpu":
                 torch.cuda.synchronize()
-            if(self._statistics):
+            if(self._print_statistics):
                 end = time.perf_counter()
-                if self._print_statistics:
-                    print(f"{end - start:.6f}\t", end="")
-                    print(f"{end - start:.6f}\t", end="")
+                print(f"{end - start:.6f}\t", end="")
+                print(f"{end - start:.6f}\t", end="")
 
             # print(state)
             if state >= self._threshold:
