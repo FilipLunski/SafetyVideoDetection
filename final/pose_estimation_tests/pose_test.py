@@ -41,6 +41,7 @@ class PoseEstimator:
         self.model_initialize, self.process_image = self.models[model_type]
         self.model_initialize()
 
+    # defining, which points are connected with lines
     edges = [
         (0, 1), (0, 2), (2, 4), (1, 3), (6, 8), (8, 10),
         (5, 7), (7, 9), (5, 11), (11, 13), (13, 15), (6, 12),
@@ -48,28 +49,19 @@ class PoseEstimator:
     ]
 
     def draw_keypoints(self, poses, scores, frame):
-        # the `outputs` is list which in-turn contains the dictionaries
         for i in range(len(poses)):
             keypoints = poses[i]
-            # proceed to draw the lines if the confidence score is above 0.9
             if scores[i] > 0.9:
-                # keypoints = keypoints[:, :].reshape(-1, 3)
                 for p in range(keypoints.shape[0]):
-                    # draw the keypoints
                     cv2.circle(frame, (int(keypoints[p, 0]), int(keypoints[p, 1])),
                                3, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
-                    # uncomment the following lines if you want to put keypoint number
-                    # cv2.putText(image, f"{p}", (int(keypoints[p, 0]+10), int(keypoints[p, 1]-5)),
-                    #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
                 for ie, e in enumerate(self.edges):
-                    # get different colors for the edges
                     rgb = matplotlib.colors.hsv_to_rgb([
                         ie/float(len(self.edges)), 1.0, 1.0
                     ])
                     rgb = rgb*255
                     if(keypoints[e, 0][0] == 0 and keypoints[e, 1][0] == 0) or (keypoints[e, 0][1] == 0 and keypoints[e, 1][1] == 0):
                         continue
-                    # join the keypoint pairs to draw the skeletal structure
                     cv2.line(frame, (int(keypoints[e, 0][0]), int(keypoints[e, 1][0])),
                              (int(keypoints[e, 0][1]),
                               int(keypoints[e, 1][1])),
@@ -101,18 +93,13 @@ class PoseEstimator:
         # Get the keypoints
         keypoints = [pose.cpu().detach().numpy()
                      for pose in prediction[0]['keypoints']]
+        
         scores = prediction[0]['scores']
 
         return keypoints, scores
 
     def yolo_initialize(self):
-        versions = {
-            "nano": "./models_pose/yolov8n-pose.pt",
-            "small": "./models_pose/yolov8s-pose.pt",
-            "medium": "./models_pose/yolov8m-pose.pt",
-            "large": "./models_pose/yolov8l-pose.pt",
-            "xlarge": "./models_pose/yolov8x-pose.pt"
-        } if False else  {
+        versions =  {
             "nano": "./models_pose/yolo11n-pose.pt",
             "small": "./models_pose/yolo11s-pose.pt",
             "medium": "./models_pose/yolo11m-pose.pt",
@@ -160,7 +147,6 @@ class PoseEstimator:
             min_tracking_confidence=min_tracking_confidence,
             output_segmentation_masks=False,
 
-            # result_callback=print_result
         )
 
         landmarker = vision.PoseLandmarker.create_from_options(options)
@@ -220,7 +206,7 @@ class PoseEstimator:
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         out_video = cv2.VideoWriter(out_file, fourcc, frame_rate,
                                     (frame_width, frame_height))
-        # print(out_file)
+        
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret:
@@ -240,7 +226,6 @@ class PoseEstimator:
 
             if frame_number % 10 == 0:
                 print(".", end="", flush=True)
-                # print(f"Frame {frame_number}:\tTime: {t/frame_number:.2f}s")
 
             out_video.write(output_frame)
 
@@ -289,9 +274,9 @@ def main(video_folders, out_folder, model_type, version="", input_formats=["mp4"
 # main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="full")
 # main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "mediapipe", version="heavy")
 
-main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="nano")
-main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="small")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="nano")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="small")
 # main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="medium")
-main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="large")
-main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="xlarge")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="large")
+# main([r'samples\video\fifty_ways\test', r'samples\video\cauca\test'], "samples\\out", "yolo", version="xlarge")
 

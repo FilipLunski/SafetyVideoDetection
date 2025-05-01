@@ -4,13 +4,7 @@ mediapipe, full, 0.0309, 32.40481233370272
 mediapipe, heavy, 0.0682, 14.654971132094836
 openpifpaf, resnet50, 0.0492, 20.32393576103568
 openpifpaf, shufflenetv2k16, 0.0313, 31.910143270071657
-openpifpaf, shufflenetv2k16-apollo-24, 0.0320, 31.293453481612836
-openpifpaf, shufflenetv2k16-apollo-66, 0.0384, 26.046095149101856
-openpifpaf, shufflenetv2k16-wholebody, 0.0515, 19.405343193400522
-openpifpaf, shufflenetv2k16-withdense, 0.0319, 31.3077395791324
 openpifpaf, shufflenetv2k30, 0.0586, 17.069978743147114
-openpifpaf, shufflenetv2k30-apollo-66, 0.0661, 15.122976213182007
-openpifpaf, shufflenetv2k30-wholebody, 0.0801, 12.481867012174858
 openpifpaf, tshufflenetv2k30, 0.0700, 14.280550155929461
 yolo, cpu nano, 0.0325, 30.74898266318138
 yolo, cpu small, 0.0539, 18.563280918148752
