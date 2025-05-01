@@ -44,7 +44,7 @@ def main(video_folder, labels_file, out_filename, input_format="mp4", new_file=T
 
 def processFile(file, out_filename):
     with h5py.File(out_filename, 'a') as f:
-
+        
         cap = cv2.VideoCapture(file)
 
         fileName_ext = os.path.basename(file)
@@ -99,15 +99,16 @@ def processFile(file, out_filename):
                 # normalized_keypoints = normalize_keypoints(
                 #     results[0].keypoints.xy[0].cpu().numpy())
 
-                # if timestamp_s >= next_state_time:
-                #     state_number += 1
-                #     state = label[state_number]["state"]
-                #     if (state_number == len(label) - 1):
-                #         next_state_time = float('inf')
-                #     else:
-                #         next_state_time = label[state_number + 1]["time"]
-                # dataset_keypoints.append(normalized_keypoints)
-                # dataset_categories.append(state==1)
+                if timestamp_s >= next_state_time:
+                    state_number += 1
+                    state = label[state_number]["state"]
+                    if (state_number == len(label) - 1):
+                        next_state_time = float('inf')
+                    else:
+                        next_state_time = label[state_number + 1]["time"]
+                dataset_keypoints.append(normalized_keypoints)
+                dataset_categories.append(state==1)
+
 
             else:
                 break
@@ -126,6 +127,12 @@ def processFile(file, out_filename):
         cap.release()
         cv2.destroyAllWindows()
 
+# main('samples\\video\\cauca\\train',
+#      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_m_train.h5", "avi")
+# main('samples\\video\\cauca\\test',
+#      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_m_test.h5", "avi")
+# main('samples\\video\\cauca\\validation',
+#      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_m_validation.h5", "avi")
 # main('samples\\video\\cauca\\train',
 #      'samples\\labels\\caucafall_labels.json', "samples\\dataset_cauca_m_train.h5", "avi")
 # main('samples\\video\\cauca\\test',
