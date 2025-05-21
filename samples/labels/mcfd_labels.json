@@ -1,0 +1,2106 @@
+{
+    "sample001_sh01_cam1": [
+        {
+            "time": 11.30,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample002_sh01_cam2": [
+        {
+            "time": 11.30,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample003_sh01_cam3": [
+        {
+            "time": 11.30,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample004_sh01_cam4": [
+        {
+            "time": 11.30,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample005_sh01_cam5": [
+        {
+            "time": 11.30,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample006_sh01_cam6": [
+        {
+            "time": 11.30,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample007_sh01_cam7": [
+        {
+            "time": 11.30,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample008_sh01_cam8": [
+        {
+            "time": 11.30,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample009_sh02_cam1": [
+        {
+            "time": 6.93,
+            "state": 2
+        },
+        {
+            "time": 18.66,
+            "state": 0
+        }
+    ],
+    "sample010_sh02_cam2": [
+        {
+            "time": 6.93,
+            "state": 2
+        },
+        {
+            "time": 18.66,
+            "state": 0
+        }
+    ],
+    "sample011_sh02_cam3": [
+        {
+            "time": 6.93,
+            "state": 2
+        },
+        {
+            "time": 18.66,
+            "state": 0
+        }
+    ],
+    "sample012_sh02_cam4": [
+        {
+            "time": 6.93,
+            "state": 2
+        },
+        {
+            "time": 18.66,
+            "state": 0
+        }
+    ],
+    "sample013_sh02_cam5": [
+        {
+            "time": 6.93,
+            "state": 2
+        },
+        {
+            "time": 18.66,
+            "state": 0
+        }
+    ],
+    "sample014_sh02_cam6": [
+        {
+            "time": 6.93,
+            "state": 2
+        },
+        {
+            "time": 18.66,
+            "state": 0
+        }
+    ],
+    "sample015_sh02_cam7": [
+        {
+            "time": 6.93,
+            "state": 2
+        },
+        {
+            "time": 18.66,
+            "state": 0
+        }
+    ],
+    "sample016_sh02_cam8": [
+        {
+            "time": 6.93,
+            "state": 2
+        },
+        {
+            "time": 18.66,
+            "state": 0
+        }
+    ],
+    "sample017_sh03_cam1": [
+        {
+            "time": 11.48,
+            "state": 2
+        }
+    ],
+    "sample018_sh03_cam2": [
+        {
+            "time": 11.48,
+            "state": 2
+        }
+    ],
+    "sample019_sh03_cam3": [
+        {
+            "time": 11.48,
+            "state": 2
+        }
+    ],
+    "sample020_sh03_cam4": [
+        {
+            "time": 11.48,
+            "state": 2
+        }
+    ],
+    "sample021_sh03_cam5": [
+        {
+            "time": 11.48,
+            "state": 2
+        }
+    ],
+    "sample022_sh03_cam6": [
+        {
+            "time": 11.48,
+            "state": 2
+        }
+    ],
+    "sample023_sh03_cam7": [
+        {
+            "time": 11.48,
+            "state": 2
+        }
+    ],
+    "sample024_sh03_cam8": [
+        {
+            "time": 11.48,
+            "state": 2
+        }
+    ],
+    "sample025_sh04_cam1": [
+        {
+            "time": 5.73,
+            "state": 2
+        },
+        {
+            "time": 9.80,
+            "state": 0
+        },
+        {
+            "time": 16.03,
+            "state": 2
+        },
+        {
+            "time": 24.00,
+            "state": 0
+        }
+    ],
+    "sample026_sh04_cam2": [
+        {
+            "time": 5.73,
+            "state": 2
+        },
+        {
+            "time": 9.80,
+            "state": 0
+        },
+        {
+            "time": 16.03,
+            "state": 2
+        },
+        {
+            "time": 24.00,
+            "state": 0
+        }
+    ],
+    "sample027_sh04_cam3": [
+        {
+            "time": 5.73,
+            "state": 2
+        },
+        {
+            "time": 9.80,
+            "state": 0
+        },
+        {
+            "time": 16.03,
+            "state": 2
+        },
+        {
+            "time": 24.00,
+            "state": 0
+        }
+    ],
+    "sample028_sh04_cam4": [
+        {
+            "time": 5.73,
+            "state": 2
+        },
+        {
+            "time": 9.80,
+            "state": 0
+        },
+        {
+            "time": 16.03,
+            "state": 2
+        },
+        {
+            "time": 24.00,
+            "state": 0
+        }
+    ],
+    "sample029_sh04_cam5": [
+        {
+            "time": 5.73,
+            "state": 2
+        },
+        {
+            "time": 9.80,
+            "state": 0
+        },
+        {
+            "time": 16.03,
+            "state": 2
+        },
+        {
+            "time": 24.00,
+            "state": 0
+        }
+    ],
+    "sample030_sh04_cam6": [
+        {
+            "time": 5.73,
+            "state": 2
+        },
+        {
+            "time": 9.80,
+            "state": 0
+        },
+        {
+            "time": 16.03,
+            "state": 2
+        },
+        {
+            "time": 24.00,
+            "state": 0
+        }
+    ],
+    "sample031_sh04_cam7": [
+        {
+            "time": 5.73,
+            "state": 2
+        },
+        {
+            "time": 9.80,
+            "state": 0
+        },
+        {
+            "time": 16.03,
+            "state": 2
+        },
+        {
+            "time": 24.00,
+            "state": 0
+        }
+    ],
+    "sample032_sh04_cam8": [
+        {
+            "time": 5.73,
+            "state": 2
+        },
+        {
+            "time": 9.80,
+            "state": 0
+        },
+        {
+            "time": 16.03,
+            "state": 2
+        },
+        {
+            "time": 24.00,
+            "state": 0
+        }
+    ],
+    "sample033_sh05_cam1": [
+        {
+            "time": 5.66,
+            "state": 2
+        },
+        {
+            "time": 11.90,
+            "state": 0
+        }
+    ],
+    "sample034_sh05_cam2": [
+        {
+            "time": 5.66,
+            "state": 2
+        },
+        {
+            "time": 11.90,
+            "state": 0
+        }
+    ],
+    "sample035_sh05_cam3": [
+        {
+            "time": 5.66,
+            "state": 2
+        },
+        {
+            "time": 11.90,
+            "state": 0
+        }
+    ],
+    "sample036_sh05_cam4": [
+        {
+            "time": 5.66,
+            "state": 2
+        },
+        {
+            "time": 11.90,
+            "state": 0
+        }
+    ],
+    "sample037_sh05_cam5": [
+        {
+            "time": 5.66,
+            "state": 2
+        },
+        {
+            "time": 11.90,
+            "state": 0
+        }
+    ],
+    "sample038_sh05_cam6": [
+        {
+            "time": 5.66,
+            "state": 2
+        },
+        {
+            "time": 11.90,
+            "state": 0
+        }
+    ],
+    "sample039_sh05_cam7": [
+        {
+            "time": 5.66,
+            "state": 2
+        },
+        {
+            "time": 11.90,
+            "state": 0
+        }
+    ],
+    "sample040_sh05_cam8": [
+        {
+            "time": 5.66,
+            "state": 2
+        },
+        {
+            "time": 11.90,
+            "state": 0
+        }
+    ],
+    "sample041_sh06_cam1": [
+        {
+            "time": 13.67,
+            "state": 2
+        },
+        {
+            "time": 32.37,
+            "state": 0
+        }
+    ],
+    "sample042_sh06_cam2": [
+        {
+            "time": 23.90,
+            "state": 2
+        },
+        {
+            "time": 42.60,
+            "state": 0
+        }
+    ],
+    "sample043_sh06_cam3": [
+        {
+            "time": 23.90,
+            "state": 2
+        },
+        {
+            "time": 42.60,
+            "state": 0
+        }
+    ],
+    "sample044_sh06_cam4": [
+        {
+            "time": 23.90,
+            "state": 2
+        },
+        {
+            "time": 42.60,
+            "state": 0
+        }
+    ],
+    "sample045_sh06_cam5": [
+        {
+            "time": 23.90,
+            "state": 2
+        },
+        {
+            "time": 42.60,
+            "state": 0
+        }
+    ],
+    "sample046_sh06_cam6": [
+        {
+            "time": 23.90,
+            "state": 2
+        },
+        {
+            "time": 42.60,
+            "state": 0
+        }
+    ],
+    "sample047_sh06_cam7": [
+        {
+            "time": 23.90,
+            "state": 2
+        },
+        {
+            "time": 42.60,
+            "state": 0
+        }
+    ],
+    "sample048_sh06_cam8": [
+        {
+            "time": 23.90,
+            "state": 2
+        },
+        {
+            "time": 42.60,
+            "state": 0
+        }
+    ],
+    "sample049_sh07_cam1": [
+        {
+            "time": 9.20,
+            "state": 2
+        },
+        {
+            "time": 17.00,
+            "state": 0
+        }
+    ],
+    "sample050_sh07_cam2": [
+        {
+            "time": 9.20,
+            "state": 2
+        },
+        {
+            "time": 17.00,
+            "state": 0
+        }
+    ],
+    "sample051_sh07_cam3": [
+        {
+            "time": 9.20,
+            "state": 2
+        },
+        {
+            "time": 17.00,
+            "state": 0
+        }
+    ],
+    "sample052_sh07_cam4": [
+        {
+            "time": 9.20,
+            "state": 2
+        },
+        {
+            "time": 17.00,
+            "state": 0
+        }
+    ],
+    "sample053_sh07_cam5": [
+        {
+            "time": 9.20,
+            "state": 2
+        },
+        {
+            "time": 17.00,
+            "state": 0
+        }
+    ],
+    "sample054_sh07_cam6": [
+        {
+            "time": 9.20,
+            "state": 2
+        },
+        {
+            "time": 17.00,
+            "state": 0
+        }
+    ],
+    "sample055_sh07_cam7": [
+        {
+            "time": 9.20,
+            "state": 2
+        },
+        {
+            "time": 17.00,
+            "state": 0
+        }
+    ],
+    "sample056_sh07_cam8": [
+        {
+            "time": 9.20,
+            "state": 2
+        },
+        {
+            "time": 17.00,
+            "state": 0
+        }
+    ],
+    "sample057_sh08_cam1": [
+        {
+            "time": 7.2,
+            "state": 2
+        },
+        {
+            "time": 14.30,
+            "state": 0
+        }
+    ],
+    "sample058_sh08_cam2": [
+        {
+            "time": 7.2,
+            "state": 2
+        },
+        {
+            "time": 14.30,
+            "state": 0
+        }
+    ],
+    "sample059_sh08_cam3": [
+        {
+            "time": 7.2,
+            "state": 2
+        },
+        {
+            "time": 14.30,
+            "state": 0
+        }
+    ],
+    "sample060_sh08_cam4": [
+        {
+            "time": 7.2,
+            "state": 2
+        },
+        {
+            "time": 14.30,
+            "state": 0
+        }
+    ],
+    "sample061_sh08_cam5": [
+        {
+            "time": 7.2,
+            "state": 2
+        },
+        {
+            "time": 14.30,
+            "state": 0
+        }
+    ],
+    "sample062_sh08_cam6": [
+        {
+            "time": 7.2,
+            "state": 2
+        },
+        {
+            "time": 14.30,
+            "state": 0
+        }
+    ],
+    "sample063_sh08_cam7": [
+        {
+            "time": 7.2,
+            "state": 2
+        },
+        {
+            "time": 14.30,
+            "state": 0
+        }
+    ],
+    "sample064_sh08_cam8": [
+        {
+            "time": 7.2,
+            "state": 2
+        },
+        {
+            "time": 14.30,
+            "state": 0
+        }
+    ],
+    "sample065_sh09_cam1": [
+        {
+            "time": 13.10,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample066_sh09_cam2": [
+        {
+            "time": 13.10,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample067_sh09_cam3": [
+        {
+            "time": 13.10,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample068_sh09_cam4": [
+        {
+            "time": 13.10,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample069_sh09_cam5": [
+        {
+            "time": 13.10,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample070_sh09_cam6": [
+        {
+            "time": 13.10,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample071_sh09_cam7": [
+        {
+            "time": 13.10,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample072_sh09_cam8": [
+        {
+            "time": 13.10,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample073_sh10_cam1": [
+        {
+            "time": 11.10,
+            "state": 2
+        },
+        {
+            "time": 16.9,
+            "state": 0
+        }
+    ],
+    "sample074_sh10_cam2": [
+        {
+            "time": 11.10,
+            "state": 2
+        },
+        {
+            "time": 16.9,
+            "state": 0
+        }
+    ],
+    "sample075_sh10_cam3": [
+        {
+            "time": 11.10,
+            "state": 2
+        },
+        {
+            "time": 16.9,
+            "state": 0
+        }
+    ],
+    "sample076_sh10_cam4": [
+        {
+            "time": 11.10,
+            "state": 2
+        },
+        {
+            "time": 16.9,
+            "state": 0
+        }
+    ],
+    "sample077_sh10_cam5": [
+        {
+            "time": 11.10,
+            "state": 2
+        },
+        {
+            "time": 16.9,
+            "state": 0
+        }
+    ],
+    "sample078_sh10_cam6": [
+        {
+            "time": 11.10,
+            "state": 2
+        },
+        {
+            "time": 16.9,
+            "state": 0
+        }
+    ],
+    "sample079_sh10_cam7": [
+        {
+            "time": 11.10,
+            "state": 2
+        },
+        {
+            "time": 16.9,
+            "state": 0
+        }
+    ],
+    "sample080_sh10_cam8": [
+        {
+            "time": 11.10,
+            "state": 2
+        },
+        {
+            "time": 16.9,
+            "state": 0
+        }
+    ],
+    "sample081_sh11_cam1": [
+        {
+            "time": 6.6,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample082_sh11_cam2": [
+        {
+            "time": 6.6,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample083_sh11_cam3": [
+        {
+            "time": 6.6,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample084_sh11_cam4": [
+        {
+            "time": 6.6,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample085_sh11_cam5": [
+        {
+            "time": 6.6,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample086_sh11_cam6": [
+        {
+            "time": 6.6,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample087_sh11_cam7": [
+        {
+            "time": 6.6,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample088_sh11_cam8": [
+        {
+            "time": 6.6,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample089_sh12_cam1": [
+        {
+            "time": 13.00,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample090_sh12_cam2": [
+        {
+            "time": 13.00,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample091_sh12_cam3": [
+        {
+            "time": 13.00,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample092_sh12_cam4": [
+        {
+            "time": 13.00,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample093_sh12_cam5": [
+        {
+            "time": 13.00,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample094_sh12_cam6": [
+        {
+            "time": 13.00,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample095_sh12_cam7": [
+        {
+            "time": 13.00,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample096_sh12_cam8": [
+        {
+            "time": 13.00,
+            "state": 2
+        },
+        {
+            "time": 15.6,
+            "state": 0
+        }
+    ],
+    "sample097_sh13_cam1": [
+        {
+            "time": 21.60,
+            "state": 2
+        },
+        {
+            "time": 26.30,
+            "state": 0
+        }
+    ],
+    "sample098_sh13_cam2": [
+        {
+            "time": 21.60,
+            "state": 2
+        },
+        {
+            "time": 26.30,
+            "state": 0
+        }
+    ],
+    "sample099_sh13_cam3": [
+        {
+            "time": 21.60,
+            "state": 2
+        },
+        {
+            "time": 26.30,
+            "state": 0
+        }
+    ],
+    "sample100_sh13_cam4": [
+        {
+            "time": 21.60,
+            "state": 2
+        },
+        {
+            "time": 26.30,
+            "state": 0
+        }
+    ],
+    "sample101_sh13_cam5": [
+        {
+            "time": 21.60,
+            "state": 2
+        },
+        {
+            "time": 26.30,
+            "state": 0
+        }
+    ],
+    "sample102_sh13_cam6": [
+        {
+            "time": 21.60,
+            "state": 2
+        },
+        {
+            "time": 26.30,
+            "state": 0
+        }
+    ],
+    "sample103_sh13_cam7": [
+        {
+            "time": 21.60,
+            "state": 2
+        },
+        {
+            "time": 26.30,
+            "state": 0
+        }
+    ],
+    "sample104_sh13_cam8": [
+        {
+            "time": 21.60,
+            "state": 2
+        },
+        {
+            "time": 26.30,
+            "state": 0
+        }
+    ],
+    "sample105_sh14_cam1": [
+        {
+            "time": 9.30,
+            "state": 2
+        },
+        {
+            "time": 18.80,
+            "state": 0
+        },
+        {
+            "time": 23.60,
+            "state": 2
+        },
+        {
+            "time": 28.00,
+            "state": 0
+        }
+    ],
+    "sample106_sh14_cam2": [
+        {
+            "time": 9.30,
+            "state": 2
+        },
+        {
+            "time": 18.80,
+            "state": 0
+        },
+        {
+            "time": 23.60,
+            "state": 2
+        },
+        {
+            "time": 28.00,
+            "state": 0
+        }
+    ],
+    "sample107_sh14_cam3": [
+        {
+            "time": 9.30,
+            "state": 2
+        },
+        {
+            "time": 18.80,
+            "state": 0
+        },
+        {
+            "time": 23.60,
+            "state": 2
+        },
+        {
+            "time": 28.00,
+            "state": 0
+        }
+    ],
+    "sample108_sh14_cam4": [
+        {
+            "time": 9.30,
+            "state": 2
+        },
+        {
+            "time": 18.80,
+            "state": 0
+        },
+        {
+            "time": 23.60,
+            "state": 2
+        },
+        {
+            "time": 28.00,
+            "state": 0
+        }
+    ],
+    "sample109_sh14_cam5": [
+        {
+            "time": 9.30,
+            "state": 2
+        },
+        {
+            "time": 18.80,
+            "state": 0
+        },
+        {
+            "time": 23.60,
+            "state": 2
+        },
+        {
+            "time": 28.00,
+            "state": 0
+        }
+    ],
+    "sample110_sh14_cam6": [
+        {
+            "time": 9.30,
+            "state": 2
+        },
+        {
+            "time": 18.80,
+            "state": 0
+        },
+        {
+            "time": 23.60,
+            "state": 2
+        },
+        {
+            "time": 28.00,
+            "state": 0
+        }
+    ],
+    "sample111_sh14_cam7": [
+        {
+            "time": 9.30,
+            "state": 2
+        },
+        {
+            "time": 18.80,
+            "state": 0
+        },
+        {
+            "time": 23.60,
+            "state": 2
+        },
+        {
+            "time": 28.00,
+            "state": 0
+        }
+    ],
+    "sample112_sh14_cam8": [
+        {
+            "time": 9.30,
+            "state": 2
+        },
+        {
+            "time": 18.80,
+            "state": 0
+        },
+        {
+            "time": 23.60,
+            "state": 2
+        },
+        {
+            "time": 28.00,
+            "state": 0
+        }
+    ],
+    "sample113_sh15_cam1": [
+        {
+            "time": 16.90,
+            "state": 2
+        },
+        {
+            "time": 20.90,
+            "state": 0
+        }
+    ],
+    "sample114_sh15_cam2": [
+        {
+            "time": 16.90,
+            "state": 2
+        },
+        {
+            "time": 20.90,
+            "state": 0
+        }
+    ],
+    "sample115_sh15_cam3": [
+        {
+            "time": 16.90,
+            "state": 2
+        },
+        {
+            "time": 20.90,
+            "state": 0
+        }
+    ],
+    "sample116_sh15_cam4": [
+        {
+            "time": 16.90,
+            "state": 2
+        },
+        {
+            "time": 20.90,
+            "state": 0
+        }
+    ],
+    "sample117_sh15_cam5": [
+        {
+            "time": 16.90,
+            "state": 2
+        },
+        {
+            "time": 20.90,
+            "state": 0
+        }
+    ],
+    "sample118_sh15_cam6": [
+        {
+            "time": 16.90,
+            "state": 2
+        },
+        {
+            "time": 20.90,
+            "state": 0
+        }
+    ],
+    "sample119_sh15_cam7": [
+        {
+            "time": 16.90,
+            "state": 2
+        },
+        {
+            "time": 20.90,
+            "state": 0
+        }
+    ],
+    "sample120_sh15_cam8": [
+        {
+            "time": 16.90,
+            "state": 2
+        },
+        {
+            "time": 20.90,
+            "state": 0
+        }
+    ],
+    "sample121_sh16_cam1": [
+        {
+            "time": 20.20,
+            "state": 2
+        },
+        {
+            "time": 22.60,
+            "state": 0
+        }
+    ],
+    "sample122_sh16_cam2": [
+        {
+            "time": 20.20,
+            "state": 2
+        },
+        {
+            "time": 22.60,
+            "state": 0
+        }
+    ],
+    "sample123_sh16_cam3": [
+        {
+            "time": 20.20,
+            "state": 2
+        },
+        {
+            "time": 22.60,
+            "state": 0
+        }
+    ],
+    "sample124_sh16_cam4": [
+        {
+            "time": 20.20,
+            "state": 2
+        },
+        {
+            "time": 22.60,
+            "state": 0
+        }
+    ],
+    "sample125_sh16_cam5": [
+        {
+            "time": 20.20,
+            "state": 2
+        },
+        {
+            "time": 22.60,
+            "state": 0
+        }
+    ],
+    "sample126_sh16_cam6": [
+        {
+            "time": 20.20,
+            "state": 2
+        },
+        {
+            "time": 22.60,
+            "state": 0
+        }
+    ],
+    "sample127_sh16_cam7": [
+        {
+            "time": 20.20,
+            "state": 2
+        },
+        {
+            "time": 22.60,
+            "state": 0
+        }
+    ],
+    "sample128_sh16_cam8": [
+        {
+            "time": 20.20,
+            "state": 2
+        },
+        {
+            "time": 22.60,
+            "state": 0
+        }
+    ],
+    "sample129_sh17_cam1": [
+        {
+            "time": 19.18,
+            "state": 2
+        },
+        {
+            "time": 24.20,
+            "state": 0
+        }
+    ],
+    "sample130_sh17_cam2": [
+        {
+            "time": 19.18,
+            "state": 2
+        },
+        {
+            "time": 24.20,
+            "state": 0
+        }
+    ],
+    "sample131_sh17_cam3": [
+        {
+            "time": 19.18,
+            "state": 2
+        },
+        {
+            "time": 24.20,
+            "state": 0
+        }
+    ],
+    "sample132_sh17_cam4": [
+        {
+            "time": 19.18,
+            "state": 2
+        },
+        {
+            "time": 24.20,
+            "state": 0
+        }
+    ],
+    "sample133_sh17_cam5": [
+        {
+            "time": 19.18,
+            "state": 2
+        },
+        {
+            "time": 24.20,
+            "state": 0
+        }
+    ],
+    "sample134_sh17_cam6": [
+        {
+            "time": 19.18,
+            "state": 2
+        },
+        {
+            "time": 24.20,
+            "state": 0
+        }
+    ],
+    "sample135_sh17_cam7": [
+        {
+            "time": 19.18,
+            "state": 2
+        },
+        {
+            "time": 24.20,
+            "state": 0
+        }
+    ],
+    "sample136_sh17_cam8": [
+        {
+            "time": 19.18,
+            "state": 2
+        },
+        {
+            "time": 24.20,
+            "state": 0
+        }
+    ],
+    "sample137_sh18_cam1": [
+        {
+            "time": 14.60,
+            "state": 2
+        },
+        {
+            "time": 20.00,
+            "state": 0
+        }
+    ],
+    "sample138_sh18_cam2": [
+        {
+            "time": 14.60,
+            "state": 2
+        },
+        {
+            "time": 20.00,
+            "state": 0
+        }
+    ],
+    "sample139_sh18_cam3": [
+        {
+            "time": 14.60,
+            "state": 2
+        },
+        {
+            "time": 20.00,
+            "state": 0
+        }
+    ],
+    "sample140_sh18_cam4": [
+        {
+            "time": 14.60,
+            "state": 2
+        },
+        {
+            "time": 20.00,
+            "state": 0
+        }
+    ],
+    "sample141_sh18_cam5": [
+        {
+            "time": 14.60,
+            "state": 2
+        },
+        {
+            "time": 20.00,
+            "state": 0
+        }
+    ],
+    "sample142_sh18_cam6": [
+        {
+            "time": 14.60,
+            "state": 2
+        },
+        {
+            "time": 20.00,
+            "state": 0
+        }
+    ],
+    "sample143_sh18_cam7": [
+        {
+            "time": 14.60,
+            "state": 2
+        },
+        {
+            "time": 20.00,
+            "state": 0
+        }
+    ],
+    "sample144_sh18_cam8": [
+        {
+            "time": 14.60,
+            "state": 2
+        },
+        {
+            "time": 20.00,
+            "state": 0
+        }
+    ],
+    "sample145_sh19_cam1": [
+        {
+            "time": 11.90,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample146_sh19_cam2": [
+        {
+            "time": 11.90,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample147_sh19_cam3": [
+        {
+            "time": 11.90,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample148_sh19_cam4": [
+        {
+            "time": 11.90,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample149_sh19_cam5": [
+        {
+            "time": 11.90,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample150_sh19_cam6": [
+        {
+            "time": 11.90,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample151_sh19_cam7": [
+        {
+            "time": 11.90,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample152_sh19_cam8": [
+        {
+            "time": 11.90,
+            "state": 2
+        },
+        {
+            "time": 20.30,
+            "state": 0
+        }
+    ],
+    "sample153_sh20_cam1": [
+        {
+            "time": 14.00,
+            "state": 2
+        }
+    ],
+    "sample154_sh20_cam2": [
+        {
+            "time": 14.00,
+            "state": 2
+        }
+    ],
+    "sample155_sh20_cam3": [
+        {
+            "time": 14.00,
+            "state": 2
+        }
+    ],
+    "sample156_sh20_cam4": [
+        {
+            "time": 14.00,
+            "state": 2
+        }
+    ],
+    "sample157_sh20_cam5": [
+        {
+            "time": 14.00,
+            "state": 2
+        }
+    ],
+    "sample158_sh20_cam6": [
+        {
+            "time": 14.00,
+            "state": 2
+        }
+    ],
+    "sample159_sh20_cam7": [
+        {
+            "time": 14.00,
+            "state": 2
+        }
+    ],
+    "sample160_sh20_cam8": [
+        {
+            "time": 14.00,
+            "state": 2
+        }
+    ],
+    "sample161_sh21_cam1": [
+        {
+            "time": 19.40,
+            "state": 2
+        },
+        {
+            "time": 25.50,
+            "state": 0
+        }
+    ],
+    "sample162_sh21_cam2": [
+        {
+            "time": 19.40,
+            "state": 2
+        },
+        {
+            "time": 25.50,
+            "state": 0
+        }
+    ],
+    "sample163_sh21_cam3": [
+        {
+            "time": 19.40,
+            "state": 2
+        },
+        {
+            "time": 25.50,
+            "state": 0
+        }
+    ],
+    "sample164_sh21_cam4": [
+        {
+            "time": 19.40,
+            "state": 2
+        },
+        {
+            "time": 25.50,
+            "state": 0
+        }
+    ],
+    "sample165_sh21_cam5": [
+        {
+            "time": 19.40,
+            "state": 2
+        },
+        {
+            "time": 25.50,
+            "state": 0
+        }
+    ],
+    "sample166_sh21_cam6": [
+        {
+            "time": 19.40,
+            "state": 2
+        },
+        {
+            "time": 25.50,
+            "state": 0
+        }
+    ],
+    "sample167_sh21_cam7": [
+        {
+            "time": 19.40,
+            "state": 2
+        },
+        {
+            "time": 25.50,
+            "state": 0
+        }
+    ],
+    "sample168_sh21_cam8": [
+        {
+            "time": 19.40,
+            "state": 2
+        },
+        {
+            "time": 25.50,
+            "state": 0
+        }
+    ],
+    "sample169_sh22_cam1": [
+        {
+            "time": 18.30,
+            "state": 2
+        },
+        {
+            "time": 23.60,
+            "state": 0
+        }
+    ],
+    "sample170_sh22_cam2": [
+        {
+            "time": 18.30,
+            "state": 2
+        },
+        {
+            "time": 23.60,
+            "state": 0
+        }
+    ],
+    "sample171_sh22_cam3": [
+        {
+            "time": 18.30,
+            "state": 2
+        },
+        {
+            "time": 23.60,
+            "state": 0
+        }
+    ],
+    "sample172_sh22_cam4": [
+        {
+            "time": 18.30,
+            "state": 2
+        },
+        {
+            "time": 23.60,
+            "state": 0
+        }
+    ],
+    "sample173_sh22_cam5": [
+        {
+            "time": 18.30,
+            "state": 2
+        },
+        {
+            "time": 23.60,
+            "state": 0
+        }
+    ],
+    "sample174_sh22_cam6": [
+        {
+            "time": 18.30,
+            "state": 2
+        },
+        {
+            "time": 23.60,
+            "state": 0
+        }
+    ],
+    "sample175_sh22_cam7": [
+        {
+            "time": 18.30,
+            "state": 2
+        },
+        {
+            "time": 23.60,
+            "state": 0
+        }
+    ],
+    "sample176_sh22_cam8": [
+        {
+            "time": 18.30,
+            "state": 2
+        },
+        {
+            "time": 23.60,
+            "state": 0
+        }
+    ],
+    "sample177_sh23_cam1": [
+        {
+            "time": 40.90,
+            "state": 2
+        },
+        {
+            "time": 42.30,
+            "state": 0
+        },
+        {
+            "time": 78.70,
+            "state": 2
+        },
+        {
+            "time": 86.30,
+            "state": 0
+        },
+        {
+            "time": 97.10,
+            "state": 2
+        },
+        {
+            "time": 104.40,
+            "state": 0
+        },
+        {
+            "time": 110.10,
+            "state": 2
+        },
+        {
+            "time": 110.60,
+            "state": 0
+        }
+    ],
+    "sample178_sh23_cam2": [
+        {
+            "time": 40.90,
+            "state": 2
+        },
+        {
+            "time": 42.30,
+            "state": 0
+        },
+        {
+            "time": 78.70,
+            "state": 2
+        },
+        {
+            "time": 86.30,
+            "state": 0
+        },
+        {
+            "time": 97.10,
+            "state": 2
+        },
+        {
+            "time": 104.40,
+            "state": 0
+        },
+        {
+            "time": 110.10,
+            "state": 2
+        },
+        {
+            "time": 110.60,
+            "state": 0
+        }
+    ],
+    "sample179_sh23_cam3": [
+        {
+            "time": 40.90,
+            "state": 2
+        },
+        {
+            "time": 42.30,
+            "state": 0
+        },
+        {
+            "time": 78.70,
+            "state": 2
+        },
+        {
+            "time": 86.30,
+            "state": 0
+        },
+        {
+            "time": 97.10,
+            "state": 2
+        },
+        {
+            "time": 104.40,
+            "state": 0
+        },
+        {
+            "time": 110.10,
+            "state": 2
+        },
+        {
+            "time": 110.60,
+            "state": 0
+        }
+    ],
+    "sample180_sh23_cam4": [
+        {
+            "time": 40.90,
+            "state": 2
+        },
+        {
+            "time": 42.30,
+            "state": 0
+        },
+        {
+            "time": 78.70,
+            "state": 2
+        },
+        {
+            "time": 86.30,
+            "state": 0
+        },
+        {
+            "time": 97.10,
+            "state": 2
+        },
+        {
+            "time": 104.40,
+            "state": 0
+        },
+        {
+            "time": 110.10,
+            "state": 2
+        },
+        {
+            "time": 110.60,
+            "state": 0
+        }
+    ],
+    "sample181_sh23_cam5": [
+        {
+            "time": 40.90,
+            "state": 2
+        },
+        {
+            "time": 42.30,
+            "state": 0
+        },
+        {
+            "time": 78.70,
+            "state": 2
+        },
+        {
+            "time": 86.30,
+            "state": 0
+        },
+        {
+            "time": 97.10,
+            "state": 2
+        },
+        {
+            "time": 104.40,
+            "state": 0
+        },
+        {
+            "time": 110.10,
+            "state": 2
+        },
+        {
+            "time": 110.60,
+            "state": 0
+        }
+    ],
+    "sample182_sh23_cam6": [
+        {
+            "time": 40.90,
+            "state": 2
+        },
+        {
+            "time": 42.30,
+            "state": 0
+        },
+        {
+            "time": 78.70,
+            "state": 2
+        },
+        {
+            "time": 86.30,
+            "state": 0
+        },
+        {
+            "time": 97.10,
+            "state": 2
+        },
+        {
+            "time": 104.40,
+            "state": 0
+        },
+        {
+            "time": 110.10,
+            "state": 2
+        },
+        {
+            "time": 110.60,
+            "state": 0
+        }
+    ],
+    "sample183_sh23_cam7": [
+        {
+            "time": 40.90,
+            "state": 2
+        },
+        {
+            "time": 42.30,
+            "state": 0
+        },
+        {
+            "time": 78.70,
+            "state": 2
+        },
+        {
+            "time": 86.30,
+            "state": 0
+        },
+        {
+            "time": 97.10,
+            "state": 2
+        },
+        {
+            "time": 104.40,
+            "state": 0
+        },
+        {
+            "time": 110.10,
+            "state": 2
+        },
+        {
+            "time": 110.60,
+            "state": 0
+        }
+    ],
+    "sample184_sh23_cam8": [
+        {
+            "time": 40.90,
+            "state": 2
+        },
+        {
+            "time": 42.30,
+            "state": 0
+        },
+        {
+            "time": 78.70,
+            "state": 2
+        },
+        {
+            "time": 86.30,
+            "state": 0
+        },
+        {
+            "time": 97.10,
+            "state": 2
+        },
+        {
+            "time": 104.40,
+            "state": 0
+        },
+        {
+            "time": 110.10,
+            "state": 2
+        },
+        {
+            "time": 110.60,
+            "state": 0
+        }
+    ],
+    "sample185_sh24_cam1": [],
+    "sample186_sh24_cam2": [],
+    "sample187_sh24_cam3": [],
+    "sample188_sh24_cam4": [],
+    "sample189_sh24_cam5": [],
+    "sample190_sh24_cam6": [],
+    "sample191_sh24_cam7": [],
+    "sample192_sh24_cam8": []
+}

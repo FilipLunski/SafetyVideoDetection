@@ -1,0 +1,842 @@
+{
+    "coffee_room_001.mp4": [
+        {
+            "time": 73.04,
+            "state": 1
+        }
+    ],
+    "coffee_room_002.mp4": [
+        {
+            "time": 3.62,
+            "state": 1
+        }
+    ],
+    "coffee_room_003.mp4": [
+        {
+            "time": 10.00,
+            "state": 1
+        }
+    ],
+    "coffee_room_004.mp4": [
+        {
+            "time": 2.58,
+            "state": 1
+        }
+    ],
+    "coffee_room_005.mp4": [
+        {
+            "time": 4.00,
+            "state": 1
+        }
+    ],
+    "coffee_room_006.mp4": [
+        {
+            "time": 10.87,
+            "state": 1
+        }
+    ],
+    "coffee_room_007.mp4": [
+        {
+            "time": 10.87,
+            "state": 1
+        }
+    ],
+    "coffee_room_008.mp4": [
+        {
+            "time": 6.87,
+            "state": 1
+        }
+    ],
+    "coffee_room_009.mp4": [
+        {
+            "time": 11.16,
+            "state": 1
+        }
+    ],
+    "coffee_room_010.mp4": [
+        {
+            "time": 4.95,
+            "state": 1
+        }
+    ],
+    "coffee_room_011.mp4": [
+        {
+            "time": 9.20,
+            "state": 1
+        }
+    ],
+    "coffee_room_012.mp4": [
+        {
+            "time": 12.54,
+            "state": 1
+        }
+    ],
+    "coffee_room_013.mp4": [
+        {
+            "time": 25.66,
+            "state": 1
+        }
+    ],
+    "coffee_room_014.mp4": [
+        {
+            "time": 2.50,
+            "state": 1
+        }
+    ],
+    "coffee_room_015.mp4": [
+        {
+            "time": 18.29,
+            "state": 1
+        }
+    ],
+    "coffee_room_016.mp4": [
+        {
+            "time": 4.62,
+            "state": 1
+        }
+    ],
+    "coffee_room_017.mp4": [
+        {
+            "time": 7.66,
+            "state": 1
+        }
+    ],
+    "coffee_room_018.mp4": [
+        {
+            "time": 7.20,
+            "state": 1
+        }
+    ],
+    "coffee_room_019.mp4": [
+        {
+            "time": 5.75,
+            "state": 1
+        }
+    ],
+    "coffee_room_020.mp4": [
+        {
+            "time": 5.62,
+            "state": 1
+        }
+    ],
+    "coffee_room_021.mp4": [
+        {
+            "time": 25.54,
+            "state": 1
+        }
+    ],
+    "coffee_room_022.mp4": [
+        {
+            "time": 26.87,
+            "state": 1
+        }
+    ],
+    "coffee_room_023.mp4": [
+        {
+            "time": 2.50,
+            "state": 1
+        }
+    ],
+    "coffee_room_024.mp4": [],
+    "coffee_room_025.mp4": [
+        {
+            "time": 7.54,
+            "state": 1
+        }
+    ],
+    "coffee_room_026.mp4": [],
+    "coffee_room_027.mp4": [
+        {
+            "time": 6.00,
+            "state": 1
+        }
+    ],
+    "coffee_room_028.mp4": [],
+    "coffee_room_029.mp4": [],
+    "coffee_room_030.mp4": [],
+    "coffee_room_031.mp4": [],
+    "coffee_room_032.mp4": [],
+    "coffee_room_033.mp4": [],
+    "coffee_room_034.mp4": [
+        {
+            "time": 17.41,
+            "state": 1
+        }
+    ],
+    "coffee_room_035.mp4": [
+        {
+            "time": 8.08,
+            "state": 1
+        }
+    ],
+    "coffee_room_036.mp4": [
+        {
+            "time": 9.62,
+            "state": 1
+        }
+    ],
+    "coffee_room_037.mp4": [
+        {
+            "time": 5.58,
+            "state": 1
+        }
+    ],
+    "coffee_room_038.mp4": [
+        {
+            "time": 5.87,
+            "state": 1
+        }
+    ],
+    "coffee_room_039.mp4": [
+        {
+            "time": 6.12,
+            "state": 1
+        }
+    ],
+    "coffee_room_040.mp4": [
+        {
+            "time": 4.62,
+            "state": 1
+        }
+    ],
+    "coffee_room_041.mp4": [
+        {
+            "time": 6.87,
+            "state": 1
+        }
+    ],
+    "coffee_room_042.mp4": [
+        {
+            "time": 4.00,
+            "state": 1
+        }
+    ],
+    "coffee_room_043.mp4": [
+        {
+            "time": 8.75,
+            "state": 1
+        }
+    ],
+    "coffee_room_044.mp4": [
+        {
+            "time": 15.50,
+            "state": 1
+        }
+    ],
+    "coffee_room_045.mp4": [
+        {
+            "time": 2.75,
+            "state": 1
+        }
+    ],
+    "coffee_room_046.mp4": [
+        {
+            "time": 4.16,
+            "state": 1
+        }
+    ],
+    "coffee_room_047.mp4": [
+        {
+            "time": 2.58,
+            "state": 1
+        }
+    ],
+    "coffee_room_048.mp4": [
+        {
+            "time": 2.50,
+            "state": 1
+        }
+    ],
+    "coffee_room_049.mp4": [
+        {
+            "time": 2.29,
+            "state": 1
+        }
+    ],
+    "coffee_room_050.mp4": [
+        {
+            "time": 1.25,
+            "state": 1
+        }
+    ],
+    "coffee_room_051.mp4": [
+        {
+            "time": 6.66,
+            "state": 1
+        }
+    ],
+    "coffee_room_052.mp4": [
+        {
+            "time": 4.37,
+            "state": 1
+        }
+    ],
+    "coffee_room_053.mp4": [
+        {
+            "time": 13.62,
+            "state": 1
+        }
+    ],
+    "coffee_room_054.mp4": [
+        {
+            "time": 3.91,
+            "state": 1
+        }
+    ],
+    "coffee_room_055.mp4": [
+        {
+            "time": 5.45,
+            "state": 1
+        }
+    ],
+    "coffee_room_056.mp4": [
+        {
+            "time": 8.66,
+            "state": 1
+        }
+    ],
+    "coffee_room_057.mp4": [
+        {
+            "time": 8.79,
+            "state": 1
+        }
+    ],
+    "coffee_room_058.mp4": [
+        {
+            "time": 5.87,
+            "state": 1
+        }
+    ],
+    "coffee_room_059.mp4": [
+        {
+            "time": 8.41,
+            "state": 1
+        }
+    ],
+    "coffee_room_060.mp4": [
+        {
+            "time": 6.79,
+            "state": 1
+        }
+    ],
+    "coffee_room_061.mp4": [
+        {
+            "time": 2.95,
+            "state": 1
+        }
+    ],
+    "coffee_room_062.mp4": [
+        {
+            "time": 12.29,
+            "state": 1
+        }
+    ],
+    "coffee_room_063.mp4": [
+        {
+            "time": 3.45,
+            "state": 1
+        }
+    ],
+    "coffee_room_064.mp4": [
+        {
+            "time": 6.70,
+            "state": 1
+        }
+    ],
+    "coffee_room_065.mp4": [
+        {
+            "time": 8.75,
+            "state": 1
+        }
+    ],
+    "coffee_room_066.mp4": [
+        {
+            "time": 4.00,
+            "state": 1
+        }
+    ],
+    "coffee_room_067.mp4": [
+        {
+            "time": 13.62,
+            "state": 1
+        }
+    ],
+    "coffee_room_068.mp4": [
+        {
+            "time": 3.614,
+            "state": 1
+        }
+    ],
+    "coffee_room_069.mp4": [
+        {
+            "time": 3.95,
+            "state": 1
+        }
+    ],
+    "coffee_room_070.mp4": [
+        {
+            "time": 2.66,
+            "state": 1
+        }
+    ],
+    "home_001.mp4": [],
+    "home_002.mp4": [
+        {
+            "time": 16.75,
+            "state": 1
+        }
+    ],
+    "home_003.mp4": [
+        {
+            "time": 5.45,
+            "state": 1
+        }
+    ],
+    "home_004.mp4": [
+        {
+            "time": 5.45,
+            "state": 1
+        }
+    ],
+    "home_005.mp4": [
+        {
+            "time": 6.83,
+            "state": 1
+        }
+    ],
+    "home_006.mp4": [
+        {
+            "time": 5.00,
+            "state": 1
+        }
+    ],
+    "home_007.mp4": [
+        {
+            "time": 5.00,
+            "state": 1
+        }
+    ],
+    "home_008.mp4": [
+        {
+            "time": 6.29,
+            "state": 1
+        }
+    ],
+    "home_009.mp4": [
+        {
+            "time": 5.75,
+            "state": 1
+        }
+    ],
+    "home_010.mp4": [
+        {
+            "time": 6.70,
+            "state": 1
+        }
+    ],
+    "home_011.mp4": [
+        {
+            "time": 5.91,
+            "state": 1
+        }
+    ],
+    "home_012.mp4": [
+        {
+            "time": 6.54,
+            "state": 1
+        }
+    ],
+    "home_013.mp4": [
+        {
+            "time": 7.04,
+            "state": 1
+        }
+    ],
+    "home_014.mp4": [
+        {
+            "time": 6.70,
+            "state": 1
+        }
+    ],
+    "home_015.mp4": [
+        {
+            "time": 8.16,
+            "state": 1
+        }
+    ],
+    "home_016.mp4": [
+        {
+            "time": 7.58,
+            "state": 1
+        }
+    ],
+    "home_017.mp4": [
+        {
+            "time": 7.87,
+            "state": 1
+        }
+    ],
+    "home_018.mp4": [
+        {
+            "time": 6.62,
+            "state": 1
+        }
+    ],
+    "home_019.mp4": [
+        {
+            "time": 6.08,
+            "state": 1
+        }
+    ],
+    "home_020.mp4": [
+        {
+            "time": 5.83,
+            "state": 1
+        }
+    ],
+    "home_021.mp4": [
+        {
+            "time": 6.50,
+            "state": 1
+        }
+    ],
+    "home_022.mp4": [
+        {
+            "time": 6.50,
+            "state": 1
+        }
+    ],
+    "home_023.mp4": [
+        {
+            "time": 6.58,
+            "state": 1
+        }
+    ],
+    "home_024.mp4": [
+        {
+            "time": 7.25,
+            "state": 1
+        }
+    ],
+    "home_025.mp4": [
+        {
+            "time": 5.87,
+            "state": 1
+        }
+    ],
+    "home_026.mp4": [
+        {
+            "time": 7.50,
+            "state": 1
+        }
+    ],
+    "home_027.mp4": [
+        {
+            "time": 5.83,
+            "state": 1
+        }
+    ],
+    "home_028.mp4": [
+        {
+            "time": 7.37,
+            "state": 1
+        }
+    ],
+    "home_029.mp4": [
+        {
+            "time": 7.50,
+            "state": 1
+        }
+    ],
+    "home_030.mp4": [
+        {
+            "time": 7.08,
+            "state": 1
+        }
+    ],
+    "home_031.mp4": [
+        {
+            "time": 5.50,
+            "state": 1
+        }
+    ],
+    "home_032.mp4": [
+        {
+            "time": 9.25,
+            "state": 1
+        }
+    ],
+    "home_033.mp4": [
+        {
+            "time": 4.20,
+            "state": 1
+        }
+    ],
+    "home_034.mp4": [
+        {
+            "time": 5.75,
+            "state": 1
+        }
+    ],
+    "home_035.mp4": [
+        {
+            "time": 7.16,
+            "state": 1
+        }
+    ],
+    "home_036.mp4": [
+        {
+            "time": 6.08,
+            "state": 1
+        }
+    ],
+    "home_037.mp4": [
+        {
+            "time": 5.50,
+            "state": 1
+        }
+    ],
+    "home_038.mp4": [
+        {
+            "time": 5.95,
+            "state": 1
+        }
+    ],
+    "home_039.mp4": [],
+    "home_040.mp4": [],
+    "home_041.mp4": [],
+    "home_042.mp4": [],
+    "home_043.mp4": [],
+    "home_044.mp4": [],
+    "home_045.mp4": [],
+    "home_046.mp4": [],
+    "home_047.mp4": [],
+    "home_048.mp4": [],
+    "home_049.mp4": [],
+    "home_050.mp4": [],
+    "home_051.mp4": [],
+    "home_052.mp4": [],
+    "home_053.mp4": [],
+    "home_054.mp4": [],
+    "home_055.mp4": [],
+    "home_056.mp4": [],
+    "home_057.mp4": [],
+    "home_058.mp4": [],
+    "home_059.mp4": [],
+    "home_060.mp4": [],
+    "lecture_room_001.mp4": [
+        {
+            "time": 7.41,
+            "state": 1
+        }
+    ],
+    "lecture_room_002.mp4": [
+        {
+            "time": 15.66,
+            "state": 1
+        }
+    ],
+    "lecture_room_003.mp4": [
+        {
+            "time": 19.37,
+            "state": 1
+        }
+    ],
+    "lecture_room_004.mp4": [
+        {
+            "time": 11.75,
+            "state": 1
+        }
+    ],
+    "lecture_room_005.mp4": [
+        {
+            "time": 11.20,
+            "state": 1
+        }
+    ],
+    "lecture_room_006.mp4": [
+        {
+            "time": 7.20,
+            "state": 1
+        }
+    ],
+    "lecture_room_007.mp4": [
+        {
+            "time": 9.62,
+            "state": 1
+        }
+    ],
+    "lecture_room_008.mp4": [
+        {
+            "time": 24.29,
+            "state": 1
+        }
+    ],
+    "lecture_room_009.mp4": [
+        {
+            "time": 31.75,
+            "state": 1
+        }
+    ],
+    "lecture_room_010.mp4": [
+        {
+            "time": 14.33,
+            "state": 1
+        }
+    ],
+    "lecture_room_011.mp4": [
+        {
+            "time": 11.04,
+            "state": 1
+        }
+    ],
+    "lecture_room_012.mp4": [
+        {
+            "time": 23.70,
+            "state": 1
+        }
+    ],
+    "lecture_room_013.mp4": [
+        {
+            "time": 12.75,
+            "state": 1
+        }
+    ],
+    "lecture_room_014.mp4": [
+        {
+            "time": 13.83,
+            "state": 1
+        }
+    ],
+    "lecture_room_015.mp4": [],
+    "lecture_room_016.mp4": [],
+    "lecture_room_017.mp4": [],
+    "lecture_room_018.mp4": [],
+    "lecture_room_019.mp4": [],
+    "lecture_room_020.mp4": [],
+    "lecture_room_021.mp4": [],
+    "lecture_room_022.mp4": [],
+    "lecture_room_023.mp4": [],
+    "lecture_room_024.mp4": [],
+    "lecture_room_025.mp4": [],
+    "lecture_room_026.mp4": [],
+    "lecture_room_027.mp4": [],
+    "office_001.mp4": [],
+    "office_002.mp4": [
+        {
+            "time": 12.29,
+            "state": 1
+        }
+    ],
+    "office_003.mp4": [
+        {
+            "time": 6.70,
+            "state": 1
+        }
+    ],
+    "office_004.mp4": [
+        {
+            "time": 14.50,
+            "state": 1
+        }
+    ],
+    "office_005.mp4": [
+        {
+            "time": 7.95,
+            "state": 1
+        }
+    ],
+    "office_006.mp4": [
+        {
+            "time": 5.91,
+            "state": 1
+        }
+    ],
+    "office_007.mp4": [
+        {
+            "time": 13.04,
+            "state": 1
+        }
+    ],
+    "office_008.mp4": [
+        {
+            "time": 5.00,
+            "state": 1
+        }
+    ],
+    "office_009.mp4": [
+        {
+            "time": 12.50,
+            "state": 1
+        }
+    ],
+    "office_010.mp4": [
+        {
+            "time": 3.08,
+            "state": 1
+        }
+    ],
+    "office_011.mp4": [
+        {
+            "time": 7.00,
+            "state": 1
+        }
+    ],
+    "office_012.mp4": [
+        {
+            "time": 4.00,
+            "state": 1
+        }
+    ],
+    "office_013.mp4": [
+        {
+            "time": 8.54,
+            "state": 1
+        }
+    ],
+    "office_014.mp4": [
+        {
+            "time": 7.12,
+            "state": 1
+        }
+    ],
+    "office_015.mp4": [
+        {
+            "time": 3.54,
+            "state": 1
+        }
+    ],
+    "office_016.mp4": [
+        {
+            "time": 9.66,
+            "state": 1
+        }
+    ],
+    "office_017.mp4": [
+        {
+            "time": 10.12,
+            "state": 1
+        }
+    ],
+    "office_018.mp4": [
+        {
+            "time": 4.83,
+            "state": 1
+        }
+    ],
+    "office_019.mp4": [],
+    "office_020.mp4": [],
+    "office_021.mp4": [],
+    "office_022.mp4": [],
+    "office_023.mp4": [],
+    "office_024.mp4": [],
+    "office_025.mp4": [],
+    "office_026.mp4": [],
+    "office_027.mp4": [],
+    "office_028.mp4": [],
+    "office_029.mp4": [],
+    "office_030.mp4": [],
+    "office_031.mp4": [],
+    "office_032.mp4": [],
+    "office_033.mp4": []
+}
