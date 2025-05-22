@@ -17,7 +17,7 @@ def parse_json(file_path):
     return data
 
 
-pose_model = YOLO("./models_pose/yolo11m-pose")
+pose_model = YOLO("./models_pose/yolo11x-pose")
 
 
 def normalize_keypoints(keypoints):
@@ -38,13 +38,13 @@ def main(video_folder, labels_file, out_filename, input_format="mp4", new_file=T
         os.remove(out_filename)
 
     for file in glob.glob(video_folder + "\\*." + input_format):
-        print('\n', file, end = '\t')
+        print('\n', file, end='\t')
         processFile(file, out_filename)
 
 
 def processFile(file, out_filename):
     with h5py.File(out_filename, 'a') as f:
-        
+
         cap = cv2.VideoCapture(file)
 
         fileName_ext = os.path.basename(file)
@@ -56,7 +56,7 @@ def processFile(file, out_filename):
 
         video_group = f.create_group(fileName)
 
-        frame_number = 0
+        frame_number = -1
 
         dataset_keypoints = []
         dataset_categories = []
@@ -80,39 +80,43 @@ def processFile(file, out_filename):
             next_state_time = label[state_number + 1]["time"]
 
         while cap.isOpened():
+            frame_number += 1
             success, frame = cap.read()
             if success:
                 # Get the current position of the video file in milliseconds
                 timestamp_ms = cap.get(cv2.CAP_PROP_POS_MSEC)
                 timestamp_s = timestamp_ms / 1000.0 
 
-                results = pose_model(frame, show=False, verbose=False)
-                print('.', end='', flush=True)
+                results = pose_model.track(
+                    frame, persist=True, tracker="bytetrack.yaml", show=False, verbose=False)
+                print(f"\t {timestamp_s:.2f}", end=' ', flush=True)
 
                 if results[0].keypoints.has_visible == False:
                     continue
 
-                normalized_keypoints = normalize_keypoints(
-                    results[0].keypoints.xy[0].cpu().numpy())
+                print(results[0].boxes.id, end='', flush=True)
 
-                if timestamp_s >= next_state_time:
-                    state_number += 1
-                    state = label[state_number]["state"]
-                    if (state_number == len(label) - 1):
-                        next_state_time = float('inf')
-                    else:
-                        next_state_time = label[state_number + 1]["time"]
-                dataset_keypoints.append(normalized_keypoints)
-                dataset_categories.append(state==1)
+                # normalized_keypoints = normalize_keypoints(
+                #     results[0].keypoints.xy[0].cpu().numpy())
 
+                # if timestamp_s >= next_state_time:
+                #     state_number += 1
+                #     state = label[state_number]["state"]
+                #     if (state_number == len(label) - 1):
+                #         next_state_time = float('inf')
+                #     else:
+                #         next_state_time = label[state_number + 1]["time"]
+                # dataset_keypoints.append(normalized_keypoints)
+                # dataset_categories.append(state==1)
 
             else:
                 break
 
-            frame_number += 1
         dataset_group = video_group.create_group('dataset')
-        dataset_group.create_dataset('keypoints', data=dataset_keypoints, dtype='float32')
-        dataset_group.create_dataset('categories', data=dataset_categories, dtype='bool')
+        dataset_group.create_dataset(
+            'keypoints', data=dataset_keypoints, dtype='float32')
+        dataset_group.create_dataset(
+            'categories', data=dataset_categories, dtype='bool')
 
         metadata_group = video_group.create_group('metadata')
         metadata_group.create_dataset(
@@ -136,3 +140,7 @@ def processFile(file, out_filename):
 #      'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_m_test.h5", "mp4")
 # main('samples\\video\\fifty_ways\\validation',
 #      'samples\\labels\\50ways_labels.json', "samples\\dataset_fifty_ways_m_validation.h5", "mp4")
+
+
+main('samples\\video\\MCFD',
+     'samples\\labels\\mcfd_labels.json', "samples\\dataset_mcfd_m_train.h5", "mp4")
