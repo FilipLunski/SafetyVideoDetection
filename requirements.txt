@@ -25,11 +25,13 @@ docopt==0.6.2
 docutils==0.21.2
 executing==2.2.0
 fastjsonschema==2.21.1
+ffmpeg-python==0.2.0
 filelock==3.17.0
 flatbuffers==25.2.10
 fonttools==4.56.0
 frozenlist==1.5.0
 fsspec==2025.3.0
+future==1.0.0
 gast==0.6.0
 google-pasta==0.2.0
 grpcio==1.71.0
@@ -131,7 +133,7 @@ sounddevice==0.5.1
 soupsieve==2.6
 stack-data==0.6.3
 supervision==0.25.1
-sympy==1.13.1
+sympy==1.13.3
 tensorboard==2.19.0
 tensorboard-data-server==0.7.2
 tensorflow==2.19.0
@@ -139,10 +141,10 @@ tensorflow-intel==0.0.1
 termcolor==2.5.0
 timm==1.0.15
 tinycss2==1.4.0
-torch==2.6.0+cu126
-torchaudio==2.6.0+cu126
+torch==2.7.0+cu128
+torchaudio==2.7.0+cu128
 torchmetrics==1.6.2
-torchvision==0.21.0+cu126
+torchvision==0.22.0+cu128
 tornado==6.4.2
 tqdm==4.67.1
 traitlets==5.14.3
