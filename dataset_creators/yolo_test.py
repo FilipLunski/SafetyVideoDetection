@@ -22,4 +22,4 @@ def process_video(file):
                      show=False, verbose=False, save=True)
 
 
-main('samples\\video\\MCFD', "mp4")
+main('samples\\video\\Le2i', "mp4")
