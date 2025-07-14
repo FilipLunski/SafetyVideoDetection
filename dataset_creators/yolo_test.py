@@ -19,7 +19,7 @@ def process_video(file):
 
     print('\n', file, "\t------------------------------------------------------------------------------------------------------------------------------------")
     pose_model.track(file, tracker="bytetrack.yaml",
-                     show=False, verbose=False, save=True)
+                     show=False, save=True)
 
 
-main('samples\\video\\Le2i', "mp4")
+main("samples\\video\\MCFD\\n", "mp4")
