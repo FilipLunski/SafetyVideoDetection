@@ -83,18 +83,24 @@ def get_checkpoint_path(model_version):
 
 default_train_dataset_paths = [
     r'samples\dataset_cauca_m_train.h5',
-    r'samples\dataset_fifty_ways_m_train.h5'
+    r'samples\dataset_fifty_ways_m_train.h5',
+    r'samples\dataset_mcfd_x_train.h5',
+    r'samples\dataset_le2i_x_train.h5'
 ]
 
 default_dev_dataset_paths = [
     r'samples\dataset_cauca_m_validation.h5',
-    r'samples\dataset_fifty_ways_m_validation.h5'
+    r'samples\dataset_fifty_ways_m_validation.h5',
+    r'samples\dataset_mcfd_x_val.h5',
+    r'samples\dataset_le2i_x_val.h5'
 ]
 
 default_test_dataset_paths = [
 
     r'samples\dataset_cauca_m_test.h5',
-    r'samples\dataset_fifty_ways_m_test.h5'
+    r'samples\dataset_fifty_ways_m_test.h5',
+    r'samples\dataset_mcfd_x_test.h5',
+    r'samples\dataset_le2i_x_test.h5'
 ]
 
 
@@ -204,7 +210,7 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
         print(f"An error occurred during training: {e}")
 
 
-def main(rnn_type="gru", timesteps=None):
+def main(rnn_type="gru"):
 
     # train(rnn_type=rnn_type, epochs=350, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
     #       timesteps=timesteps, from_checkpoint=False, rnn_dropout=0.15, test=False)
@@ -223,8 +229,20 @@ def main(rnn_type="gru", timesteps=None):
     # train(rnn_type=rnn_type, epochs=700, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
     #       timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=False)
 
-    train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
-          timesteps=timesteps, from_checkpoint=True, rnn_dropout=0.15, test=True, device="cpu", checkpoint_path="fall_detection/GRU.ckpt")
+    # train(rnn_type=rnn_type, epochs=420, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=timesteps, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu", checkpoint_path="fall_detection/GRU.ckpt")
+
+    # train(rnn_type=rnn_type, epochs=420, rnn_layers=3, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=timesteps, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu", checkpoint_path="fall_detection/GRU.ckpt")
+
+    train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=128, fc_size=128, batch_size=6144,
+          timesteps=50, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+
+    train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=256, fc_size=64, batch_size=6144,
+          timesteps=50, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+
+    train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=128, fc_size=64, batch_size=6144,
+          timesteps=75, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
 
 
-main("gru", 50)
+main("gru")

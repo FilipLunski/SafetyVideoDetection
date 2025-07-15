@@ -183,3 +183,5 @@ samples/**/out
 
 /models_pose
 .pre-commit-config.yaml
+/samples/video/**/annotated
+samples/video/MCFD/23

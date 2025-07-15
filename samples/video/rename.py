@@ -116,7 +116,7 @@ import os
 import re
 
 # Path to the folder containing files
-folder_path = r'samples\video\MCFD'
+folder_path = r'samples\video\Le2i'
 
 # Regex to match filenames like "sample01_sh01_cam1.avi"
 pattern = re.compile(r'^(sample)(\d{2})_(sh\d{2})_(cam\d+)\.avi$', re.IGNORECASE)

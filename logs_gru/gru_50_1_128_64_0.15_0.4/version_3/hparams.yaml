@@ -1,0 +1,25 @@
+batch_size: 6144
+dev_dataset_paths:
+- samples\dataset_cauca_m_validation.h5
+- samples\dataset_fifty_ways_m_validation.h5
+- samples\dataset_mcfd_x_val.h5
+- samples\dataset_le2i_x_val.h5
+device: gpu
+epochs: 450
+fc_droupout: 0.4
+fc_size: 128
+from_checkpoint: true
+input_size: 34
+model_path: null
+output_size: 1
+previous_model_path: logs_gru\gru_50_1_128_64_0.15_0.4\version_1\checkpoints\epoch=419-step=8820.ckpt
+rnn_dropout: 0.15
+rnn_hidden_size: 128
+rnn_layers_count: 1
+save: true
+timesteps: 50
+train_dataset_paths:
+- samples\dataset_cauca_m_train.h5
+- samples\dataset_fifty_ways_m_train.h5
+- samples\dataset_mcfd_x_train.h5
+- samples\dataset_le2i_x_train.h5
