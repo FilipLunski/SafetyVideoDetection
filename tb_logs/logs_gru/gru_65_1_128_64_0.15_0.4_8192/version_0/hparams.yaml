@@ -1,0 +1,25 @@
+batch_size: 8192
+dev_dataset_paths:
+- samples\dataset_cauca_x_val.h5
+- samples\dataset_fifty_ways_x_val.h5
+- samples\dataset_mcfd_x_val.h5
+- samples\dataset_le2i_x_val.h5
+device: gpu
+epochs: 550
+fc_droupout: 0.4
+fc_size: 128
+from_checkpoint: false
+input_size: 34
+model_path: null
+output_size: 1
+previous_model_path: null
+rnn_dropout: 0.15
+rnn_hidden_size: 128
+rnn_layers_count: 1
+save: true
+timesteps: 65
+train_dataset_paths:
+- samples\dataset_cauca_x_train.h5
+- samples\dataset_fifty_ways_x_train.h5
+- samples\dataset_mcfd_x_train.h5
+- samples\dataset_le2i_x_train.h5

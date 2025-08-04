@@ -48,19 +48,24 @@ def get_checkpoint_path(model_version):
 
 
 default_train_dataset_paths = [
-    r'samples\dataset_cauca_m_train.h5',
-    r'samples\dataset_fifty_ways_m_train.h5'
+    r'samples\dataset_cauca_x_train.h5',
+    r'samples\dataset_fifty_ways_x_train.h5',
+    r'samples\dataset_mcfd_x_train.h5',
+    r'samples\dataset_le2i_x_train.h5'
 ]
 
 default_dev_dataset_paths = [
-    r'samples\dataset_cauca_m_validation.h5',
-    r'samples\dataset_fifty_ways_m_validation.h5'
+    r'samples\dataset_cauca_x_val.h5',
+    r'samples\dataset_fifty_ways_x_val.h5',
+    r'samples\dataset_mcfd_x_val.h5',
+    r'samples\dataset_le2i_x_val.h5'
 ]
 
 default_test_dataset_paths = [
-    
-    r'samples\dataset_cauca_m_test.h5',
-    r'samples\dataset_fifty_ways_m_test.h5'
+    r'samples\dataset_cauca_x_test.h5',
+    r'samples\dataset_fifty_ways_x_test.h5',
+    r'samples\dataset_mcfd_x_test.h5',
+    r'samples\dataset_le2i_x_test.h5'
 ]
 
 

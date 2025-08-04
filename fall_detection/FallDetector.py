@@ -124,6 +124,7 @@ class FallDetector:
         self._video_number = 0
         self._frame_width = frame_width
         self._frame_height = frame_height
+        self._font_scale = 0.5
         self._frame_rate = frame_rate
         self._threshold = threshold
         self._frames_buffer_size = frames_buffer_size
@@ -161,49 +162,50 @@ class FallDetector:
             frame, show=False, verbose=False, persist=True, tracker="bytetrack.yaml")
         result: Results = results[0]
 
-        if result.keypoints.has_visible == False:
-            return None
-        
-        if (self._annotated_video_output_file != None):
-            annotated_frame = frame.copy()
-            # annotated_frame = result.plot()
-
-        if self._fall_model._device != "cpu":
-            result = result.cpu()
-
         seen_persons: list[Person] = []
+        if result.keypoints.has_visible == True:
+        
+            if (self._annotated_video_output_file != None):
+                annotated_frame = frame.copy()
+                # annotated_frame = result.plot()
 
-        # print(result.keypoints.xy.shape if result.keypoints.xy is not None else None, result.boxes.xywhn.shape if result.boxes.xywhn is not None else None, result.boxes.xyxy.shape if result.boxes.xyxy is not None else None, result.boxes.id.shape if result.boxes.id is not None else None)
-        if (result.boxes.id is None):
-            print("No IDs detected!!!")
-            return
-        for keypoints, bounding_box, bounding_box_abs, id in zip(result.keypoints.xy, result.boxes.xywhn, result.boxes.xyxy, result.boxes.id):
-            person: Person = None
+            if self._fall_model._device != "cpu":
+                result = result.cpu()
 
-            keypoints = keypoints.cpu()
-            bounding_box = bounding_box.cpu()
-            bounding_box_abs = bounding_box_abs.cpu()
-            id = id.cpu()
 
-            id = int(id.item())
-            if (np.sum(np.all(keypoints.numpy() == 0, axis=1)) < 8):
-                normalized_keypoints = normalize_keypoints(keypoints.numpy())
-                if (id in self._fall_finder_persons):
-                    person = self._fall_finder_persons[id]
-                else:
-                    person = Person(id, self._sequence_length)
-                    self._fall_finder_persons[id] = person
-                person.bounding_box = bounding_box
-                person.buffer_keypoints = normalized_keypoints
-                person.unseen_frames = 0
-                person.text_position = self.normalize_text_position(
-                    (bounding_box_abs[0], bounding_box_abs[1]))
-                self.update_state(person)
-                seen_persons.append(person)
+            # print(result.keypoints.xy.shape if result.keypoints.xy is not None else None, result.boxes.xywhn.shape if result.boxes.xywhn is not None else None, result.boxes.xyxy.shape if result.boxes.xyxy is not None else None, result.boxes.id.shape if result.boxes.id is not None else None)
+            if (result.boxes.id is None):
+                print("No IDs detected!!!")
+                return
+            for keypoints, bounding_box, bounding_box_abs, id in zip(result.keypoints.xy, result.boxes.xywhn, result.boxes.xyxy, result.boxes.id):
+                person: Person = None
 
-                if (self._annotated_video_output_file != None):
-                    cv2.putText(annotated_frame, f"{annotations[person.state]['text']} {person.confidence:.2f}", person.text_position,
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, annotations[person.state]["color"], 2)
+                keypoints = keypoints.cpu()
+                bounding_box = bounding_box.cpu()
+                bounding_box_abs = bounding_box_abs.cpu()
+                id = id.cpu()
+
+                id = int(id.item())
+                if (np.sum(np.all(keypoints.numpy() == 0, axis=1)) < 8):
+                    normalized_keypoints = normalize_keypoints(keypoints.numpy())
+                    if (id in self._fall_finder_persons):
+                        person = self._fall_finder_persons[id]
+                    else:
+                        person = Person(id, self._sequence_length)
+                        self._fall_finder_persons[id] = person
+                    person.bounding_box = bounding_box
+                    person.buffer_keypoints = normalized_keypoints
+                    person.unseen_frames = 0
+                    person.text_position = self.normalize_text_position(
+                        (bounding_box_abs[0], bounding_box_abs[1]))
+                    self.update_state(person)
+                    seen_persons.append(person)
+
+                    if (self._annotated_video_output_file != None):
+                        cv2.putText(annotated_frame, f"{id}: {annotations[person.state]['text']} {person.confidence:.2f}", person.text_position,
+                                    cv2.FONT_HERSHEY_SIMPLEX, self._font_scale, annotations[person.state]["color"], 2)
+        else:
+            annotated_frame = frame
         if (self._annotated_video_output_file != None):
             self._annotated_frame_buffer.append(annotated_frame)
 
@@ -293,6 +295,6 @@ class FallDetector:
     def normalize_text_position(self, position):
         position_x = position[0].item()
         position_y = position[1].item()-20
-        position_x = max(5, min(position_x, self._frame_width - 80))
+        position_x = max(5, min(position_x, self._frame_width - 120))
         position_y = max(5, min(position_y, self._frame_height - 30))
         return (int(position_x), int(position_y))

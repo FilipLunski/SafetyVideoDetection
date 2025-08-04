@@ -9,6 +9,7 @@ import json
 import lightning as L
 import os
 from lightning.pytorch.loggers import TensorBoardLogger
+from lightning.pytorch.callbacks import ModelCheckpoint
 import time
 
 CHECKPOINTS_FILE = "fall_detection/checkpoints.json"
@@ -42,20 +43,20 @@ def collate_fn(batch):
 def load_dataset(paths, batch_size, timesteps=None):
 
     data = []
-    for path in paths:
+    for path, fps in paths:
+        step = round(fps / 10) # resampling to 10 fps  
         with h5py.File(path, 'r') as f:
             for video in f:
                 frames = f[video]['dataset']['keypoints'][()]
-                for j in range(1, 2):
-                    for i in range(len(frames)):
-                        start = 0
-                        if timesteps is not None and i > timesteps * j:
-                            start = i - timesteps * j + 1
+                for i in range(len(frames)):
+                    start = 0
+                    if timesteps is not None and i > timesteps * step:
+                        start = i - timesteps * step + 1
 
-                        k = frames[start: i + 1: j]
-                        l = [float(f[video]['dataset']['categories'][i])]
-                        data.append((k, l))
-                    # print(f[video]['dataset']['keypoints'][()].shape)
+                    k = frames[start: i + 1: step]
+                    l = [float(f[video]['dataset']['categories'][i])]
+                    data.append((k, l))
+                # print(f[video]['dataset']['keypoints'][()].shape)
 
     dataset = VariableLengthDataset(data)
     loader = torch.utils.data.DataLoader(
@@ -82,25 +83,24 @@ def get_checkpoint_path(model_version):
 
 
 default_train_dataset_paths = [
-    r'samples\dataset_cauca_m_train.h5',
-    r'samples\dataset_fifty_ways_m_train.h5',
-    r'samples\dataset_mcfd_x_train.h5',
-    r'samples\dataset_le2i_x_train.h5'
+    [r'samples\dataset_cauca_x_train.h5',20],
+    [r'samples\dataset_fifty_ways_x_train.h5',30],
+    [r'samples\dataset_mcfd_x_train.h5',24],
+    [r'samples\dataset_le2i_x_train.h5',30]
 ]
 
 default_dev_dataset_paths = [
-    r'samples\dataset_cauca_m_validation.h5',
-    r'samples\dataset_fifty_ways_m_validation.h5',
-    r'samples\dataset_mcfd_x_val.h5',
-    r'samples\dataset_le2i_x_val.h5'
+    [r'samples\dataset_cauca_x_val.h5',20],
+    [r'samples\dataset_fifty_ways_x_val.h5',30],
+    [r'samples\dataset_mcfd_x_val.h5',24],
+    [r'samples\dataset_le2i_x_val.h5',30]
 ]
 
 default_test_dataset_paths = [
-
-    r'samples\dataset_cauca_m_test.h5',
-    r'samples\dataset_fifty_ways_m_test.h5',
-    r'samples\dataset_mcfd_x_test.h5',
-    r'samples\dataset_le2i_x_test.h5'
+    [r'samples\dataset_cauca_x_test.h5',20],
+    [r'samples\dataset_fifty_ways_x_test.h5',30],
+    [r'samples\dataset_mcfd_x_test.h5',24],
+    [r'samples\dataset_le2i_x_test.h5',30]
 ]
 
 
@@ -109,7 +109,7 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
 
     try:
         # _{batch_size}"
-        name = f"{rnn_type}_{timesteps}_{rnn_layers}_{rnn_hidden_size}_{fc_size}_{rnn_dropout}_{fc_droupout}"
+        name = f"{rnn_type}_{timesteps}_{rnn_layers}_{rnn_hidden_size}_{fc_size}_{rnn_dropout}_{fc_droupout}_{batch_size}"
 
         print(
             f"----------------------------------Training {name} model ---------------------------------------")
@@ -128,10 +128,18 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
 
         if model is None:
             raise ValueError(f"Unknown RNN type: {rnn_type}")
-
+        checkpoint_callback = ModelCheckpoint(
+            filename="{epoch:04d}",      # name format
+            monitor="val_loss",               # metric to monitor
+            save_top_k=40,                   # save all checkpoints (no limit)
+            # every_n_epochs=10,               # save every 10 epochs
+            # saves entire model (change if needed)
+            save_weights_only=False
+        )
         logger = TensorBoardLogger(
-            f"logs_{rnn_type}", name=name)
-        trainer = L.Trainer(max_epochs=epochs, logger=logger)
+            f"tb_logs/logs_gru_64_64", name=name)
+        trainer = L.Trainer(max_epochs=epochs, logger=logger,
+                            callbacks=[checkpoint_callback])
 
         model.hparams.model_path = model_path
         model.hparams.previous_model_path = checkpoint_path
@@ -210,7 +218,7 @@ def train(train_dataset_paths=default_train_dataset_paths, dev_dataset_paths=def
         print(f"An error occurred during training: {e}")
 
 
-def main(rnn_type="gru"):
+def main(rnn_type="gru", batch_size=4096):
 
     # train(rnn_type=rnn_type, epochs=350, rnn_layers=1, rnn_hidden_size=64, fc_size=64,
     #       timesteps=timesteps, from_checkpoint=False, rnn_dropout=0.15, test=False)
@@ -235,14 +243,79 @@ def main(rnn_type="gru"):
     # train(rnn_type=rnn_type, epochs=420, rnn_layers=3, rnn_hidden_size=64, fc_size=64, batch_size=6144,
     #       timesteps=timesteps, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu", checkpoint_path="fall_detection/GRU.ckpt")
 
-    train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=128, fc_size=128, batch_size=6144,
-          timesteps=50, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=256, fc_size=64, batch_size=8192,
+    #       timesteps=50, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
 
-    train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=256, fc_size=64, batch_size=6144,
-          timesteps=50, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=128, fc_size=64, batch_size=6144,
+    #       timesteps=75, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
 
-    train(rnn_type=rnn_type, epochs=550, rnn_layers=1, rnn_hidden_size=128, fc_size=64, batch_size=6144,
-          timesteps=75, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=550, rnn_layers=2, rnn_hidden_size=128, fc_size=64, batch_size=6144,
+    #       timesteps=50, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+
+    # train(rnn_type=rnn_type, epochs=550, rnn_layers=2, rnn_hidden_size=128, fc_size=64, batch_size=6144,
+    #       timesteps=75, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=450, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=475, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=500, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=525, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=700, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=710, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=730, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=740, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=750, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=760, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=770, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=780, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=790, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+
+    # train(rnn_type=rnn_type, epochs=570, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=4096,
+    #       timesteps=70, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=590, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=4096,
+    #       timesteps=70, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=610, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=4096,
+    #       timesteps=70, from_checkpoint=True, rnn_dropout=0.15, test=False, device="gpu")
+
+    # train(rnn_type=rnn_type, epochs=380, rnn_layers=2, rnn_hidden_size=128, fc_size=64, batch_size=8192,
+    #       timesteps=50, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=False, rnn_dropout=0.15, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=False, rnn_dropout=0.12, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=False, rnn_dropout=0.18, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=False, rnn_dropout=0.22, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=False, rnn_dropout=0.15, fc_droupout=0.3, test=False, device="gpu")
+    # train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+    #       timesteps=65, from_checkpoint=False, rnn_dropout=0.15, fc_droupout=0.2, test=False, device="gpu")
+    train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+          timesteps=20, from_checkpoint=False, rnn_dropout=0.15, fc_droupout=0.4, test=False, device="gpu")
+    train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+          timesteps=22, from_checkpoint=False, rnn_dropout=0.15, fc_droupout=0.4, test=False, device="gpu")
+    train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+          timesteps=25, from_checkpoint=False, rnn_dropout=0.15, fc_droupout=0.4, test=False, device="gpu")
+    train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+          timesteps=27, from_checkpoint=False, rnn_dropout=0.15, fc_droupout=0.4, test=False, device="gpu")
+    train(rnn_type=rnn_type, epochs=720, rnn_layers=1, rnn_hidden_size=64, fc_size=64, batch_size=6144,
+          timesteps=30, from_checkpoint=False, rnn_dropout=0.15, fc_droupout=0.4, test=False, device="gpu")
+    
+    
 
 
 main("gru")
